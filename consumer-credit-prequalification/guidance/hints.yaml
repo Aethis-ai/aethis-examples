@@ -1,0 +1,41 @@
+hints:
+  - >
+    The following fields capture the applicant data for credit
+    pre-qualification. These field keys and types define the data
+    contract between the application system and the eligibility engine:
+    credit.has_adverse_history (boolean),
+    credit.employment_status (enum: employed, self_employed, retired, unemployed, student),
+    credit.gross_annual_income (integer, GBP),
+    credit.has_joint_applicant (boolean),
+    credit.joint_annual_income (integer, GBP),
+    credit.dti_percent (integer, percentage),
+    credit.credit_score_band (enum: excellent, good, fair, poor, very_poor),
+    credit.product_type (enum: secured, unsecured),
+    credit.ltv_percent (integer, percentage),
+    credit.stress_test_passed (boolean),
+    credit.is_existing_customer (boolean)
+
+  - >
+    Any adverse credit history (CCJ, IVA, bankruptcy, or default within
+    the last 6 years) is an absolute disqualification. No other factor
+    can override this — the application must be refused immediately.
+
+  - >
+    The income requirement can be met by either the applicant's sole
+    income (at least £15,000 gross annual) or the combined income with
+    a joint applicant (at least £20,000 combined). Either route is
+    sufficient.
+
+  - >
+    Credit score requirements depend on the product type. Secured
+    facilities accept applicants with a fair, good, or excellent score.
+    Unsecured facilities require good or excellent only.
+
+  - >
+    The loan-to-value check only applies to secured facilities. Where
+    the facility is secured, the LTV must not exceed 85%.
+
+  - >
+    Existing customers (24 months or more in good standing) are exempt
+    from the debt-to-income ratio check. All other requirements still
+    apply.

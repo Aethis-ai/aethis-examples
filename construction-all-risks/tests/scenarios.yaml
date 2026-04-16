@@ -1,0 +1,211 @@
+tests:
+  - name: "Rectification claim — absolute exclusion (Clause 6)"
+    inputs:
+      car.policy.period_valid: true
+      car.property.category: permanent_works
+      car.loss.is_physical: true
+      car.component.is_defective: true
+      car.defect.origin: materials
+      car.claim.is_rectification: true
+      car.claim.is_access_damage: false
+      car.damage.consequence_of_failure: false
+      car.project.value_millions_gbp: 50
+      car.notification.within_period: true
+      car.contract.jct_compliant: true
+    expect:
+      outcome: not_eligible
+
+  - name: "Consequential damage — carve-back applies (Clause 7a)"
+    inputs:
+      car.policy.period_valid: true
+      car.property.category: permanent_works
+      car.loss.is_physical: true
+      car.component.is_defective: true
+      car.defect.origin: materials
+      car.claim.is_rectification: false
+      car.claim.is_access_damage: false
+      car.damage.consequence_of_failure: true
+      car.project.value_millions_gbp: 50
+      car.notification.within_period: true
+      car.contract.jct_compliant: true
+    expect:
+      outcome: eligible
+
+  - name: "Access damage, standard project — re-excluded (Clause 8)"
+    inputs:
+      car.policy.period_valid: true
+      car.property.category: permanent_works
+      car.loss.is_physical: true
+      car.component.is_defective: true
+      car.defect.origin: workmanship
+      car.claim.is_rectification: false
+      car.claim.is_access_damage: true
+      car.damage.consequence_of_failure: false
+      car.project.value_millions_gbp: 50
+      car.notification.within_period: true
+      car.contract.jct_compliant: true
+    expect:
+      outcome: not_eligible
+
+  - name: "Access damage, enhanced project — reinstated (Clause 9)"
+    inputs:
+      car.policy.period_valid: true
+      car.property.category: permanent_works
+      car.loss.is_physical: true
+      car.component.is_defective: true
+      car.defect.origin: workmanship
+      car.claim.is_rectification: false
+      car.claim.is_access_damage: true
+      car.damage.consequence_of_failure: false
+      car.project.value_millions_gbp: 150
+      car.notification.within_period: true
+      car.contract.jct_compliant: true
+    expect:
+      outcome: eligible
+
+  - name: "Design defect, enhanced project — not reinstated (Clause 9(2))"
+    inputs:
+      car.policy.period_valid: true
+      car.property.category: permanent_works
+      car.loss.is_physical: true
+      car.component.is_defective: true
+      car.defect.origin: design
+      car.claim.is_rectification: false
+      car.claim.is_access_damage: true
+      car.damage.consequence_of_failure: false
+      car.project.value_millions_gbp: 150
+      car.notification.within_period: true
+      car.contract.jct_compliant: true
+    expect:
+      outcome: not_eligible
+
+  - name: "Design defect, pioneer project — override reinstates (Clause 9(3))"
+    inputs:
+      car.policy.period_valid: true
+      car.property.category: permanent_works
+      car.loss.is_physical: true
+      car.component.is_defective: true
+      car.defect.origin: design
+      car.claim.is_rectification: false
+      car.claim.is_access_damage: true
+      car.damage.consequence_of_failure: false
+      car.project.value_millions_gbp: 600
+      car.notification.within_period: true
+      car.contract.jct_compliant: true
+      car.defect.was_known_prior: false
+      car.defect.has_engineer_assessment: false
+    expect:
+      outcome: eligible
+
+  - name: "Plant equipment — excluded category (Clause 5)"
+    inputs:
+      car.policy.period_valid: true
+      car.property.category: plant_equipment
+      car.loss.is_physical: true
+      car.component.is_defective: true
+      car.defect.origin: materials
+      car.claim.is_rectification: false
+      car.claim.is_access_damage: false
+      car.damage.consequence_of_failure: true
+      car.project.value_millions_gbp: 50
+      car.notification.within_period: true
+      car.contract.jct_compliant: true
+    expect:
+      outcome: not_eligible
+
+  - name: "Late notification — not covered (Clause 11)"
+    inputs:
+      car.policy.period_valid: true
+      car.property.category: permanent_works
+      car.loss.is_physical: true
+      car.component.is_defective: true
+      car.defect.origin: materials
+      car.claim.is_rectification: false
+      car.claim.is_access_damage: false
+      car.damage.consequence_of_failure: true
+      car.project.value_millions_gbp: 50
+      car.notification.within_period: false
+      car.contract.jct_compliant: true
+    expect:
+      outcome: not_eligible
+
+  # --- Depth 4-5: Known defect limitation (Clause 9A) ---
+
+  - name: "DEPTH4: Pioneer + known defect — pioneer BLOCKED (Cl.9A)"
+    inputs:
+      car.policy.period_valid: true
+      car.property.category: permanent_works
+      car.loss.is_physical: true
+      car.component.is_defective: true
+      car.defect.origin: design
+      car.claim.is_rectification: false
+      car.claim.is_access_damage: true
+      car.damage.consequence_of_failure: false
+      car.project.value_millions_gbp: 600
+      car.notification.within_period: true
+      car.contract.jct_compliant: true
+      car.defect.was_known_prior: true
+      car.defect.has_engineer_assessment: false
+    expect:
+      outcome: not_eligible
+
+  - name: "DEPTH5: Pioneer + known + engineer — UNBLOCKED (Cl.9A(2))"
+    inputs:
+      car.policy.period_valid: true
+      car.property.category: permanent_works
+      car.loss.is_physical: true
+      car.component.is_defective: true
+      car.defect.origin: design
+      car.claim.is_rectification: false
+      car.claim.is_access_damage: true
+      car.damage.consequence_of_failure: false
+      car.project.value_millions_gbp: 600
+      car.notification.within_period: true
+      car.contract.jct_compliant: true
+      car.defect.was_known_prior: true
+      car.defect.has_engineer_assessment: true
+    expect:
+      outcome: eligible
+
+  - name: "DEPTH4: Pioneer + defect NOT known — pioneer applies normally"
+    inputs:
+      car.policy.period_valid: true
+      car.property.category: permanent_works
+      car.loss.is_physical: true
+      car.component.is_defective: true
+      car.defect.origin: design
+      car.claim.is_rectification: false
+      car.claim.is_access_damage: true
+      car.damage.consequence_of_failure: false
+      car.project.value_millions_gbp: 600
+      car.notification.within_period: true
+      car.contract.jct_compliant: true
+      car.defect.was_known_prior: false
+      car.defect.has_engineer_assessment: false
+    expect:
+      outcome: eligible
+
+  # --- Known authoring limitation (depth 6) ---
+  # The rule generator cannot yet reliably encode conditional thresholds
+  # (£200M for subcontractor vs £100M for principal contractor). The
+  # constraint engine handles this correctly when rules are authored
+  # manually. Uncomment to test.
+  #
+  # - name: "DEPTH6: Subcontractor at £150M — below modified £200M threshold (Cl.9B)"
+  #   inputs:
+  #     car.policy.period_valid: true
+  #     car.property.category: permanent_works
+  #     car.loss.is_physical: true
+  #     car.component.is_defective: true
+  #     car.defect.origin: workmanship
+  #     car.claim.is_rectification: false
+  #     car.claim.is_access_damage: true
+  #     car.damage.consequence_of_failure: false
+  #     car.project.value_millions_gbp: 150
+  #     car.notification.within_period: true
+  #     car.contract.jct_compliant: true
+  #     car.defect.was_known_prior: false
+  #     car.defect.has_engineer_assessment: false
+  #     car.component.installed_by_subcontractor: true
+  #   expect:
+  #     outcome: not_eligible

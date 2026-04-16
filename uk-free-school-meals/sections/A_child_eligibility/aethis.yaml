@@ -1,0 +1,10 @@
+project: uk-fsm-child-eligibility
+project_id: proj_8CzLVwyx53rTGEJv
+section_id: child_eligibility
+domain: uk_fsm
+api_key_env: AETHIS_API_KEY
+
+bundle:
+  id: child_eligibility:20260416-888e4f8b
+  label: "v1 — child eligibility gate (age 4–15, state-funded schools)"
+  tests_passing: 6/6

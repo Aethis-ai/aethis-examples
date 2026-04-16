@@ -1,0 +1,10 @@
+project: uk-fsm-universal-infant
+project_id: proj_ode63LEkzMV9tNhH
+section_id: universal_infant_fsm
+domain: uk_fsm
+api_key_env: AETHIS_API_KEY
+
+bundle:
+  id: universal_infant_fsm:20260416-dd9a9cab
+  label: "v1 — universal infant (Reception, Year 1, Year 2)"
+  tests_passing: 6/6
