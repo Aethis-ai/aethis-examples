@@ -1,0 +1,59 @@
+hints:
+  - >
+    The following fields capture the claim data for coverage determination.
+    These field keys and types define the data contract between the claims
+    intake system and the eligibility engine:
+    car.policy.period_valid (boolean),
+    car.property.category (enum: permanent_works, temporary_works, plant_equipment, existing_structures, materials_on_site),
+    car.loss.is_physical (boolean),
+    car.component.is_defective (boolean),
+    car.defect.origin (enum: design, specification, materials, workmanship, none),
+    car.claim.is_rectification (boolean),
+    car.claim.is_access_damage (boolean),
+    car.damage.consequence_of_failure (boolean),
+    car.project.value_millions_gbp (integer),
+    car.notification.within_period (boolean),
+    car.contract.jct_compliant (boolean),
+    car.defect.was_known_prior (boolean),
+    car.defect.has_engineer_assessment (boolean),
+    car.component.installed_by_subcontractor (boolean)
+
+  - >
+    Rectification cost is absolutely excluded. The cost of repairing or
+    replacing the defective component itself is never covered, regardless
+    of project value, enhanced cover status, or any other provision.
+
+  - >
+    The carve-back for resultant damage can be satisfied by either of
+    two routes: the damage arose as a consequence of the defective
+    component failing, or the damage was not caused solely to gain
+    access to the defective component. Either route is sufficient.
+
+  - >
+    Access damage is re-excluded after the carve-back, but enhanced
+    cover can reinstate it. The enhanced cover threshold depends on
+    who installed the defective component: £100M for work done by the
+    principal contractor, £200M for subcontractor-installed components.
+    Enhanced cover does not extend to design defects, unless the project
+    qualifies as a pioneer infrastructure project (£500M or more). The
+    pioneer threshold is not affected by subcontractor status.
+
+  - >
+    Where the property is an existing structure, a JCT-compliant
+    construction contract must be in place. This requirement does not
+    apply to other property categories.
+
+  - >
+    Plant and equipment is not covered under this endorsement. The
+    approved insured categories are: permanent works, temporary works,
+    existing structures, and materials on site.
+
+  - >
+    The pioneer infrastructure override does not apply where the defect
+    was known to the insured before commencement of works, unless the
+    insured obtained an independent engineer assessment confirming the
+    defect was not material to structural integrity. In other words:
+    either the defect was not known beforehand, or there is an engineer
+    assessment on file. If neither condition is met, the pioneer override
+    is blocked and the design defect limitation applies even on projects
+    above £500M.

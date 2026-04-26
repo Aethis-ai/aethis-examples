@@ -1,0 +1,10 @@
+project: uk-fsm-household-criteria
+project_id: proj_ImZUN44kBf5XVquw
+section_id: household_qualifying_criteria
+domain: uk_fsm
+api_key_env: AETHIS_API_KEY
+
+bundle:
+  id: household_qualifying_criteria:20260416-0de422ac
+  label: "v1 — household criteria (7 benefit routes + looked-after/care leaver)"
+  tests_passing: 11/11

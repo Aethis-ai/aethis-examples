@@ -1,0 +1,154 @@
+tests:
+  - name: "Universal Credit, income £6,000 — below threshold, eligible"
+    inputs:
+      household.receives_universal_credit: true
+      household.annual_net_earnings: 6000
+      household.receives_income_support: false
+      household.receives_income_based_jsa: false
+      household.receives_income_related_esa: false
+      household.receives_child_tax_credit_only: false
+      household.receives_nass_support: false
+      child.is_looked_after: false
+      child.is_care_leaver: false
+    expect:
+      outcome: eligible
+
+  - name: "Universal Credit, income £7,400 — at threshold, eligible"
+    inputs:
+      household.receives_universal_credit: true
+      household.annual_net_earnings: 7400
+      household.receives_income_support: false
+      household.receives_income_based_jsa: false
+      household.receives_income_related_esa: false
+      household.receives_child_tax_credit_only: false
+      household.receives_nass_support: false
+      child.is_looked_after: false
+      child.is_care_leaver: false
+    expect:
+      outcome: eligible
+
+  - name: "Universal Credit, income £8,000 — above threshold, not eligible via UC route"
+    inputs:
+      household.receives_universal_credit: true
+      household.annual_net_earnings: 8000
+      household.receives_income_support: false
+      household.receives_income_based_jsa: false
+      household.receives_income_related_esa: false
+      household.receives_child_tax_credit_only: false
+      household.receives_nass_support: false
+      child.is_looked_after: false
+      child.is_care_leaver: false
+    expect:
+      outcome: not_eligible
+
+  - name: "Income Support recipient — eligible"
+    inputs:
+      household.receives_universal_credit: false
+      household.annual_net_earnings: 0
+      household.receives_income_support: true
+      household.receives_income_based_jsa: false
+      household.receives_income_related_esa: false
+      household.receives_child_tax_credit_only: false
+      household.receives_nass_support: false
+      child.is_looked_after: false
+      child.is_care_leaver: false
+    expect:
+      outcome: eligible
+
+  - name: "Income-based JSA recipient — eligible"
+    inputs:
+      household.receives_universal_credit: false
+      household.annual_net_earnings: 0
+      household.receives_income_support: false
+      household.receives_income_based_jsa: true
+      household.receives_income_related_esa: false
+      household.receives_child_tax_credit_only: false
+      household.receives_nass_support: false
+      child.is_looked_after: false
+      child.is_care_leaver: false
+    expect:
+      outcome: eligible
+
+  - name: "Income-related ESA recipient — eligible"
+    inputs:
+      household.receives_universal_credit: false
+      household.annual_net_earnings: 0
+      household.receives_income_support: false
+      household.receives_income_based_jsa: false
+      household.receives_income_related_esa: true
+      household.receives_child_tax_credit_only: false
+      household.receives_nass_support: false
+      child.is_looked_after: false
+      child.is_care_leaver: false
+    expect:
+      outcome: eligible
+
+  - name: "Child Tax Credit only (no WTC) — eligible"
+    inputs:
+      household.receives_universal_credit: false
+      household.annual_net_earnings: 0
+      household.receives_income_support: false
+      household.receives_income_based_jsa: false
+      household.receives_income_related_esa: false
+      household.receives_child_tax_credit_only: true
+      household.receives_nass_support: false
+      child.is_looked_after: false
+      child.is_care_leaver: false
+    expect:
+      outcome: eligible
+
+  - name: "NASS support (asylum seeker) — eligible"
+    inputs:
+      household.receives_universal_credit: false
+      household.annual_net_earnings: 0
+      household.receives_income_support: false
+      household.receives_income_based_jsa: false
+      household.receives_income_related_esa: false
+      household.receives_child_tax_credit_only: false
+      household.receives_nass_support: true
+      child.is_looked_after: false
+      child.is_care_leaver: false
+    expect:
+      outcome: eligible
+
+  - name: "Looked-after child — eligible regardless of income"
+    inputs:
+      household.receives_universal_credit: false
+      household.annual_net_earnings: 50000
+      household.receives_income_support: false
+      household.receives_income_based_jsa: false
+      household.receives_income_related_esa: false
+      household.receives_child_tax_credit_only: false
+      household.receives_nass_support: false
+      child.is_looked_after: true
+      child.is_care_leaver: false
+    expect:
+      outcome: eligible
+
+  - name: "Care leaver — eligible regardless of income"
+    inputs:
+      household.receives_universal_credit: false
+      household.annual_net_earnings: 40000
+      household.receives_income_support: false
+      household.receives_income_based_jsa: false
+      household.receives_income_related_esa: false
+      household.receives_child_tax_credit_only: false
+      household.receives_nass_support: false
+      child.is_looked_after: false
+      child.is_care_leaver: true
+    expect:
+      outcome: eligible
+
+  - name: "No qualifying benefit or circumstance — not eligible"
+    inputs:
+      household.receives_universal_credit: false
+      household.annual_net_earnings: 0
+      household.receives_income_support: false
+      household.receives_income_based_jsa: false
+      household.receives_income_related_esa: false
+      household.receives_child_tax_credit_only: false
+      household.receives_nass_support: false
+      child.is_looked_after: false
+      child.is_care_leaver: false
+    expect:
+      outcome: not_eligible
