@@ -1,0 +1,927 @@
+{
+  "artifact_version": 1,
+  "ruleset_id": "consumer-credit-prequalification:20260517-3012bb29",
+  "source_env": "prod",
+  "source_database": "Rules",
+  "created_at": "2026-05-17T21:00:26.746366+00:00",
+  "options": {
+    "with_sources": true,
+    "with_rulebook": false
+  },
+  "collections": {
+    "rule_bundles_dsl": [
+      {
+        "_id": {
+          "$oid": "6a0a17fa4ba3003a0600b704"
+        },
+        "bundle_id": "consumer-credit-prequalification:20260517-3012bb29",
+        "section_id": "consumer-credit-prequalification",
+        "tenant_id": "user_39E6Y4c6po7HO70DSDjcB0Ve56u",
+        "visibility": "public",
+        "slug": "aethis/consumer-credit-prequalification",
+        "python_source": "\n# No imports needed \u2014 types are provided automatically by the DSL runtime.\n\n# \u2500\u2500 FIELD DEFINITIONS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\nfield_has_adverse_history = FieldDefinition(\n    key=\"credit.has_adverse_history\",\n    label=\"Adverse Credit History\",\n    sort=Sort.BOOL,\n    description=\"Does the applicant have any adverse credit history in the last 6 years?\",\n    question=\"Does the applicant have any adverse credit history (CCJ, IVA, bankruptcy, default) in the last 6 years?\",\n    weight=3,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Adverse credit history is an absolute disqualification \u2014 any CCJ, IVA, bankruptcy, or default within 6 years means the application must be refused immediately.\",\n            source=\"ConsumerCreditPreQualificationRules2025#s.3\",\n            metadata={\"type\": \"why\", \"section\": \"adverse_history_check\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 3(1) provides that an applicant with an adverse credit history must be refused \"\n                \"without consideration of any other requirement. Section 3(2) defines adverse credit \"\n                \"history as any of the following recorded within the preceding 6 years: (a) a County \"\n                \"Court Judgment (CCJ) or equivalent; (b) an Individual Voluntary Arrangement (IVA); \"\n                \"(c) bankruptcy or sequestration; (d) a default on any credit agreement. No waiver or \"\n                \"exception is available under Section 3.\"\n            ),\n            source=\"ConsumerCreditPreQualificationRules2025#s.3\",\n            metadata={\"type\": \"legal_background\", \"section\": \"adverse_history_check\"},\n        ),\n    ],\n)\n\nfield_employment_status = FieldDefinition(\n    key=\"credit.employment_status\",\n    label=\"Employment Status\",\n    sort=Sort.ENUM,\n    enum_values=[\"employed\", \"self_employed\", \"retired\", \"unemployed\", \"student\"],\n    description=\"What is the applicant's employment status?\",\n    question=\"What is the applicant's employment status?\",\n    weight=1,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Eligibility is restricted to applicants in approved employment categories \u2014 employed, self-employed (2+ years trading), or retired on pension income.\",\n            source=\"ConsumerCreditPreQualificationRules2025#s.4\",\n            metadata={\"type\": \"why\", \"section\": \"employment_check\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 4(1) requires the applicant to be in one of the following employment \"\n                \"categories: (a) employed (full-time or part-time); (b) self-employed (trading not \"\n                \"less than 2 years); (c) retired (receiving pension income). Section 4(2) explicitly \"\n                \"excludes applicants who are unemployed, students, or on zero-hours contracts. \"\n                \"Accepted values: employed, self_employed, retired. Rejected values: unemployed, student.\"\n            ),\n            source=\"ConsumerCreditPreQualificationRules2025#s.4\",\n            metadata={\"type\": \"legal_background\", \"section\": \"employment_check\"},\n        ),\n    ],\n)\n\nfield_gross_annual_income = FieldDefinition(\n    key=\"credit.gross_annual_income\",\n    label=\"Gross Annual Income\",\n    sort=Sort.INT,\n    description=\"What is the applicant's gross annual income in GBP?\",\n    question=\"What is the applicant's gross annual income in GBP?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Income is assessed to ensure the applicant meets the minimum income threshold required for the credit facility.\",\n            source=\"ConsumerCreditPreQualificationRules2025#s.5\",\n            metadata={\"type\": \"why\", \"section\": \"income_check\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 5(1)(a) (Route A) requires the applicant's gross annual income to be not \"\n                \"less than GBP 15,000 where the applicant relies on sole income. Section 5(1)(b) \"\n                \"(Route B) allows a combined gross annual income of the applicant and a joint \"\n                \"applicant of not less than GBP 20,000. Gross annual income means total annual \"\n                \"income before tax and deductions (Section 2). Either route is sufficient to satisfy \"\n                \"Section 5.\"\n            ),\n            source=\"ConsumerCreditPreQualificationRules2025#s.5\",\n            metadata={\"type\": \"legal_background\", \"section\": \"income_check\"},\n        ),\n    ],\n)\n\nfield_has_joint_applicant = FieldDefinition(\n    key=\"credit.has_joint_applicant\",\n    label=\"Has Joint Applicant\",\n    sort=Sort.BOOL,\n    description=\"Is there a joint applicant?\",\n    question=\"Is there a joint applicant?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: A joint applicant's income may be combined with the primary applicant's to meet the minimum income threshold under Route B.\",\n            source=\"ConsumerCreditPreQualificationRules2025#s.5\",\n            metadata={\"type\": \"why\", \"section\": \"income_check\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 5(1)(b) permits the combined gross annual income of the applicant and a \"\n                \"joint applicant (as defined in Section 2) to be used to meet a threshold of GBP \"\n                \"20,000. The joint applicant's income is only considered where the applicant \"\n                \"declares a joint applicant. If no joint applicant is present, only Route A \"\n                \"(sole income >= GBP 15,000) is available.\"\n            ),\n            source=\"ConsumerCreditPreQualificationRules2025#s.5\",\n            metadata={\"type\": \"legal_background\", \"section\": \"income_check\"},\n        ),\n    ],\n)\n\nfield_joint_annual_income = FieldDefinition(\n    key=\"credit.joint_annual_income\",\n    label=\"Joint Applicant Gross Annual Income\",\n    sort=Sort.INT,\n    description=\"What is the joint applicant's gross annual income in GBP?\",\n    question=\"What is the joint applicant's gross annual income in GBP?\",\n    weight=3,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: The joint applicant's income is combined with the primary applicant's to assess whether the Route B combined income threshold of GBP 20,000 is met.\",\n            source=\"ConsumerCreditPreQualificationRules2025#s.5\",\n            metadata={\"type\": \"why\", \"section\": \"income_check\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 5(1)(b) specifies a combined gross annual income threshold of GBP 20,000 \"\n                \"for the applicant and joint applicant together. This field carries the joint \"\n                \"applicant's contribution. The combined total is computed as credit.gross_annual_income \"\n                \"+ credit.joint_annual_income and must be >= 20,000. This field is only relevant \"\n                \"where credit.has_joint_applicant is true.\"\n            ),\n            source=\"ConsumerCreditPreQualificationRules2025#s.5\",\n            metadata={\"type\": \"legal_background\", \"section\": \"income_check\"},\n        ),\n    ],\n)\n\nfield_dti_percent = FieldDefinition(\n    key=\"credit.dti_percent\",\n    label=\"Debt-to-Income Ratio (%)\",\n    sort=Sort.INT,\n    description=\"What is the applicant's debt-to-income ratio as a percentage?\",\n    question=\"What is the applicant's debt-to-income ratio as a percentage?\",\n    weight=4,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: The debt-to-income ratio must not exceed 45% to ensure the applicant is not over-committed on existing debts relative to income.\",\n            source=\"ConsumerCreditPreQualificationRules2025#s.6\",\n            metadata={\"type\": \"why\", \"section\": \"dti_check\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 6(1) requires that the applicant's debt-to-income ratio must not exceed \"\n                \"45%. Section 6(2) defines DTI as: (monthly_debt_obligation / (gross_annual_income \"\n                \"/ 12)) \u00d7 100. Section 10(1) exempts existing customers (as defined in Section 2 \"\n                \"and Section 10(3)) from this requirement. 'Good standing' means no missed payments \"\n                \"and no adverse events during the 24-month qualifying period (Section 10(3)).\"\n            ),\n            source=\"ConsumerCreditPreQualificationRules2025#s.6#s.10\",\n            metadata={\"type\": \"legal_background\", \"section\": \"dti_check\"},\n        ),\n    ],\n)\n\nfield_credit_score_band = FieldDefinition(\n    key=\"credit.credit_score_band\",\n    label=\"Credit Score Band\",\n    sort=Sort.ENUM,\n    enum_values=[\"excellent\", \"good\", \"fair\", \"poor\", \"very_poor\"],\n    description=\"What is the applicant's credit score band?\",\n    question=\"What is the applicant's credit score band?\",\n    weight=3,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: The minimum credit score band depends on the product type \u2014 secured facilities accept fair or above, while unsecured facilities require good or excellent.\",\n            source=\"ConsumerCreditPreQualificationRules2025#s.7\",\n            metadata={\"type\": \"why\", \"section\": \"credit_score_check\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 7(1)(a) requires that for a secured facility the credit score band must be \"\n                \"'fair', 'good', or 'excellent'. Section 7(1)(b) requires that for an unsecured \"\n                \"facility the credit score band must be 'good' or 'excellent'. Section 7(2) provides \"\n                \"that an applicant with a credit score band of 'poor' or 'very_poor' is not eligible \"\n                \"for any product type. Accepted values: excellent, good, fair, poor, very_poor.\"\n            ),\n            source=\"ConsumerCreditPreQualificationRules2025#s.7\",\n            metadata={\"type\": \"legal_background\", \"section\": \"credit_score_check\"},\n        ),\n    ],\n)\n\nfield_product_type = FieldDefinition(\n    key=\"credit.product_type\",\n    label=\"Product Type\",\n    sort=Sort.ENUM,\n    enum_values=[\"secured\", \"unsecured\"],\n    description=\"Is the facility secured or unsecured?\",\n    question=\"Is the facility secured or unsecured?\",\n    weight=1,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: The product type determines which credit score bands are acceptable and whether the loan-to-value ratio check applies.\",\n            source=\"ConsumerCreditPreQualificationRules2025#s.7#s.8\",\n            metadata={\"type\": \"why\", \"section\": \"credit_score_check\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 7(1) applies different credit score band requirements depending on whether \"\n                \"the facility is secured or unsecured. Section 8(1) applies the LTV cap of 85% only \"\n                \"to secured facilities; Section 8(3) explicitly disapplies Section 8 to unsecured \"\n                \"facilities. Accepted values: secured, unsecured.\"\n            ),\n            source=\"ConsumerCreditPreQualificationRules2025#s.7#s.8\",\n            metadata={\"type\": \"legal_background\", \"section\": \"credit_score_check\"},\n        ),\n    ],\n)\n\nfield_ltv_percent = FieldDefinition(\n    key=\"credit.ltv_percent\",\n    label=\"Loan-to-Value Ratio (%)\",\n    sort=Sort.INT,\n    description=\"What is the loan-to-value ratio as a percentage? (Secured only)\",\n    question=\"What is the loan-to-value ratio as a percentage? (Secured only)\",\n    weight=4,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: For secured facilities, the LTV ratio must not exceed 85% to limit the lender's exposure relative to the property value.\",\n            source=\"ConsumerCreditPreQualificationRules2025#s.8\",\n            metadata={\"type\": \"why\", \"section\": \"ltv_check\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 8(1) provides that where the facility is a secured facility, the \"\n                \"loan-to-value ratio must not exceed 85%. Section 8(2) defines LTV as: \"\n                \"(loan_amount / property_value) \u00d7 100. Section 8(3) expressly provides that \"\n                \"this section does not apply to unsecured facilities. This field is only \"\n                \"collected and evaluated when credit.product_type is 'secured'.\"\n            ),\n            source=\"ConsumerCreditPreQualificationRules2025#s.8\",\n            metadata={\"type\": \"legal_background\", \"section\": \"ltv_check\"},\n        ),\n    ],\n)\n\nfield_stress_test_passed = FieldDefinition(\n    key=\"credit.stress_test_passed\",\n    label=\"Affordability Stress Test Passed\",\n    sort=Sort.BOOL,\n    description=\"Does the applicant pass the affordability stress test?\",\n    question=\"Does the applicant pass the affordability stress test?\",\n    weight=5,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: The stress test checks that monthly repayments remain affordable even if interest rates rise \u2014 the stressed payment must not exceed 35% of gross monthly income.\",\n            source=\"ConsumerCreditPreQualificationRules2025#s.9\",\n            metadata={\"type\": \"why\", \"section\": \"stress_test_check\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 9(1) requires the applicant to demonstrate that monthly repayments remain \"\n                \"affordable under a stressed interest rate scenario. Section 9(2) defines the \"\n                \"stressed monthly payment as calculated using the stress-tested rate (standard \"\n                \"variable rate plus 3 percentage points) applied to the full loan amount over the \"\n                \"full loan term. Section 9(3) requires that the stressed monthly payment must not \"\n                \"exceed 35% of the applicant's gross monthly income.\"\n            ),\n            source=\"ConsumerCreditPreQualificationRules2025#s.9\",\n            metadata={\"type\": \"legal_background\", \"section\": \"stress_test_check\"},\n        ),\n    ],\n)\n\nfield_is_existing_customer = FieldDefinition(\n    key=\"credit.is_existing_customer\",\n    label=\"Existing Customer\",\n    sort=Sort.BOOL,\n    description=\"Is the applicant an existing Meridian customer (24+ months in good standing)?\",\n    question=\"Is the applicant an existing Meridian customer (24+ months in good standing)?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Existing customers in good standing for 24+ months are exempt from the debt-to-income ratio requirement under Section 10.\",\n            source=\"ConsumerCreditPreQualificationRules2025#s.10\",\n            metadata={\"type\": \"why\", \"section\": \"dti_check\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 10(1) exempts existing customers from the requirements of Section 6 \"\n                \"(debt-to-income ratio). Section 10(3) defines 'good standing' as no missed \"\n                \"payments and no adverse events during the 24-month qualifying period. All other \"\n                \"requirements under these rules continue to apply to existing customers \"\n                \"(Section 10(2)). 'Existing customer' is defined in Section 2 as an applicant \"\n                \"who has held a Meridian account in good standing for not less than 24 months.\"\n            ),\n            source=\"ConsumerCreditPreQualificationRules2025#s.10\",\n            metadata={\"type\": \"legal_background\", \"section\": \"dti_check\"},\n        ),\n    ],\n)\n\n# \u2500\u2500 CRITERIA \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n# Section 3 \u2014 Adverse credit history check (no adverse history)\nrule_adverse_history = Criterion(\n    id=\"adverse_history_check\",\n    title=\"No adverse credit history\",\n    group=\"adverse_history_check\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"credit.has_adverse_history\"),\n        Const(sort=Sort.BOOL, value=False),\n    ]),\n    waivable=False,\n    notes=\"Section 3: Applicant must have no adverse credit history (CCJ, IVA, bankruptcy, default) in the preceding 6 years. Absolute disqualification if present.\",\n)\n\n# Section 4 \u2014 Employment status check\nrule_employment = Criterion(\n    id=\"employment_check\",\n    title=\"Employment status eligible\",\n    group=\"employment_check\",\n    expr=Op(operator=Operator.IN, args=[\n        FieldRef(key=\"credit.employment_status\"),\n        Const(sort=Sort.ENUM, value=\"employed\"),\n        Const(sort=Sort.ENUM, value=\"self_employed\"),\n        Const(sort=Sort.ENUM, value=\"retired\"),\n    ]),\n    waivable=False,\n    notes=\"Section 4: Applicant must be employed, self-employed (2+ years trading), or retired on pension income.\",\n)\n\n# Section 5 \u2014 Income check: Route A (sole income >= 15,000)\nrule_income_route_a = Criterion(\n    id=\"income_route_a\",\n    title=\"Income Route A: sole income >= GBP 15,000\",\n    group=\"income_check\",\n    expr=Op(operator=Operator.GE, args=[\n        FieldRef(key=\"credit.gross_annual_income\"),\n        Const(sort=Sort.INT, value=15000),\n    ]),\n    waivable=False,\n    notes=\"Section 5(1)(a): Applicant's gross annual income is not less than GBP 15,000.\",\n)\n\n# Section 5 \u2014 Income check: Route B (joint income >= 20,000)\nrule_income_route_b = Criterion(\n    id=\"income_route_b\",\n    title=\"Income Route B: combined joint income >= GBP 20,000\",\n    group=\"income_check\",\n    expr=Op(operator=Operator.AND, args=[\n        Op(operator=Operator.EQ, args=[\n            FieldRef(key=\"credit.has_joint_applicant\"),\n            Const(sort=Sort.BOOL, value=True),\n        ]),\n        Op(operator=Operator.GE, args=[\n            Op(operator=Operator.PLUS, args=[\n                FieldRef(key=\"credit.gross_annual_income\"),\n                FieldRef(key=\"credit.joint_annual_income\"),\n            ]),\n            Const(sort=Sort.INT, value=20000),\n        ]),\n    ]),\n    waivable=False,\n    notes=\"Section 5(1)(b): Combined gross annual income of applicant and joint applicant is not less than GBP 20,000.\",\n)\n\n# Section 6 + Section 10 \u2014 DTI check (exempt if existing customer)\nrule_dti = Criterion(\n    id=\"dti_check\",\n    title=\"Debt-to-income ratio <= 45% (or existing customer exemption)\",\n    group=\"dti_check\",\n    expr=Op(operator=Operator.IMPLIES, args=[\n        Op(operator=Operator.EQ, args=[\n            Op(operator=Operator.DEFAULT_TO, args=[\n                FieldRef(key=\"credit.is_existing_customer\"),\n                Const(sort=Sort.BOOL, value=False),\n            ]),\n            Const(sort=Sort.BOOL, value=False),\n        ]),\n        Op(operator=Operator.LE, args=[\n            FieldRef(key=\"credit.dti_percent\"),\n            Const(sort=Sort.INT, value=45),\n        ]),\n    ]),\n    waivable=False,\n    notes=\"Section 6: DTI must not exceed 45%. Section 10: Existing customers are exempt from this requirement.\",\n)\n\n# Section 7 \u2014 Credit score check: secured facility (fair, good, excellent)\nrule_credit_score_secured = Criterion(\n    id=\"credit_score_secured\",\n    title=\"Credit score: secured facility (fair, good, or excellent)\",\n    group=\"credit_score_check\",\n    expr=Op(operator=Operator.AND, args=[\n        Op(operator=Operator.EQ, args=[\n            FieldRef(key=\"credit.product_type\"),\n            Const(sort=Sort.ENUM, value=\"secured\"),\n        ]),\n        Op(operator=Operator.IN, args=[\n            FieldRef(key=\"credit.credit_score_band\"),\n            Const(sort=Sort.ENUM, value=\"fair\"),\n            Const(sort=Sort.ENUM, value=\"good\"),\n            Const(sort=Sort.ENUM, value=\"excellent\"),\n        ]),\n    ]),\n    waivable=False,\n    notes=\"Section 7(1)(a): For secured facilities, the credit score band must be fair, good, or excellent.\",\n)\n\n# Section 7 \u2014 Credit score check: unsecured facility (good, excellent)\nrule_credit_score_unsecured = Criterion(\n    id=\"credit_score_unsecured\",\n    title=\"Credit score: unsecured facility (good or excellent)\",\n    group=\"credit_score_check\",\n    expr=Op(operator=Operator.AND, args=[\n        Op(operator=Operator.EQ, args=[\n            FieldRef(key=\"credit.product_type\"),\n            Const(sort=Sort.ENUM, value=\"unsecured\"),\n        ]),\n        Op(operator=Operator.IN, args=[\n            FieldRef(key=\"credit.credit_score_band\"),\n            Const(sort=Sort.ENUM, value=\"good\"),\n            Const(sort=Sort.ENUM, value=\"excellent\"),\n        ]),\n    ]),\n    waivable=False,\n    notes=\"Section 7(1)(b): For unsecured facilities, the credit score band must be good or excellent.\",\n)\n\n# Section 8 \u2014 LTV check: applies only to secured facilities\nrule_ltv = Criterion(\n    id=\"ltv_check\",\n    title=\"LTV ratio <= 85% (secured facilities only)\",\n    group=\"ltv_check\",\n    expr=Op(operator=Operator.IMPLIES, args=[\n        Op(operator=Operator.EQ, args=[\n            FieldRef(key=\"credit.product_type\"),\n            Const(sort=Sort.ENUM, value=\"secured\"),\n        ]),\n        Op(operator=Operator.LE, args=[\n            FieldRef(key=\"credit.ltv_percent\"),\n            Const(sort=Sort.INT, value=85),\n        ]),\n    ]),\n    waivable=False,\n    notes=\"Section 8: Where the facility is secured, the LTV ratio must not exceed 85%. This section does not apply to unsecured facilities.\",\n)\n\n# Section 9 \u2014 Affordability stress test\nrule_stress_test = Criterion(\n    id=\"stress_test_check\",\n    title=\"Affordability stress test passed\",\n    group=\"stress_test_check\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"credit.stress_test_passed\"),\n        Const(sort=Sort.BOOL, value=True),\n    ]),\n    waivable=False,\n    notes=\"Section 9: The applicant must pass the affordability stress test \u2014 stressed monthly payment must not exceed 35% of gross monthly income.\",\n)\n",
+        "python_source_hash": "1a0cfbbedde854529677ecbf327c2da22fda9c3d4c2dfa00d447495cd89ef2c6",
+        "compiled_bundle": {
+          "name": "consumer-credit-prequalification",
+          "jurisdiction": "uk",
+          "instrument": "agent_generated",
+          "version": "v1",
+          "effective_from": {
+            "$date": "2026-05-17T00:00:00Z"
+          },
+          "effective_to": null,
+          "criteria": [
+            {
+              "id": "adverse_history_check",
+              "title": "No adverse credit history",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "credit.has_adverse_history"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": false,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "adverse_history_check",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 3: Applicant must have no adverse credit history (CCJ, IVA, bankruptcy, default) in the preceding 6 years. Absolute disqualification if present.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "employment_check",
+              "title": "Employment status eligible",
+              "expr": {
+                "type": "op",
+                "operator": "in",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "credit.employment_status"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Enum",
+                    "value": "employed",
+                    "field_context": null
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Enum",
+                    "value": "self_employed",
+                    "field_context": null
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Enum",
+                    "value": "retired",
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "employment_check",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 4: Applicant must be employed, self-employed (2+ years trading), or retired on pension income.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "income_route_a",
+              "title": "Income Route A: sole income >= GBP 15,000",
+              "expr": {
+                "type": "op",
+                "operator": ">=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "credit.gross_annual_income"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Int",
+                    "value": 15000,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "income_check",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 5(1)(a): Applicant's gross annual income is not less than GBP 15,000.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "income_route_b",
+              "title": "Income Route B: combined joint income >= GBP 20,000",
+              "expr": {
+                "type": "op",
+                "operator": "and",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "credit.has_joint_applicant"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Bool",
+                        "value": true,
+                        "field_context": null
+                      }
+                    ]
+                  },
+                  {
+                    "type": "op",
+                    "operator": ">=",
+                    "args": [
+                      {
+                        "type": "op",
+                        "operator": "+",
+                        "args": [
+                          {
+                            "type": "field_ref",
+                            "key": "credit.gross_annual_income"
+                          },
+                          {
+                            "type": "field_ref",
+                            "key": "credit.joint_annual_income"
+                          }
+                        ]
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Int",
+                        "value": 20000,
+                        "field_context": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              "group": "income_check",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 5(1)(b): Combined gross annual income of applicant and joint applicant is not less than GBP 20,000.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "dti_check",
+              "title": "Debt-to-income ratio <= 45% (or existing customer exemption)",
+              "expr": {
+                "type": "op",
+                "operator": "=>",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "op",
+                        "operator": "default_to",
+                        "args": [
+                          {
+                            "type": "field_ref",
+                            "key": "credit.is_existing_customer"
+                          },
+                          {
+                            "type": "const",
+                            "sort": "Bool",
+                            "value": false,
+                            "field_context": null
+                          }
+                        ]
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Bool",
+                        "value": false,
+                        "field_context": null
+                      }
+                    ]
+                  },
+                  {
+                    "type": "op",
+                    "operator": "<=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "credit.dti_percent"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Int",
+                        "value": 45,
+                        "field_context": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              "group": "dti_check",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 6: DTI must not exceed 45%. Section 10: Existing customers are exempt from this requirement.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "credit_score_secured",
+              "title": "Credit score: secured facility (fair, good, or excellent)",
+              "expr": {
+                "type": "op",
+                "operator": "and",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "credit.product_type"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Enum",
+                        "value": "secured",
+                        "field_context": null
+                      }
+                    ]
+                  },
+                  {
+                    "type": "op",
+                    "operator": "in",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "credit.credit_score_band"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Enum",
+                        "value": "fair",
+                        "field_context": null
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Enum",
+                        "value": "good",
+                        "field_context": null
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Enum",
+                        "value": "excellent",
+                        "field_context": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              "group": "credit_score_check",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 7(1)(a): For secured facilities, the credit score band must be fair, good, or excellent.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "credit_score_unsecured",
+              "title": "Credit score: unsecured facility (good or excellent)",
+              "expr": {
+                "type": "op",
+                "operator": "and",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "credit.product_type"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Enum",
+                        "value": "unsecured",
+                        "field_context": null
+                      }
+                    ]
+                  },
+                  {
+                    "type": "op",
+                    "operator": "in",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "credit.credit_score_band"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Enum",
+                        "value": "good",
+                        "field_context": null
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Enum",
+                        "value": "excellent",
+                        "field_context": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              "group": "credit_score_check",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 7(1)(b): For unsecured facilities, the credit score band must be good or excellent.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "ltv_check",
+              "title": "LTV ratio <= 85% (secured facilities only)",
+              "expr": {
+                "type": "op",
+                "operator": "=>",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "credit.product_type"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Enum",
+                        "value": "secured",
+                        "field_context": null
+                      }
+                    ]
+                  },
+                  {
+                    "type": "op",
+                    "operator": "<=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "credit.ltv_percent"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Int",
+                        "value": 85,
+                        "field_context": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              "group": "ltv_check",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 8: Where the facility is secured, the LTV ratio must not exceed 85%. This section does not apply to unsecured facilities.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "stress_test_check",
+              "title": "Affordability stress test passed",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "credit.stress_test_passed"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "stress_test_check",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 9: The applicant must pass the affordability stress test \u2014 stressed monthly payment must not exceed 35% of gross monthly income.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            }
+          ],
+          "outcome_logic": null
+        },
+        "compiled_fields": [
+          {
+            "key": "credit.has_adverse_history",
+            "label": "Adverse Credit History",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Does the applicant have any adverse credit history in the last 6 years?",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Does the applicant have any adverse credit history (CCJ, IVA, bankruptcy, default) in the last 6 years?",
+            "weight": 3,
+            "notes": [
+              {
+                "note_text": "WHY: Adverse credit history is an absolute disqualification \u2014 any CCJ, IVA, bankruptcy, or default within 6 years means the application must be refused immediately.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.3",
+                "metadata": {
+                  "type": "why",
+                  "section": "adverse_history_check"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 3(1) provides that an applicant with an adverse credit history must be refused without consideration of any other requirement. Section 3(2) defines adverse credit history as any of the following recorded within the preceding 6 years: (a) a County Court Judgment (CCJ) or equivalent; (b) an Individual Voluntary Arrangement (IVA); (c) bankruptcy or sequestration; (d) a default on any credit agreement. No waiver or exception is available under Section 3.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.3",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "adverse_history_check"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "credit.employment_status",
+            "label": "Employment Status",
+            "sort": "Enum",
+            "enum_values": [
+              "employed",
+              "self_employed",
+              "retired",
+              "unemployed",
+              "student"
+            ],
+            "description": "What is the applicant's employment status?",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the applicant's employment status?",
+            "weight": 1,
+            "notes": [
+              {
+                "note_text": "WHY: Eligibility is restricted to applicants in approved employment categories \u2014 employed, self-employed (2+ years trading), or retired on pension income.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.4",
+                "metadata": {
+                  "type": "why",
+                  "section": "employment_check"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 4(1) requires the applicant to be in one of the following employment categories: (a) employed (full-time or part-time); (b) self-employed (trading not less than 2 years); (c) retired (receiving pension income). Section 4(2) explicitly excludes applicants who are unemployed, students, or on zero-hours contracts. Accepted values: employed, self_employed, retired. Rejected values: unemployed, student.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.4",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "employment_check"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "credit.gross_annual_income",
+            "label": "Gross Annual Income",
+            "sort": "Int",
+            "enum_values": null,
+            "description": "What is the applicant's gross annual income in GBP?",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the applicant's gross annual income in GBP?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: Income is assessed to ensure the applicant meets the minimum income threshold required for the credit facility.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.5",
+                "metadata": {
+                  "type": "why",
+                  "section": "income_check"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 5(1)(a) (Route A) requires the applicant's gross annual income to be not less than GBP 15,000 where the applicant relies on sole income. Section 5(1)(b) (Route B) allows a combined gross annual income of the applicant and a joint applicant of not less than GBP 20,000. Gross annual income means total annual income before tax and deductions (Section 2). Either route is sufficient to satisfy Section 5.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.5",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "income_check"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "credit.has_joint_applicant",
+            "label": "Has Joint Applicant",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Is there a joint applicant?",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Is there a joint applicant?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: A joint applicant's income may be combined with the primary applicant's to meet the minimum income threshold under Route B.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.5",
+                "metadata": {
+                  "type": "why",
+                  "section": "income_check"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 5(1)(b) permits the combined gross annual income of the applicant and a joint applicant (as defined in Section 2) to be used to meet a threshold of GBP 20,000. The joint applicant's income is only considered where the applicant declares a joint applicant. If no joint applicant is present, only Route A (sole income >= GBP 15,000) is available.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.5",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "income_check"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "credit.joint_annual_income",
+            "label": "Joint Applicant Gross Annual Income",
+            "sort": "Int",
+            "enum_values": null,
+            "description": "What is the joint applicant's gross annual income in GBP?",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the joint applicant's gross annual income in GBP?",
+            "weight": 3,
+            "notes": [
+              {
+                "note_text": "WHY: The joint applicant's income is combined with the primary applicant's to assess whether the Route B combined income threshold of GBP 20,000 is met.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.5",
+                "metadata": {
+                  "type": "why",
+                  "section": "income_check"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 5(1)(b) specifies a combined gross annual income threshold of GBP 20,000 for the applicant and joint applicant together. This field carries the joint applicant's contribution. The combined total is computed as credit.gross_annual_income + credit.joint_annual_income and must be >= 20,000. This field is only relevant where credit.has_joint_applicant is true.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.5",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "income_check"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "credit.dti_percent",
+            "label": "Debt-to-Income Ratio (%)",
+            "sort": "Int",
+            "enum_values": null,
+            "description": "What is the applicant's debt-to-income ratio as a percentage?",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the applicant's debt-to-income ratio as a percentage?",
+            "weight": 4,
+            "notes": [
+              {
+                "note_text": "WHY: The debt-to-income ratio must not exceed 45% to ensure the applicant is not over-committed on existing debts relative to income.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.6",
+                "metadata": {
+                  "type": "why",
+                  "section": "dti_check"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 6(1) requires that the applicant's debt-to-income ratio must not exceed 45%. Section 6(2) defines DTI as: (monthly_debt_obligation / (gross_annual_income / 12)) \u00d7 100. Section 10(1) exempts existing customers (as defined in Section 2 and Section 10(3)) from this requirement. 'Good standing' means no missed payments and no adverse events during the 24-month qualifying period (Section 10(3)).",
+                "source": "ConsumerCreditPreQualificationRules2025#s.6#s.10",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "dti_check"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "credit.credit_score_band",
+            "label": "Credit Score Band",
+            "sort": "Enum",
+            "enum_values": [
+              "excellent",
+              "good",
+              "fair",
+              "poor",
+              "very_poor"
+            ],
+            "description": "What is the applicant's credit score band?",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the applicant's credit score band?",
+            "weight": 3,
+            "notes": [
+              {
+                "note_text": "WHY: The minimum credit score band depends on the product type \u2014 secured facilities accept fair or above, while unsecured facilities require good or excellent.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.7",
+                "metadata": {
+                  "type": "why",
+                  "section": "credit_score_check"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 7(1)(a) requires that for a secured facility the credit score band must be 'fair', 'good', or 'excellent'. Section 7(1)(b) requires that for an unsecured facility the credit score band must be 'good' or 'excellent'. Section 7(2) provides that an applicant with a credit score band of 'poor' or 'very_poor' is not eligible for any product type. Accepted values: excellent, good, fair, poor, very_poor.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.7",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "credit_score_check"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "credit.product_type",
+            "label": "Product Type",
+            "sort": "Enum",
+            "enum_values": [
+              "secured",
+              "unsecured"
+            ],
+            "description": "Is the facility secured or unsecured?",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Is the facility secured or unsecured?",
+            "weight": 1,
+            "notes": [
+              {
+                "note_text": "WHY: The product type determines which credit score bands are acceptable and whether the loan-to-value ratio check applies.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.7#s.8",
+                "metadata": {
+                  "type": "why",
+                  "section": "credit_score_check"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 7(1) applies different credit score band requirements depending on whether the facility is secured or unsecured. Section 8(1) applies the LTV cap of 85% only to secured facilities; Section 8(3) explicitly disapplies Section 8 to unsecured facilities. Accepted values: secured, unsecured.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.7#s.8",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "credit_score_check"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "credit.ltv_percent",
+            "label": "Loan-to-Value Ratio (%)",
+            "sort": "Int",
+            "enum_values": null,
+            "description": "What is the loan-to-value ratio as a percentage? (Secured only)",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the loan-to-value ratio as a percentage? (Secured only)",
+            "weight": 4,
+            "notes": [
+              {
+                "note_text": "WHY: For secured facilities, the LTV ratio must not exceed 85% to limit the lender's exposure relative to the property value.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.8",
+                "metadata": {
+                  "type": "why",
+                  "section": "ltv_check"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 8(1) provides that where the facility is a secured facility, the loan-to-value ratio must not exceed 85%. Section 8(2) defines LTV as: (loan_amount / property_value) \u00d7 100. Section 8(3) expressly provides that this section does not apply to unsecured facilities. This field is only collected and evaluated when credit.product_type is 'secured'.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.8",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "ltv_check"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "credit.stress_test_passed",
+            "label": "Affordability Stress Test Passed",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Does the applicant pass the affordability stress test?",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Does the applicant pass the affordability stress test?",
+            "weight": 5,
+            "notes": [
+              {
+                "note_text": "WHY: The stress test checks that monthly repayments remain affordable even if interest rates rise \u2014 the stressed payment must not exceed 35% of gross monthly income.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.9",
+                "metadata": {
+                  "type": "why",
+                  "section": "stress_test_check"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 9(1) requires the applicant to demonstrate that monthly repayments remain affordable under a stressed interest rate scenario. Section 9(2) defines the stressed monthly payment as calculated using the stress-tested rate (standard variable rate plus 3 percentage points) applied to the full loan amount over the full loan term. Section 9(3) requires that the stressed monthly payment must not exceed 35% of the applicant's gross monthly income.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.9",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "stress_test_check"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "credit.is_existing_customer",
+            "label": "Existing Customer",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Is the applicant an existing Meridian customer (24+ months in good standing)?",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Is the applicant an existing Meridian customer (24+ months in good standing)?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: Existing customers in good standing for 24+ months are exempt from the debt-to-income ratio requirement under Section 10.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.10",
+                "metadata": {
+                  "type": "why",
+                  "section": "dti_check"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 10(1) exempts existing customers from the requirements of Section 6 (debt-to-income ratio). Section 10(3) defines 'good standing' as no missed payments and no adverse events during the 24-month qualifying period. All other requirements under these rules continue to apply to existing customers (Section 10(2)). 'Existing customer' is defined in Section 2 as an applicant who has held a Meridian account in good standing for not less than 24 months.",
+                "source": "ConsumerCreditPreQualificationRules2025#s.10",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "dti_check"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          }
+        ],
+        "version": "v1",
+        "status": "active",
+        "effective_from": {
+          "$date": "2026-05-17T19:33:14.513Z"
+        },
+        "effective_to": null,
+        "supersedes": null,
+        "last_edited": {
+          "$date": "2026-05-17T20:10:01.139Z"
+        },
+        "edit_count": 0,
+        "edit_notes": "",
+        "metadata": {
+          "total_rules": 9,
+          "total_fields": 11,
+          "complexity_score": 1,
+          "estimated_evaluation_time_ms": 10,
+          "tags": [
+            "developer_api",
+            "agent_generated",
+            "consumer-credit-prequalification"
+          ],
+          "description": "Generated via agent authoring for project proj_cv0YQ9Ld_cBmEh5H",
+          "last_validated": null,
+          "validation_status": "agent_validated"
+        },
+        "provenance": {
+          "generation_run_id": "job_D88Ft2SV48Ar0i8S",
+          "source_documents": [],
+          "generation_timestamp": {
+            "$date": "2026-05-17T19:33:14.512Z"
+          },
+          "llm_model": "claude-sonnet-4-6",
+          "llm_temperature": 0.0,
+          "prompt_version": "",
+          "human_review_status": "unreviewed",
+          "edited_by": "agent",
+          "snapshot_id": "snap_20260517_9d191b0d",
+          "pass_rate_progression": [
+            [
+              4,
+              8,
+              8
+            ]
+          ],
+          "turns_used": 4,
+          "elapsed_seconds": 313.1,
+          "tokens_input": 31860,
+          "tokens_output": 25080
+        }
+      }
+    ],
+    "projects": [],
+    "guidance_hints": [],
+    "test_run_results": []
+  }
+}

@@ -1,0 +1,25 @@
+# Canonical public bundles — single source of truth for the public catalog.
+#
+# Format: <slug>\t<example_dir_relative_to_aethis_examples_root>
+#
+# Each line declares one of the public-facing demonstration bundles. The
+# slug is the only identifier exposed in docs, READMEs, and dashboards;
+# the dated bundle_id underneath rotates on every regeneration but the
+# slug stays stable (re-publishing under an existing slug repoints
+# atomically and archives the previous holder).
+#
+# The example directory is the source-of-truth for rebuilding the bundle
+# from sources/ + tests/scenarios.yaml + guidance/hints.yaml.
+#
+# When adding a new canonical bundle:
+#   1. Add a line here with the new slug + example dir.
+#   2. Run: make rebuild-canonical-bundles  (or publish manually via aethis publish --slug ...).
+#   3. Run: make snapshot-canonical-bundles
+#   4. Commit the resulting snapshots/<slug-tail>.json file.
+
+aethis/uk-fsm/child-eligibility	uk-free-school-meals/sections/A_child_eligibility
+aethis/uk-fsm/household-criteria	uk-free-school-meals/sections/B_household_criteria
+aethis/uk-fsm/universal-infant	uk-free-school-meals/sections/C_universal_infant
+aethis/spacecraft-crew-certification	spacecraft-crew-certification
+aethis/construction-all-risks	construction-all-risks
+aethis/consumer-credit-prequalification	consumer-credit-prequalification

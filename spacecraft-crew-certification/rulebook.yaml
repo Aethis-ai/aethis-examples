@@ -1,0 +1,31 @@
+# Spacecraft Crew Certification — Rulebook composition
+#
+# A single-ruleset rulebook. The crew_certification ruleset covers the
+# entire statute (S.3-S.9); composition is the implicit AND of the one
+# live ruleset, so no `outcome_logic` is set.
+#
+# Used as the simplest end-to-end smoke test of the converged 2-term
+# authoring model — exercises every CLI step (create rulebook → author
+# ruleset via project pipeline → publish-into-rulebook → promote-to-
+# live → decide) without the multi-ruleset composition story.
+#
+# See `scripts/publish-rulebook.sh` for the script that builds and
+# publishes this from a clean slate.
+
+rulebook:
+  name: Spacecraft Crew Certification
+  domain: spacecraft
+  slug: aethis/spacecraft-crew-certification
+
+  rulesets:
+    - name: crew_certification
+      display_name: "Spacecraft Crew Certification Act 2049"
+      description: >
+        Whole-statute eligibility check covering species, flight hours,
+        pilot licence, medical cert validity, age exemptions, orbital
+        radiation requirements, propulsion type, and towel possession.
+
+  # outcome_logic intentionally omitted — single-ruleset rulebooks
+  # default to "the one live ruleset's decision IS the rulebook's
+  # decision". Multi-ruleset examples (see uk-free-school-meals) set
+  # outcome_logic explicitly via `aethis rulebooks set-logic ...`.

@@ -1,0 +1,47 @@
+{
+    "ruleset_id": "construction-all-risks:20260508-215c0c38",
+    "criteria": [
+        {
+            "criterion_id": "cl3_policy_period",
+            "group": "policy_period",
+            "title": "Loss occurred within policy period (Clause 3)",
+            "rule_text": "car.policy.period_valid equals true"
+        },
+        {
+            "criterion_id": "cl4_insuring_clause",
+            "group": "insuring_clause",
+            "title": "Physical loss and defective component established (Clause 4)",
+            "rule_text": "( AND car.loss.is_physical equals true AND car.component.is_defective equals true)"
+        },
+        {
+            "criterion_id": "cl5_property_category",
+            "group": "property_category",
+            "title": "Property falls within an insured category (Clause 5)",
+            "rule_text": "car.property.category is one of \"permanent_works\", \"temporary_works\", \"existing_structures\", or \"materials_on_site\""
+        },
+        {
+            "criterion_id": "cl11_notification",
+            "group": "notification",
+            "title": "Notified underwriters within 30 days of discovery (Clause 11)",
+            "rule_text": "car.notification.within_period equals true"
+        },
+        {
+            "criterion_id": "cl10_jct_contract",
+            "group": "jct_contract",
+            "title": "JCT-compliant contract in place where property is existing structure (Clause 10)",
+            "rule_text": "IF car.property.category equals \"existing_structures\" THEN car.contract.jct_compliant equals true"
+        },
+        {
+            "criterion_id": "cl6_no_rectification",
+            "group": "rectification_exclusion",
+            "title": "Claim is not for rectification of the defective component (Clause 6)",
+            "rule_text": "car.claim.is_rectification equals false"
+        },
+        {
+            "criterion_id": "cl7_8_9_damage_qualification",
+            "group": "damage_qualification",
+            "title": "Damage qualification: Clauses 7, 8, 9, 9A, 9B",
+            "rule_text": "OR(\n  car.damage.consequence_of_failure equals true,\n  car.claim.is_access_damage equals false,\n  ( AND car.claim.is_access_damage equals true AND OR(\n      ( AND Operator.DEFAULT_TO(car.component.installed_by_subcontractor, false) equals false AND car.defect.origin does not equal \"design\" AND car.project.value_millions_gbp is at least 100),\n      ( AND Operator.DEFAULT_TO(car.component.installed_by_subcontractor, false) equals true AND car.defect.origin does not equal \"design\" AND car.project.value_millions_gbp is at least 200),\n      ( AND car.project.value_millions_gbp is at least 500 AND ( OR Operator.DEFAULT_TO(car.defect.was_known_prior, false) equals false OR Operator.DEFAULT_TO(car.defect.has_engineer_assessment, false) equals true))\n    ))\n)"
+        }
+    ]
+}

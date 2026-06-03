@@ -1,0 +1,104 @@
+hints:
+  - >
+    The following fields capture the claim data for coverage determination.
+    These field keys and types define the data contract between the claims
+    intake system and the eligibility engine:
+    car.policy.period_valid (boolean),
+    car.property.category (enum: permanent_works, temporary_works, plant_equipment, existing_structures, materials_on_site),
+    car.loss.is_physical (boolean),
+    car.component.is_defective (boolean),
+    car.defect.origin (enum: design, specification, materials, workmanship, none),
+    car.claim.is_rectification (boolean),
+    car.claim.is_access_damage (boolean),
+    car.damage.consequence_of_failure (boolean),
+    car.project.value_millions_gbp (integer),
+    car.notification.within_period (boolean),
+    car.contract.jct_compliant (boolean),
+    car.defect.was_known_prior (boolean),
+    car.defect.has_engineer_assessment (boolean),
+    car.component.installed_by_subcontractor (boolean)
+
+  - >
+    Rectification cost is absolutely excluded. The cost of repairing or
+    replacing the defective component itself is never covered, regardless
+    of project value, enhanced cover status, or any other provision.
+
+  - >
+    The carve-back for resultant damage can be satisfied by either of
+    two routes: the damage arose as a consequence of the defective
+    component failing, or the damage was not caused solely to gain
+    access to the defective component. Either route is sufficient.
+
+  - >
+    Access damage is re-excluded after the Clause 7 carve-back, but
+    Clause 9 reinstates it on enhanced cover projects. The general
+    rule for the enhanced tier is that the project's total insured
+    value must reach £100 million. The only exception to the £100
+    million threshold is the narrow Clause 9B subcontractor case:
+    where the claim positively establishes that the defective component
+    was installed or fabricated by a subcontractor (rather than by the
+    principal contractor), the threshold is raised to £200 million.
+    Where the claim is silent on subcontractor installation — as it
+    ordinarily is, since most claims simply describe a defective
+    component without distinguishing who installed it — Clause 9B(3)
+    confirms that the principal-contractor case applies and the
+    unmodified £100 million threshold governs. Enhanced cover does
+    not extend to design-origin access damage at the standard tier;
+    under Clause 9(2) that is carved out unless the project qualifies
+    as a pioneer infrastructure project at £500 million or above, in
+    which case Clause 9(3) restores cover. The pioneer threshold of
+    £500 million is fixed and is not affected by Clause 9B.
+
+  - >
+    Where the property is an existing structure, a JCT-compliant
+    construction contract must be in place. This requirement does not
+    apply to other property categories.
+
+  - >
+    Plant and equipment is not covered under this endorsement. The
+    approved insured categories are: permanent works, temporary works,
+    existing structures, and materials on site.
+
+  - >
+    The pioneer infrastructure override does not apply where the defect
+    was known to the insured before commencement of works, unless the
+    insured obtained an independent engineer assessment confirming the
+    defect was not material to structural integrity. In other words:
+    either the defect was not known beforehand, or there is an engineer
+    assessment on file. If neither condition is met, the pioneer override
+    is blocked and the design defect limitation applies even on projects
+    above £500M.
+
+  - >
+    The Clause 9B subcontractor modifier is an exception that applies
+    only on positive evidence of subcontractor installation. It does
+    not require the claim to disprove subcontractor installation as a
+    precondition for the standard Clause 9(1) reinstatement. A claim
+    that does not name a subcontractor is, by Clause 9B(3) ("Where the
+    principal contractor installed the defective component directly,
+    the thresholds under Clause 9 apply without modification"), the
+    principal-contractor case, and the unmodified £100 million
+    threshold under Clause 9(1) governs. Authoring the rule so that it
+    requires the subcontractor question to be answered before any
+    access-damage reinstatement can take effect would be incorrect:
+    it would deny cover to ordinary claims that simply describe a
+    defective component without addressing who installed it. The
+    reinstatement at £100 million proceeds on every claim that does
+    not show subcontractor installation; the £200 million threshold is
+    engaged only on the narrower set of claims that do.
+
+  - >
+    Worked example for the Clause 9 enhanced reinstatement: a claim
+    describes a defective steel bracket of workmanship origin on a
+    £150 million tunnel project, with access damage to non-defective
+    wall lining. The claim does not address whether the bracket was
+    installed by a subcontractor or by the principal contractor.
+    Reading Clause 9(1) with Clause 9B(3): no subcontractor is
+    positively established on the claim, so this is the
+    principal-contractor case; the £100 million enhanced cover
+    threshold governs; £150 million clears that threshold; the
+    workmanship origin is not a design defect, so the Clause 9(2)
+    carve-out does not apply; therefore the access damage is reinstated
+    under the enhanced terms and the claim is eligible. The same claim
+    on a £50 million project would not clear the threshold and the
+    access damage would remain excluded under Clause 8.

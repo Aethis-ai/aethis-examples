@@ -1,0 +1,1144 @@
+{
+  "artifact_version": 1,
+  "ruleset_id": "construction-all-risks:20260517-a7234924",
+  "source_env": "prod",
+  "source_database": "Rules",
+  "created_at": "2026-05-17T21:00:24.039665+00:00",
+  "options": {
+    "with_sources": true,
+    "with_rulebook": false
+  },
+  "collections": {
+    "rule_bundles_dsl": [
+      {
+        "_id": {
+          "$oid": "6a0a2ae4b832d1f2e467c25c"
+        },
+        "bundle_id": "construction-all-risks:20260517-a7234924",
+        "section_id": "construction-all-risks",
+        "tenant_id": "user_39E6Y4c6po7HO70DSDjcB0Ve56u",
+        "visibility": "public",
+        "slug": "aethis/construction-all-risks",
+        "python_source": "\n# CAR Policy Defect Exclusion Endorsement Schedule 2025\n# Thames Estuary Resilience Tunnel \u2014 Eligibility Rules\n\n# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n# FIELD DEFINITIONS\n# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\nfield_policy_period_valid = FieldDefinition(\n    key=\"car.policy.period_valid\", label=\"Policy Period Valid\", sort=Sort.BOOL,\n    description=\"Whether the loss occurred within the policy period.\",\n    question=\"Did the loss occur within the policy period?\",\n    weight=1,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: The date of loss is needed to confirm the endorsement applies and that the loss happened during the relevant coverage period.\",\n            source=\"Synthetic Policy Wording \u2014 Clause 3: Policy period; Clause 1: Title and effective date\",\n            metadata={\"type\": \"why\", \"section\": \"construction-all-risks\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"This endorsement only responds to loss or damage occurring within the policy period. \"\n                \"If the loss occurs outside the policy period, the claim must be refused without considering any other clause.\\n\\n\"\n                \"In addition, the endorsement schedule itself states an effective date (1 March 2025). Where applicable in \"\n                \"administration of the endorsement, the date of loss may be checked against the endorsement's effective date \"\n                \"and the policy period.\\n\\n\"\n                \"Practical evidence that may support the date of loss includes:\\n\"\n                \"- incident reports / site logs\\n\"\n                \"- adjuster's report\\n\"\n                \"- photographs with timestamps\\n\"\n                \"- contemporaneous correspondence identifying the incident date\\n\\n\"\n                \"Not accepted on its own (without corroboration):\\n\"\n                \"- an undated narrative statement with no supporting documentation\"\n            ),\n            source=\"Synthetic Policy Wording \u2014 Clause 3: Policy period; Clause 1: Title and effective date\",\n            metadata={\"type\": \"legal_background\", \"section\": \"construction-all-risks\"},\n        ),\n    ],\n)\n\nfield_property_category = FieldDefinition(\n    key=\"car.property.category\", label=\"Property Category\", sort=Sort.ENUM,\n    enum_values=[\"permanent_works\", \"temporary_works\", \"existing_structures\", \"materials_on_site\", \"plant_equipment\"],\n    description=\"Category of the insured property that suffered loss or damage.\",\n    question=\"What category of insured property suffered the loss or damage?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Coverage under this endorsement depends on the type of property involved, and some categories (like plant and equipment) are not covered here.\",\n            source=\"Synthetic Policy Wording \u2014 Clause 5: Insured property categories\",\n            metadata={\"type\": \"why\", \"section\": \"construction-all-risks\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Clause 5 restricts this endorsement to specific insured property categories. The property that suffered \"\n                \"loss/damage must fall within a covered category for the endorsement to respond.\\n\\n\"\n                \"Covered categories under Clause 5(1):\\n\"\n                \"- permanent works\\n\"\n                \"- temporary works\\n\"\n                \"- existing structures\\n\"\n                \"- materials on site\\n\\n\"\n                \"Not covered under this endorsement (Clause 5(2)):\\n\"\n                \"- plant and equipment (cover, if any, is provided under a separate section of the policy)\\n\\n\"\n                \"Practical effect:\\n\"\n                \"- If the damaged item is plant/equipment, this endorsement does not apply even if other conditions \"\n                \"(defect, timing, notification) are met.\\n\"\n                \"- If the damaged item is an existing structure, additional conditions may apply elsewhere in the \"\n                \"endorsement (see Clause 10).\"\n            ),\n            source=\"Synthetic Policy Wording \u2014 Clause 5: Insured property categories\",\n            metadata={\"type\": \"legal_background\", \"section\": \"construction-all-risks\"},\n        ),\n    ],\n)\n\nfield_loss_is_physical = FieldDefinition(\n    key=\"car.loss.is_physical\", label=\"Physical Loss Occurred\", sort=Sort.BOOL,\n    description=\"Whether physical loss of or damage to insured property has occurred.\",\n    question=\"Has physical loss of or damage to insured property occurred?\",\n    weight=1,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: This endorsement only responds to physical loss or damage; a mere defect or the need to fix something is not enough on its own.\",\n            source=\"Synthetic Policy Wording \u2014 Clause 4: Insuring clause\",\n            metadata={\"type\": \"why\", \"section\": \"construction-all-risks\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Clause 4(1)(a) makes physical loss or damage a gateway requirement. If the insured cannot establish \"\n                \"physical loss or damage, the claim is outside the scope of this endorsement.\\n\\n\"\n                \"Key points:\\n\"\n                \"- The endorsement is not triggered by the existence of a defect alone.\\n\"\n                \"- Clause 7(3) reinforces this by stating property is not treated as 'damaged' merely because a defect \"\n                \"exists within it.\\n\\n\"\n                \"Typical supporting evidence (non-exhaustive):\\n\"\n                \"- photos/video of damage\\n\"\n                \"- incident reports/site logs\\n\"\n                \"- engineer/adjuster reports describing physical damage\\n\\n\"\n                \"Not sufficient on its own:\\n\"\n                \"- design review identifying a defect without physical damage\\n\"\n                \"- preventative replacement/upgrade proposals where no physical damage has occurred\"\n            ),\n            source=\"Synthetic Policy Wording \u2014 Clause 4: Insuring clause; Clause 7(3): For the avoidance of doubt\",\n            metadata={\"type\": \"legal_background\", \"section\": \"construction-all-risks\"},\n        ),\n    ],\n)\n\nfield_component_is_defective = FieldDefinition(\n    key=\"car.component.is_defective\", label=\"Defective Component Identified\", sort=Sort.BOOL,\n    description=\"Whether a defective component has been identified in connection with the loss.\",\n    question=\"Has a defective component been identified in connection with the loss or damage?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: The endorsement is specifically about losses connected to a defective component, so the defective part must be identified.\",\n            source=\"Synthetic Policy Wording \u2014 Clause 4: Insuring clause\",\n            metadata={\"type\": \"why\", \"section\": \"construction-all-risks\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Clause 4(1)(b) requires that 'a defective component has been identified in connection with the loss.' \"\n                \"Clause 2 defines 'defective component' broadly as a part of the Works that is defective in:\\n\"\n                \"- design\\n\"\n                \"- plan\\n\"\n                \"- specification\\n\"\n                \"- materials\\n\"\n                \"- workmanship\\n\\n\"\n                \"Operational impact:\\n\"\n                \"- If physical damage occurred but no defective component is identified, the claim is not within the \"\n                \"scope of this endorsement (Clause 4(2)).\\n\\n\"\n                \"Typical supporting evidence (non-exhaustive):\\n\"\n                \"- failure analysis identifying the defective part\\n\"\n                \"- engineer's report attributing failure to defect type\\n\"\n                \"- QA/QC records or NCRs identifying defective workmanship/materials\"\n            ),\n            source=\"Synthetic Policy Wording \u2014 Clause 2: Interpretation; Clause 4: Insuring clause\",\n            metadata={\"type\": \"legal_background\", \"section\": \"construction-all-risks\"},\n        ),\n    ],\n)\n\nfield_defect_origin = FieldDefinition(\n    key=\"car.defect.origin\", label=\"Defect Origin\", sort=Sort.ENUM,\n    enum_values=[\"design\", \"specification\", \"materials\", \"workmanship\", \"none\", \"unknown\"],\n    description=\"Origin/type of defect relevant to access-damage enhanced cover limitations.\",\n    question=\"What is the origin of the defect?\",\n    weight=4,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: For some large projects, access damage may be covered\u2014but design-origin defects can change that unless the project meets the higher threshold.\",\n            source=\"Synthetic Policy Wording \u2014 Clause 9: Enhanced cover for large projects\",\n            metadata={\"type\": \"why\", \"section\": \"construction-all-risks\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Clause 9 modifies the access-damage re-exclusion (Clause 8) for 'enhanced cover projects' and \"\n                \"'pioneer infrastructure projects,' but it treats design-origin defects differently:\\n\\n\"\n                \"- Clause 9(1): If the project is an enhanced cover project, the access damage exclusion in Clause 8 \"\n                \"does not apply (access damage becomes covered), subject to Clause 9(2).\\n\"\n                \"- Clause 9(2): Enhanced cover does NOT extend to access damage arising from a defect of design origin \"\n                \"(except as provided by Clause 9(3)).\\n\"\n                \"- Clause 9(3): If the project is a pioneer infrastructure project, the limitation in Clause 9(2) does \"\n                \"not apply; access damage from all defect origins (including design) can be covered.\\n\\n\"\n                \"How to use the values:\\n\"\n                \"- Use 'none' where investigations confirm there was no defect origin attributable to the listed categories.\\n\"\n                \"- Use 'unknown' where a defective component is identified but the precise origin has not been determined.\\n\\n\"\n                \"Common evidence (non-exhaustive):\\n\"\n                \"- design review / calculations (design)\\n\"\n                \"- IFC drawings/spec schedules (specification/plan)\\n\"\n                \"- materials test certificates (materials)\\n\"\n                \"- workmanship/installation QA records (workmanship)\"\n            ),\n            source=\"Synthetic Policy Wording \u2014 Clause 9: Enhanced cover for large projects; Clause 2: Interpretation\",\n            metadata={\"type\": \"legal_background\", \"section\": \"construction-all-risks\"},\n        ),\n    ],\n)\n\nfield_claim_is_rectification = FieldDefinition(\n    key=\"car.claim.is_rectification\", label=\"Claim is Rectification\", sort=Sort.BOOL,\n    description=\"Whether the claim is for costs of repairing/replacing/rectifying the defective component itself.\",\n    question=\"Is any part of your claim for the cost of repairing, replacing, or rectifying the defective component itself?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Costs to fix the defective component itself are excluded under this endorsement, even if other related damage might be covered.\",\n            source=\"Synthetic Policy Wording \u2014 Clause 6: Defect rectification exclusion\",\n            metadata={\"type\": \"why\", \"section\": \"construction-all-risks\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Clause 6(1) provides an absolute exclusion for 'the cost of repairing, replacing, or rectifying any \"\n                \"component that is itself defective' in design/plan/specification/materials/workmanship.\\n\\n\"\n                \"Clause 6(2)-(3) strengthens the exclusion:\\n\"\n                \"- It applies regardless of project value/classification.\\n\"\n                \"- It applies notwithstanding Clauses 7, 8, and 9.\\n\"\n                \"- No other provision reinstates cover for rectification costs.\\n\\n\"\n                \"Meaning in practice:\\n\"\n                \"- A claim line item for the defective component's own repair/replacement is not covered.\\n\"\n                \"- Separate damage to other insured property may still be assessed under carve-backs (e.g., resultant \"\n                \"damage), but Clause 6 remains a hard bar for rectification costs.\\n\\n\"\n                \"Examples (illustrative):\\n\"\n                \"- Not covered: replacing a cracked defective bracket itself.\\n\"\n                \"- Potentially covered (if conditions met): damage to other non-defective parts caused by the bracket \"\n                \"failing (see Clause 7 and worked example).\"\n            ),\n            source=\"Synthetic Policy Wording \u2014 Clause 6: Defect rectification exclusion; Thames Estuary Resilience Tunnel \u2014 Defective Steel Bracket example\",\n            metadata={\"type\": \"legal_background\", \"section\": \"construction-all-risks\"},\n        ),\n    ],\n)\n\nfield_claim_is_access_damage = FieldDefinition(\n    key=\"car.claim.is_access_damage\", label=\"Claim is Access Damage\", sort=Sort.BOOL,\n    description=\"Whether damage was caused solely to gain access to, remove, or replace a defective component.\",\n    question=\"Was any of the damage caused solely to gain access to, remove, or replace the defective component?\",\n    weight=4,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Access/removal damage is usually excluded, but it can become covered for sufficiently large projects (and subject to limits).\",\n            source=\"Synthetic Policy Wording \u2014 Clause 8: Access and removal damage re-exclusion; Clause 9: Enhanced cover for large projects\",\n            metadata={\"type\": \"why\", \"section\": \"construction-all-risks\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Clause 8 re-excludes 'access damage' even where Clause 7 carve-backs might otherwise help. Access damage \"\n                \"is defined (Clause 2; elaborated in Clause 8(2)) as damage to non-defective property that occurs only \"\n                \"because it must be disturbed/removed to reach the defective component for repair/replacement.\\n\\n\"\n                \"Core rule (Clause 8(1)):\\n\"\n                \"- Damage caused solely to gain access to, remove, or replace the defective component is excluded.\\n\\n\"\n                \"Possible reinstatement (Clause 9):\\n\"\n                \"- For enhanced cover projects, Clause 8's exclusion does not apply (Clause 9(1)), subject to the \"\n                \"design-origin limitation in Clause 9(2).\\n\"\n                \"- For pioneer infrastructure projects, the design-origin limitation is lifted (Clause 9(3)), subject \"\n                \"to the known defect limitation (Clause 9A).\\n\\n\"\n                \"Typical indicators of access damage:\\n\"\n                \"- cutting/opening finishes or removing intact panels solely to access the defective item\\n\"\n                \"- demolition/removal work that is necessary for replacement rather than caused by the failure event itself\\n\\n\"\n                \"Not access damage (often):\\n\"\n                \"- collateral damage caused by the defective component failing (i.e., resultant damage as a physical \"\n                \"consequence of failure)\"\n            ),\n            source=\"Synthetic Policy Wording \u2014 Clause 8: Access and removal damage re-exclusion; Clause 9: Enhanced cover for large projects\",\n            metadata={\"type\": \"legal_background\", \"section\": \"construction-all-risks\"},\n        ),\n    ],\n)\n\nfield_damage_consequence_of_failure = FieldDefinition(\n    key=\"car.damage.consequence_of_failure\", label=\"Damage Consequence of Failure\", sort=Sort.BOOL,\n    description=\"Whether damage to other insured property arose as a physical consequence of the defective component failing.\",\n    question=\"Did any damage to other insured property arise as a physical consequence of the defective component failing (not just to enable repair)?\",\n    weight=5,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Damage caused by the defective component failing can be covered as 'resultant damage', even though fixing the defective component itself is excluded.\",\n            source=\"Synthetic Policy Wording \u2014 Clause 7: Carve-back for resultant damage\",\n            metadata={\"type\": \"why\", \"section\": \"construction-all-risks\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Clause 7 provides a carve-back pathway for damage to other insured property where the claim is not for \"\n                \"rectification costs (and subject to Clause 8). Route A in Clause 7(1)(a) is satisfied where 'the damage \"\n                \"arose as a physical consequence of the defective component failing.'\\n\\n\"\n                \"Key distinctions:\\n\"\n                \"- Resultant (potentially covered): other property is physically damaged because the defective component fails.\\n\"\n                \"- Mere defect (not damage): Clause 7(3) says property is not treated as damaged merely because a defect \"\n                \"exists within it.\\n\"\n                \"- Access damage (excluded unless Clause 9 applies): Clause 8 excludes damage caused solely to gain \"\n                \"access/remove/replace.\\n\\n\"\n                \"Evidence commonly used (non-exhaustive):\\n\"\n                \"- incident timeline showing failure followed by collateral damage\\n\"\n                \"- engineering causation report\\n\"\n                \"- photos showing impact/collapse/spread from the failing component\\n\\n\"\n                \"Illustration from the worked example:\\n\"\n                \"- Bracket fails; ducting collapses and damages non-defective ceiling panels \u2192 Route A satisfied for \"\n                \"other-property damage (not for the bracket itself).\"\n            ),\n            source=\"Synthetic Policy Wording \u2014 Clause 7: Carve-back for resultant damage; Thames Estuary Resilience Tunnel \u2014 Defective Steel Bracket example\",\n            metadata={\"type\": \"legal_background\", \"section\": \"construction-all-risks\"},\n        ),\n    ],\n)\n\nfield_project_value = FieldDefinition(\n    key=\"car.project.value_millions_gbp\", label=\"Project Value (GBP millions)\", sort=Sort.INT,\n    description=\"Total insured project value in GBP millions.\",\n    question=\"What is the total insured project value (in GBP millions)?\",\n    weight=6,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Project value determines whether access damage can be covered under the enhanced cover provisions, and the threshold can change in subcontractor scenarios.\",\n            source=\"Synthetic Policy Wording \u2014 Clause 2: Interpretation; Clause 9; Clause 9B\",\n            metadata={\"type\": \"why\", \"section\": \"construction-all-risks\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Clause 2 defines value-based project classes:\\n\"\n                \"- 'enhanced cover project' = total insured value not less than GBP 100 million\\n\"\n                \"- 'pioneer infrastructure project' = total insured value not less than GBP 500 million\\n\\n\"\n                \"Clause 9 uses these classes to determine whether access damage (otherwise excluded by Clause 8) can be \"\n                \"covered, and whether design-origin access damage is allowed.\\n\\n\"\n                \"Clause 9B modifies the enhanced cover threshold where the defective component was installed/fabricated \"\n                \"by a subcontractor:\\n\"\n                \"- If installed/fabricated by a subcontractor (not principal contractor): enhanced cover threshold \"\n                \"increases from 100 to 200 (GBP millions)\\n\"\n                \"- Pioneer infrastructure threshold remains 500 (GBP millions)\\n\\n\"\n                \"Practical evidence (non-exhaustive):\\n\"\n                \"- schedule of values / declared total contract works value\\n\"\n                \"- policy schedule showing total insured value\\n\\n\"\n                \"Common pitfalls:\\n\"\n                \"- Using contract price rather than the 'total insured value' used for policy classification \"\n                \"(ensure the value is the insured value as declared).\"\n            ),\n            source=\"Synthetic Policy Wording \u2014 Clause 2: Interpretation; Clause 9; Clause 9B\",\n            metadata={\"type\": \"legal_background\", \"section\": \"construction-all-risks\"},\n        ),\n    ],\n)\n\nfield_notification_within_period = FieldDefinition(\n    key=\"car.notification.within_period\", label=\"Notification Within 30 Days\", sort=Sort.BOOL,\n    description=\"Whether the loss was notified to underwriters within 30 days of discovery.\",\n    question=\"Was the loss notified to underwriters within 30 days of discovery?\",\n    weight=3,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: The endorsement requires notification within 30 days of discovery; failure to notify in time makes the claim void.\",\n            source=\"Synthetic Policy Wording \u2014 Clause 11: Notification compliance\",\n            metadata={\"type\": \"why\", \"section\": \"construction-all-risks\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Clause 11(1) requires the insured to notify underwriters of any loss or damage within 30 days of \"\n                \"discovery. Clause 11(2) states late notification renders the claim void under this endorsement, \"\n                \"notwithstanding satisfaction of all other conditions.\\n\\n\"\n                \"Supporting evidence for timely notification:\\n\"\n                \"- broker/underwriter acknowledgement email\\n\"\n                \"- claim reference creation timestamp\\n\"\n                \"- portal submission receipt\\n\"\n                \"- recorded letter/email with sent date\"\n            ),\n            source=\"Synthetic Policy Wording \u2014 Clause 11: Notification compliance\",\n            metadata={\"type\": \"legal_background\", \"section\": \"construction-all-risks\"},\n        ),\n    ],\n)\n\nfield_jct_compliant = FieldDefinition(\n    key=\"car.contract.jct_compliant\", label=\"JCT-Compliant Contract\", sort=Sort.BOOL,\n    description=\"Whether a JCT-compliant construction contract was in place at the date of loss.\",\n    question=\"If the damaged property is an existing structure, was a JCT-compliant (or equivalent approved) construction contract in place on the date of loss?\",\n    weight=6,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Where the damaged property is an existing structure, the endorsement requires a JCT-compliant contract to be in place at the date of loss.\",\n            source=\"Synthetic Policy Wording \u2014 Clause 10: Existing structures condition; Clause 2: Interpretation\",\n            metadata={\"type\": \"why\", \"section\": \"construction-all-risks\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"If the property suffering loss or damage is an existing structure, the insured must have in place a \"\n                \"JCT-compliant construction contract at the date of loss. If the property is not an existing structure, \"\n                \"this requirement does not arise under the endorsement.\\n\\n\"\n                \"What can count (per the endorsement definition):\\n\"\n                \"- JCT standard form contract; or\\n\"\n                \"- an equivalent approved form (where the insurer/underwriters accept the equivalence)\\n\\n\"\n                \"Typical evidence:\\n\"\n                \"- executed contract (signature pages + relevant schedules)\\n\"\n                \"- contract particulars showing contract form and effective date\\n\"\n                \"- endorsements/variations confirming the form in force at the loss date\\n\\n\"\n                \"Potential pitfalls:\\n\"\n                \"- a draft contract not executed may not show the contract 'in place'\\n\"\n                \"- a contract executed after the loss date will not satisfy 'in place at the date of loss'\"\n            ),\n            source=\"Synthetic Policy Wording \u2014 Clause 10: Existing structures condition; Clause 2: Interpretation\",\n            metadata={\"type\": \"legal_background\", \"section\": \"construction-all-risks\"},\n        ),\n    ],\n)\n\nfield_defect_was_known_prior = FieldDefinition(\n    key=\"car.defect.was_known_prior\", label=\"Defect Known Before Commencement\", sort=Sort.BOOL,\n    description=\"Whether the defect was known (or ought reasonably to have been known) before commencement of works.\",\n    question=\"Was the defect known (or should it reasonably have been known) before work commenced?\",\n    weight=7,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Even for very large projects, enhanced cover may not apply if the defect was known before work started.\",\n            source=\"Synthetic Policy Wording \u2014 Clause 9A: Known defect limitation\",\n            metadata={\"type\": \"why\", \"section\": \"construction-all-risks\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Clause 9A limits the pioneer infrastructure override in Clause 9(3).\\n\\n\"\n                \"Rule (Clause 9A(1)):\\n\"\n                \"- The pioneer infrastructure override does not apply where the defect giving rise to the claim was known \"\n                \"to the insured, or ought reasonably to have been known, prior to the commencement of works.\\n\\n\"\n                \"Definition of 'known' (Clause 9A(3)):\\n\"\n                \"- A defect is 'known' if it was identified in any survey, inspection report, or design review conducted \"\n                \"before the date of commencement.\\n\\n\"\n                \"Evidence considerations (non-exhaustive):\\n\"\n                \"- pre-commencement surveys and inspection reports\\n\"\n                \"- design review records and meeting minutes\\n\"\n                \"- correspondence acknowledging the defect before work commenced\\n\\n\"\n                \"Interaction with the exception in Clause 9A(2):\\n\"\n                \"- If the defect was known, enhanced cover may still apply if the insured obtained a qualifying \"\n                \"independent engineer assessment before commencement (captured separately).\"\n            ),\n            source=\"Synthetic Policy Wording \u2014 Clause 9A: Known defect limitation\",\n            metadata={\"type\": \"legal_background\", \"section\": \"construction-all-risks\"},\n        ),\n    ],\n)\n\nfield_has_engineer_assessment = FieldDefinition(\n    key=\"car.defect.has_engineer_assessment\", label=\"Independent Engineer Assessment Obtained\", sort=Sort.BOOL,\n    description=\"Whether the insured obtained a written assessment from an independent chartered engineer confirming the known defect was not material.\",\n    question=\"Before work commenced, did you obtain a written assessment from an independent chartered engineer confirming the defect was not material to the structural integrity of the Works?\",\n    weight=8,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: A pre-commencement independent engineer assessment can preserve enhanced cover even if the defect was known beforehand.\",\n            source=\"Synthetic Policy Wording \u2014 Clause 9A: Known defect limitation\",\n            metadata={\"type\": \"why\", \"section\": \"construction-all-risks\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Clause 9A(2) creates an exception to the known-defect limitation in Clause 9A(1).\\n\\n\"\n                \"Exception (Clause 9A(2)):\\n\"\n                \"- Clause 9A(1) does not apply where the insured obtained, prior to commencement of works, a written \"\n                \"assessment from an independent chartered engineer confirming the known defect was not material to the \"\n                \"structural integrity of the Works.\\n\\n\"\n                \"What typically qualifies (non-exhaustive):\\n\"\n                \"- a written report/letter\\n\"\n                \"- authored by an independent chartered engineer\\n\"\n                \"- expressly addressing materiality to structural integrity\\n\"\n                \"- dated before commencement of works\\n\\n\"\n                \"What typically does not qualify (non-exhaustive):\\n\"\n                \"- internal opinions from the insured's own staff without independence\\n\"\n                \"- informal emails lacking an assessment of structural integrity\\n\"\n                \"- assessments obtained after commencement (timing is explicit)\\n\\n\"\n                \"Note:\\n\"\n                \"- This exception is narrowly framed and only affects the application of the Clause 9A(1) limitation; \"\n                \"it does not override the absolute rectification cost exclusion in Clause 6.\"\n            ),\n            source=\"Synthetic Policy Wording \u2014 Clause 9A: Known defect limitation\",\n            metadata={\"type\": \"legal_background\", \"section\": \"construction-all-risks\"},\n        ),\n    ],\n)\n\nfield_installed_by_subcontractor = FieldDefinition(\n    key=\"car.component.installed_by_subcontractor\", label=\"Installed by Subcontractor\", sort=Sort.BOOL,\n    description=\"Whether the defective component was installed or fabricated by a subcontractor.\",\n    question=\"Was the defective component installed or fabricated by a subcontractor (not the principal contractor)?\",\n    weight=6,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: If a subcontractor installed or fabricated the defective component, the project value threshold for enhanced cover is higher.\",\n            source=\"Synthetic Policy Wording \u2014 Clause 9B: Subcontractor defect modifier\",\n            metadata={\"type\": \"why\", \"section\": \"construction-all-risks\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Clause 9B changes the enhanced cover threshold (the threshold relevant to Clause 9(1)) based on who \"\n                \"installed/fabricated the defective component.\\n\\n\"\n                \"Rules:\\n\"\n                \"- Clause 9B(1): If the defective component was installed/fabricated by a subcontractor (not the \"\n                \"principal contractor), the enhanced cover threshold increases from GBP 100m to GBP 200m.\\n\"\n                \"- Clause 9B(2): This does not change the pioneer infrastructure threshold (GBP 500m).\\n\"\n                \"- Clause 9B(3): If installed directly by the principal contractor, the thresholds under Clause 9 \"\n                \"apply without modification.\\n\\n\"\n                \"Evidence (non-exhaustive):\\n\"\n                \"- subcontract agreements / work packages\\n\"\n                \"- installation records / ITP sign-offs indicating installer\\n\"\n                \"- fabrication certificates showing fabricator identity\"\n            ),\n            source=\"Synthetic Policy Wording \u2014 Clause 9B: Subcontractor defect modifier\",\n            metadata={\"type\": \"legal_background\", \"section\": \"construction-all-risks\"},\n        ),\n    ],\n)\n\n# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n# CRITERIA (RULES)\n# \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n# GROUP: policy_period\nrule_policy_period = Criterion(\n    id=\"policy_period_valid\",\n    title=\"Loss within policy period (Clause 3)\",\n    group=\"policy_period\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"car.policy.period_valid\"),\n        Const(sort=Sort.BOOL, value=True),\n    ]),\n    waivable=False,\n    notes=\"The endorsement applies only to loss occurring within the policy period (Clause 3).\",\n)\n\n# GROUP: insuring_clause\nrule_insuring_clause = Criterion(\n    id=\"insuring_clause\",\n    title=\"Physical loss and defective component identified (Clause 4)\",\n    group=\"insuring_clause\",\n    expr=Op(operator=Operator.AND, args=[\n        Op(operator=Operator.EQ, args=[\n            FieldRef(key=\"car.loss.is_physical\"),\n            Const(sort=Sort.BOOL, value=True),\n        ]),\n        Op(operator=Operator.EQ, args=[\n            FieldRef(key=\"car.component.is_defective\"),\n            Const(sort=Sort.BOOL, value=True),\n        ]),\n    ]),\n    waivable=False,\n    notes=\"Physical loss and identification of a defective component are both gateway requirements (Clause 4).\",\n)\n\n# GROUP: insured_property_category\nrule_insured_property_category = Criterion(\n    id=\"insured_property_category\",\n    title=\"Property in insured category (Clause 5)\",\n    group=\"insured_property_category\",\n    expr=Op(operator=Operator.IN, args=[\n        FieldRef(key=\"car.property.category\"),\n        Const(sort=Sort.ENUM, value=\"permanent_works\"),\n        Const(sort=Sort.ENUM, value=\"temporary_works\"),\n        Const(sort=Sort.ENUM, value=\"existing_structures\"),\n        Const(sort=Sort.ENUM, value=\"materials_on_site\"),\n    ]),\n    waivable=False,\n    notes=\"Plant and equipment is not covered under this endorsement (Clause 5(2)).\",\n)\n\n# GROUP: notification_compliance\nrule_notification = Criterion(\n    id=\"notification_within_period\",\n    title=\"Timely notification (Clause 11)\",\n    group=\"notification_compliance\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"car.notification.within_period\"),\n        Const(sort=Sort.BOOL, value=True),\n    ]),\n    waivable=False,\n    notes=\"The insured must notify underwriters within 30 days of discovery; late notification voids the claim (Clause 11).\",\n)\n\n# GROUP: existing_structures_jct_contract\nrule_existing_structures_jct = Criterion(\n    id=\"existing_structures_jct_contract\",\n    title=\"JCT-compliant contract for existing structures (Clause 10)\",\n    group=\"existing_structures_jct_contract\",\n    expr=Op(operator=Operator.IMPLIES, args=[\n        Op(operator=Operator.EQ, args=[\n            FieldRef(key=\"car.property.category\"),\n            Const(sort=Sort.ENUM, value=\"existing_structures\"),\n        ]),\n        Op(operator=Operator.EQ, args=[\n            FieldRef(key=\"car.contract.jct_compliant\"),\n            Const(sort=Sort.BOOL, value=True),\n        ]),\n    ]),\n    waivable=False,\n    notes=\"Where the property is an existing structure, a JCT-compliant contract must be in place at the date of loss (Clause 10).\",\n)\n\n# GROUP: not_rectification\nrule_not_rectification = Criterion(\n    id=\"not_rectification_claim\",\n    title=\"Claim not for rectification of defective component (Clause 6)\",\n    group=\"not_rectification\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"car.claim.is_rectification\"),\n        Const(sort=Sort.BOOL, value=False),\n    ]),\n    waivable=False,\n    notes=\"Rectification costs are absolutely excluded (Clause 6). No other provision reinstates cover for this.\",\n)\n\n# GROUP: carve_back_or_access_damage_reinstated\n# Criterion 1: Non-access-damage \u2014 carve-back applies (Clause 7 Route B)\nrule_carve_back_non_access = Criterion(\n    id=\"carve_back_non_access_damage\",\n    title=\"Carve-back: non-access damage (Clause 7, Route A or B)\",\n    group=\"carve_back_or_access_damage_reinstated\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"car.claim.is_access_damage\"),\n        Const(sort=Sort.BOOL, value=False),\n    ]),\n    waivable=False,\n    notes=(\n        \"Where damage is not access damage, the carve-back under Clause 7 applies. \"\n        \"Route B (not caused solely to gain access) is satisfied, and Clause 8 does not re-exclude.\"\n    ),\n)\n\n# Criterion 2: Access-damage reinstated by enhanced cover (Clause 9/9A/9B)\nrule_access_damage_reinstated = Criterion(\n    id=\"access_damage_enhanced_cover_reinstated\",\n    title=\"Access damage reinstated by enhanced cover (Clause 9/9A/9B)\",\n    group=\"carve_back_or_access_damage_reinstated\",\n    expr=Op(operator=Operator.AND, args=[\n        Op(operator=Operator.EQ, args=[\n            FieldRef(key=\"car.claim.is_access_damage\"),\n            Const(sort=Sort.BOOL, value=True),\n        ]),\n        Op(operator=Operator.OR, args=[\n            # Non-design defect path: threshold GBP 100M (principal) or GBP 200M (subcontractor)\n            Op(operator=Operator.AND, args=[\n                Op(operator=Operator.NOT, args=[\n                    Op(operator=Operator.EQ, args=[\n                        FieldRef(key=\"car.defect.origin\"),\n                        Const(sort=Sort.ENUM, value=\"design\"),\n                    ]),\n                ]),\n                Op(operator=Operator.AND, args=[\n                    # subcontractor=True => must be >= 200M\n                    Op(operator=Operator.IMPLIES, args=[\n                        Op(operator=Operator.EQ, args=[\n                            Op(operator=Operator.DEFAULT_TO, args=[\n                                FieldRef(key=\"car.component.installed_by_subcontractor\"),\n                                Const(sort=Sort.BOOL, value=False),\n                            ]),\n                            Const(sort=Sort.BOOL, value=True),\n                        ]),\n                        Op(operator=Operator.GE, args=[\n                            FieldRef(key=\"car.project.value_millions_gbp\"),\n                            Const(sort=Sort.INT, value=200),\n                        ]),\n                    ]),\n                    # subcontractor=False (or absent) => must be >= 100M\n                    Op(operator=Operator.IMPLIES, args=[\n                        Op(operator=Operator.EQ, args=[\n                            Op(operator=Operator.DEFAULT_TO, args=[\n                                FieldRef(key=\"car.component.installed_by_subcontractor\"),\n                                Const(sort=Sort.BOOL, value=False),\n                            ]),\n                            Const(sort=Sort.BOOL, value=False),\n                        ]),\n                        Op(operator=Operator.GE, args=[\n                            FieldRef(key=\"car.project.value_millions_gbp\"),\n                            Const(sort=Sort.INT, value=100),\n                        ]),\n                    ]),\n                ]),\n            ]),\n            # Design defect path: pioneer (>= 500M) + Cl.9A check\n            Op(operator=Operator.AND, args=[\n                Op(operator=Operator.EQ, args=[\n                    FieldRef(key=\"car.defect.origin\"),\n                    Const(sort=Sort.ENUM, value=\"design\"),\n                ]),\n                Op(operator=Operator.GE, args=[\n                    FieldRef(key=\"car.project.value_millions_gbp\"),\n                    Const(sort=Sort.INT, value=500),\n                ]),\n                # Cl.9A: defect NOT known prior OR has engineer assessment\n                Op(operator=Operator.OR, args=[\n                    Op(operator=Operator.EQ, args=[\n                        Op(operator=Operator.DEFAULT_TO, args=[\n                            FieldRef(key=\"car.defect.was_known_prior\"),\n                            Const(sort=Sort.BOOL, value=False),\n                        ]),\n                        Const(sort=Sort.BOOL, value=False),\n                    ]),\n                    Op(operator=Operator.EQ, args=[\n                        Op(operator=Operator.DEFAULT_TO, args=[\n                            FieldRef(key=\"car.defect.has_engineer_assessment\"),\n                            Const(sort=Sort.BOOL, value=False),\n                        ]),\n                        Const(sort=Sort.BOOL, value=True),\n                    ]),\n                ]),\n            ]),\n        ]),\n    ]),\n    waivable=False,\n    notes=(\n        \"Access damage is re-excluded by Clause 8 but may be reinstated under Clause 9 for enhanced cover projects. \"\n        \"Non-design defects: threshold GBP 100M (principal contractor) or GBP 200M (subcontractor per Clause 9B). \"\n        \"Design-origin defects: pioneer project (GBP 500M+) required under Clause 9(3), subject to Clause 9A known-defect limitation.\"\n    ),\n)\n",
+        "python_source_hash": "f62854bf8b076c0a6220dc46f51afd8f8a4ab283b594a86f807ab75759e30ae5",
+        "compiled_bundle": {
+          "name": "construction-all-risks",
+          "jurisdiction": "uk",
+          "instrument": "agent_generated",
+          "version": "v1",
+          "effective_from": {
+            "$date": "2026-05-17T00:00:00Z"
+          },
+          "effective_to": null,
+          "criteria": [
+            {
+              "id": "policy_period_valid",
+              "title": "Loss within policy period (Clause 3)",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "car.policy.period_valid"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "policy_period",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "The endorsement applies only to loss occurring within the policy period (Clause 3).",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "insuring_clause",
+              "title": "Physical loss and defective component identified (Clause 4)",
+              "expr": {
+                "type": "op",
+                "operator": "and",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "car.loss.is_physical"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Bool",
+                        "value": true,
+                        "field_context": null
+                      }
+                    ]
+                  },
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "car.component.is_defective"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Bool",
+                        "value": true,
+                        "field_context": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              "group": "insuring_clause",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Physical loss and identification of a defective component are both gateway requirements (Clause 4).",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "insured_property_category",
+              "title": "Property in insured category (Clause 5)",
+              "expr": {
+                "type": "op",
+                "operator": "in",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "car.property.category"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Enum",
+                    "value": "permanent_works",
+                    "field_context": null
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Enum",
+                    "value": "temporary_works",
+                    "field_context": null
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Enum",
+                    "value": "existing_structures",
+                    "field_context": null
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Enum",
+                    "value": "materials_on_site",
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "insured_property_category",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Plant and equipment is not covered under this endorsement (Clause 5(2)).",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "notification_within_period",
+              "title": "Timely notification (Clause 11)",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "car.notification.within_period"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "notification_compliance",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "The insured must notify underwriters within 30 days of discovery; late notification voids the claim (Clause 11).",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "existing_structures_jct_contract",
+              "title": "JCT-compliant contract for existing structures (Clause 10)",
+              "expr": {
+                "type": "op",
+                "operator": "=>",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "car.property.category"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Enum",
+                        "value": "existing_structures",
+                        "field_context": null
+                      }
+                    ]
+                  },
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "car.contract.jct_compliant"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Bool",
+                        "value": true,
+                        "field_context": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              "group": "existing_structures_jct_contract",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Where the property is an existing structure, a JCT-compliant contract must be in place at the date of loss (Clause 10).",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "not_rectification_claim",
+              "title": "Claim not for rectification of defective component (Clause 6)",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "car.claim.is_rectification"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": false,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "not_rectification",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Rectification costs are absolutely excluded (Clause 6). No other provision reinstates cover for this.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "carve_back_non_access_damage",
+              "title": "Carve-back: non-access damage (Clause 7, Route A or B)",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "car.claim.is_access_damage"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": false,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "carve_back_or_access_damage_reinstated",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Where damage is not access damage, the carve-back under Clause 7 applies. Route B (not caused solely to gain access) is satisfied, and Clause 8 does not re-exclude.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "access_damage_enhanced_cover_reinstated",
+              "title": "Access damage reinstated by enhanced cover (Clause 9/9A/9B)",
+              "expr": {
+                "type": "op",
+                "operator": "and",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "car.claim.is_access_damage"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Bool",
+                        "value": true,
+                        "field_context": null
+                      }
+                    ]
+                  },
+                  {
+                    "type": "op",
+                    "operator": "or",
+                    "args": [
+                      {
+                        "type": "op",
+                        "operator": "and",
+                        "args": [
+                          {
+                            "type": "op",
+                            "operator": "not",
+                            "args": [
+                              {
+                                "type": "op",
+                                "operator": "=",
+                                "args": [
+                                  {
+                                    "type": "field_ref",
+                                    "key": "car.defect.origin"
+                                  },
+                                  {
+                                    "type": "const",
+                                    "sort": "Enum",
+                                    "value": "design",
+                                    "field_context": null
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "type": "op",
+                            "operator": "and",
+                            "args": [
+                              {
+                                "type": "op",
+                                "operator": "=>",
+                                "args": [
+                                  {
+                                    "type": "op",
+                                    "operator": "=",
+                                    "args": [
+                                      {
+                                        "type": "op",
+                                        "operator": "default_to",
+                                        "args": [
+                                          {
+                                            "type": "field_ref",
+                                            "key": "car.component.installed_by_subcontractor"
+                                          },
+                                          {
+                                            "type": "const",
+                                            "sort": "Bool",
+                                            "value": false,
+                                            "field_context": null
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "type": "const",
+                                        "sort": "Bool",
+                                        "value": true,
+                                        "field_context": null
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "type": "op",
+                                    "operator": ">=",
+                                    "args": [
+                                      {
+                                        "type": "field_ref",
+                                        "key": "car.project.value_millions_gbp"
+                                      },
+                                      {
+                                        "type": "const",
+                                        "sort": "Int",
+                                        "value": 200,
+                                        "field_context": null
+                                      }
+                                    ]
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "op",
+                                "operator": "=>",
+                                "args": [
+                                  {
+                                    "type": "op",
+                                    "operator": "=",
+                                    "args": [
+                                      {
+                                        "type": "op",
+                                        "operator": "default_to",
+                                        "args": [
+                                          {
+                                            "type": "field_ref",
+                                            "key": "car.component.installed_by_subcontractor"
+                                          },
+                                          {
+                                            "type": "const",
+                                            "sort": "Bool",
+                                            "value": false,
+                                            "field_context": null
+                                          }
+                                        ]
+                                      },
+                                      {
+                                        "type": "const",
+                                        "sort": "Bool",
+                                        "value": false,
+                                        "field_context": null
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "type": "op",
+                                    "operator": ">=",
+                                    "args": [
+                                      {
+                                        "type": "field_ref",
+                                        "key": "car.project.value_millions_gbp"
+                                      },
+                                      {
+                                        "type": "const",
+                                        "sort": "Int",
+                                        "value": 100,
+                                        "field_context": null
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      },
+                      {
+                        "type": "op",
+                        "operator": "and",
+                        "args": [
+                          {
+                            "type": "op",
+                            "operator": "=",
+                            "args": [
+                              {
+                                "type": "field_ref",
+                                "key": "car.defect.origin"
+                              },
+                              {
+                                "type": "const",
+                                "sort": "Enum",
+                                "value": "design",
+                                "field_context": null
+                              }
+                            ]
+                          },
+                          {
+                            "type": "op",
+                            "operator": ">=",
+                            "args": [
+                              {
+                                "type": "field_ref",
+                                "key": "car.project.value_millions_gbp"
+                              },
+                              {
+                                "type": "const",
+                                "sort": "Int",
+                                "value": 500,
+                                "field_context": null
+                              }
+                            ]
+                          },
+                          {
+                            "type": "op",
+                            "operator": "or",
+                            "args": [
+                              {
+                                "type": "op",
+                                "operator": "=",
+                                "args": [
+                                  {
+                                    "type": "op",
+                                    "operator": "default_to",
+                                    "args": [
+                                      {
+                                        "type": "field_ref",
+                                        "key": "car.defect.was_known_prior"
+                                      },
+                                      {
+                                        "type": "const",
+                                        "sort": "Bool",
+                                        "value": false,
+                                        "field_context": null
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "type": "const",
+                                    "sort": "Bool",
+                                    "value": false,
+                                    "field_context": null
+                                  }
+                                ]
+                              },
+                              {
+                                "type": "op",
+                                "operator": "=",
+                                "args": [
+                                  {
+                                    "type": "op",
+                                    "operator": "default_to",
+                                    "args": [
+                                      {
+                                        "type": "field_ref",
+                                        "key": "car.defect.has_engineer_assessment"
+                                      },
+                                      {
+                                        "type": "const",
+                                        "sort": "Bool",
+                                        "value": false,
+                                        "field_context": null
+                                      }
+                                    ]
+                                  },
+                                  {
+                                    "type": "const",
+                                    "sort": "Bool",
+                                    "value": true,
+                                    "field_context": null
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "group": "carve_back_or_access_damage_reinstated",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Access damage is re-excluded by Clause 8 but may be reinstated under Clause 9 for enhanced cover projects. Non-design defects: threshold GBP 100M (principal contractor) or GBP 200M (subcontractor per Clause 9B). Design-origin defects: pioneer project (GBP 500M+) required under Clause 9(3), subject to Clause 9A known-defect limitation.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            }
+          ],
+          "outcome_logic": null
+        },
+        "compiled_fields": [
+          {
+            "key": "car.policy.period_valid",
+            "label": "Policy Period Valid",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the loss occurred within the policy period.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Did the loss occur within the policy period?",
+            "weight": 1,
+            "notes": [
+              {
+                "note_text": "WHY: The date of loss is needed to confirm the endorsement applies and that the loss happened during the relevant coverage period.",
+                "source": "Synthetic Policy Wording \u2014 Clause 3: Policy period; Clause 1: Title and effective date",
+                "metadata": {
+                  "type": "why",
+                  "section": "construction-all-risks"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nThis endorsement only responds to loss or damage occurring within the policy period. If the loss occurs outside the policy period, the claim must be refused without considering any other clause.\n\nIn addition, the endorsement schedule itself states an effective date (1 March 2025). Where applicable in administration of the endorsement, the date of loss may be checked against the endorsement's effective date and the policy period.\n\nPractical evidence that may support the date of loss includes:\n- incident reports / site logs\n- adjuster's report\n- photographs with timestamps\n- contemporaneous correspondence identifying the incident date\n\nNot accepted on its own (without corroboration):\n- an undated narrative statement with no supporting documentation",
+                "source": "Synthetic Policy Wording \u2014 Clause 3: Policy period; Clause 1: Title and effective date",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "construction-all-risks"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "car.property.category",
+            "label": "Property Category",
+            "sort": "Enum",
+            "enum_values": [
+              "permanent_works",
+              "temporary_works",
+              "existing_structures",
+              "materials_on_site",
+              "plant_equipment"
+            ],
+            "description": "Category of the insured property that suffered loss or damage.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What category of insured property suffered the loss or damage?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: Coverage under this endorsement depends on the type of property involved, and some categories (like plant and equipment) are not covered here.",
+                "source": "Synthetic Policy Wording \u2014 Clause 5: Insured property categories",
+                "metadata": {
+                  "type": "why",
+                  "section": "construction-all-risks"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nClause 5 restricts this endorsement to specific insured property categories. The property that suffered loss/damage must fall within a covered category for the endorsement to respond.\n\nCovered categories under Clause 5(1):\n- permanent works\n- temporary works\n- existing structures\n- materials on site\n\nNot covered under this endorsement (Clause 5(2)):\n- plant and equipment (cover, if any, is provided under a separate section of the policy)\n\nPractical effect:\n- If the damaged item is plant/equipment, this endorsement does not apply even if other conditions (defect, timing, notification) are met.\n- If the damaged item is an existing structure, additional conditions may apply elsewhere in the endorsement (see Clause 10).",
+                "source": "Synthetic Policy Wording \u2014 Clause 5: Insured property categories",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "construction-all-risks"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "car.loss.is_physical",
+            "label": "Physical Loss Occurred",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether physical loss of or damage to insured property has occurred.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Has physical loss of or damage to insured property occurred?",
+            "weight": 1,
+            "notes": [
+              {
+                "note_text": "WHY: This endorsement only responds to physical loss or damage; a mere defect or the need to fix something is not enough on its own.",
+                "source": "Synthetic Policy Wording \u2014 Clause 4: Insuring clause",
+                "metadata": {
+                  "type": "why",
+                  "section": "construction-all-risks"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nClause 4(1)(a) makes physical loss or damage a gateway requirement. If the insured cannot establish physical loss or damage, the claim is outside the scope of this endorsement.\n\nKey points:\n- The endorsement is not triggered by the existence of a defect alone.\n- Clause 7(3) reinforces this by stating property is not treated as 'damaged' merely because a defect exists within it.\n\nTypical supporting evidence (non-exhaustive):\n- photos/video of damage\n- incident reports/site logs\n- engineer/adjuster reports describing physical damage\n\nNot sufficient on its own:\n- design review identifying a defect without physical damage\n- preventative replacement/upgrade proposals where no physical damage has occurred",
+                "source": "Synthetic Policy Wording \u2014 Clause 4: Insuring clause; Clause 7(3): For the avoidance of doubt",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "construction-all-risks"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "car.component.is_defective",
+            "label": "Defective Component Identified",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether a defective component has been identified in connection with the loss.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Has a defective component been identified in connection with the loss or damage?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: The endorsement is specifically about losses connected to a defective component, so the defective part must be identified.",
+                "source": "Synthetic Policy Wording \u2014 Clause 4: Insuring clause",
+                "metadata": {
+                  "type": "why",
+                  "section": "construction-all-risks"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nClause 4(1)(b) requires that 'a defective component has been identified in connection with the loss.' Clause 2 defines 'defective component' broadly as a part of the Works that is defective in:\n- design\n- plan\n- specification\n- materials\n- workmanship\n\nOperational impact:\n- If physical damage occurred but no defective component is identified, the claim is not within the scope of this endorsement (Clause 4(2)).\n\nTypical supporting evidence (non-exhaustive):\n- failure analysis identifying the defective part\n- engineer's report attributing failure to defect type\n- QA/QC records or NCRs identifying defective workmanship/materials",
+                "source": "Synthetic Policy Wording \u2014 Clause 2: Interpretation; Clause 4: Insuring clause",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "construction-all-risks"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "car.defect.origin",
+            "label": "Defect Origin",
+            "sort": "Enum",
+            "enum_values": [
+              "design",
+              "specification",
+              "materials",
+              "workmanship",
+              "none",
+              "unknown"
+            ],
+            "description": "Origin/type of defect relevant to access-damage enhanced cover limitations.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the origin of the defect?",
+            "weight": 4,
+            "notes": [
+              {
+                "note_text": "WHY: For some large projects, access damage may be covered\u2014but design-origin defects can change that unless the project meets the higher threshold.",
+                "source": "Synthetic Policy Wording \u2014 Clause 9: Enhanced cover for large projects",
+                "metadata": {
+                  "type": "why",
+                  "section": "construction-all-risks"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nClause 9 modifies the access-damage re-exclusion (Clause 8) for 'enhanced cover projects' and 'pioneer infrastructure projects,' but it treats design-origin defects differently:\n\n- Clause 9(1): If the project is an enhanced cover project, the access damage exclusion in Clause 8 does not apply (access damage becomes covered), subject to Clause 9(2).\n- Clause 9(2): Enhanced cover does NOT extend to access damage arising from a defect of design origin (except as provided by Clause 9(3)).\n- Clause 9(3): If the project is a pioneer infrastructure project, the limitation in Clause 9(2) does not apply; access damage from all defect origins (including design) can be covered.\n\nHow to use the values:\n- Use 'none' where investigations confirm there was no defect origin attributable to the listed categories.\n- Use 'unknown' where a defective component is identified but the precise origin has not been determined.\n\nCommon evidence (non-exhaustive):\n- design review / calculations (design)\n- IFC drawings/spec schedules (specification/plan)\n- materials test certificates (materials)\n- workmanship/installation QA records (workmanship)",
+                "source": "Synthetic Policy Wording \u2014 Clause 9: Enhanced cover for large projects; Clause 2: Interpretation",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "construction-all-risks"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "car.claim.is_rectification",
+            "label": "Claim is Rectification",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the claim is for costs of repairing/replacing/rectifying the defective component itself.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Is any part of your claim for the cost of repairing, replacing, or rectifying the defective component itself?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: Costs to fix the defective component itself are excluded under this endorsement, even if other related damage might be covered.",
+                "source": "Synthetic Policy Wording \u2014 Clause 6: Defect rectification exclusion",
+                "metadata": {
+                  "type": "why",
+                  "section": "construction-all-risks"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nClause 6(1) provides an absolute exclusion for 'the cost of repairing, replacing, or rectifying any component that is itself defective' in design/plan/specification/materials/workmanship.\n\nClause 6(2)-(3) strengthens the exclusion:\n- It applies regardless of project value/classification.\n- It applies notwithstanding Clauses 7, 8, and 9.\n- No other provision reinstates cover for rectification costs.\n\nMeaning in practice:\n- A claim line item for the defective component's own repair/replacement is not covered.\n- Separate damage to other insured property may still be assessed under carve-backs (e.g., resultant damage), but Clause 6 remains a hard bar for rectification costs.\n\nExamples (illustrative):\n- Not covered: replacing a cracked defective bracket itself.\n- Potentially covered (if conditions met): damage to other non-defective parts caused by the bracket failing (see Clause 7 and worked example).",
+                "source": "Synthetic Policy Wording \u2014 Clause 6: Defect rectification exclusion; Thames Estuary Resilience Tunnel \u2014 Defective Steel Bracket example",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "construction-all-risks"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "car.claim.is_access_damage",
+            "label": "Claim is Access Damage",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether damage was caused solely to gain access to, remove, or replace a defective component.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Was any of the damage caused solely to gain access to, remove, or replace the defective component?",
+            "weight": 4,
+            "notes": [
+              {
+                "note_text": "WHY: Access/removal damage is usually excluded, but it can become covered for sufficiently large projects (and subject to limits).",
+                "source": "Synthetic Policy Wording \u2014 Clause 8: Access and removal damage re-exclusion; Clause 9: Enhanced cover for large projects",
+                "metadata": {
+                  "type": "why",
+                  "section": "construction-all-risks"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nClause 8 re-excludes 'access damage' even where Clause 7 carve-backs might otherwise help. Access damage is defined (Clause 2; elaborated in Clause 8(2)) as damage to non-defective property that occurs only because it must be disturbed/removed to reach the defective component for repair/replacement.\n\nCore rule (Clause 8(1)):\n- Damage caused solely to gain access to, remove, or replace the defective component is excluded.\n\nPossible reinstatement (Clause 9):\n- For enhanced cover projects, Clause 8's exclusion does not apply (Clause 9(1)), subject to the design-origin limitation in Clause 9(2).\n- For pioneer infrastructure projects, the design-origin limitation is lifted (Clause 9(3)), subject to the known defect limitation (Clause 9A).\n\nTypical indicators of access damage:\n- cutting/opening finishes or removing intact panels solely to access the defective item\n- demolition/removal work that is necessary for replacement rather than caused by the failure event itself\n\nNot access damage (often):\n- collateral damage caused by the defective component failing (i.e., resultant damage as a physical consequence of failure)",
+                "source": "Synthetic Policy Wording \u2014 Clause 8: Access and removal damage re-exclusion; Clause 9: Enhanced cover for large projects",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "construction-all-risks"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "car.damage.consequence_of_failure",
+            "label": "Damage Consequence of Failure",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether damage to other insured property arose as a physical consequence of the defective component failing.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Did any damage to other insured property arise as a physical consequence of the defective component failing (not just to enable repair)?",
+            "weight": 5,
+            "notes": [
+              {
+                "note_text": "WHY: Damage caused by the defective component failing can be covered as 'resultant damage', even though fixing the defective component itself is excluded.",
+                "source": "Synthetic Policy Wording \u2014 Clause 7: Carve-back for resultant damage",
+                "metadata": {
+                  "type": "why",
+                  "section": "construction-all-risks"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nClause 7 provides a carve-back pathway for damage to other insured property where the claim is not for rectification costs (and subject to Clause 8). Route A in Clause 7(1)(a) is satisfied where 'the damage arose as a physical consequence of the defective component failing.'\n\nKey distinctions:\n- Resultant (potentially covered): other property is physically damaged because the defective component fails.\n- Mere defect (not damage): Clause 7(3) says property is not treated as damaged merely because a defect exists within it.\n- Access damage (excluded unless Clause 9 applies): Clause 8 excludes damage caused solely to gain access/remove/replace.\n\nEvidence commonly used (non-exhaustive):\n- incident timeline showing failure followed by collateral damage\n- engineering causation report\n- photos showing impact/collapse/spread from the failing component\n\nIllustration from the worked example:\n- Bracket fails; ducting collapses and damages non-defective ceiling panels \u2192 Route A satisfied for other-property damage (not for the bracket itself).",
+                "source": "Synthetic Policy Wording \u2014 Clause 7: Carve-back for resultant damage; Thames Estuary Resilience Tunnel \u2014 Defective Steel Bracket example",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "construction-all-risks"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "car.project.value_millions_gbp",
+            "label": "Project Value (GBP millions)",
+            "sort": "Int",
+            "enum_values": null,
+            "description": "Total insured project value in GBP millions.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the total insured project value (in GBP millions)?",
+            "weight": 6,
+            "notes": [
+              {
+                "note_text": "WHY: Project value determines whether access damage can be covered under the enhanced cover provisions, and the threshold can change in subcontractor scenarios.",
+                "source": "Synthetic Policy Wording \u2014 Clause 2: Interpretation; Clause 9; Clause 9B",
+                "metadata": {
+                  "type": "why",
+                  "section": "construction-all-risks"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nClause 2 defines value-based project classes:\n- 'enhanced cover project' = total insured value not less than GBP 100 million\n- 'pioneer infrastructure project' = total insured value not less than GBP 500 million\n\nClause 9 uses these classes to determine whether access damage (otherwise excluded by Clause 8) can be covered, and whether design-origin access damage is allowed.\n\nClause 9B modifies the enhanced cover threshold where the defective component was installed/fabricated by a subcontractor:\n- If installed/fabricated by a subcontractor (not principal contractor): enhanced cover threshold increases from 100 to 200 (GBP millions)\n- Pioneer infrastructure threshold remains 500 (GBP millions)\n\nPractical evidence (non-exhaustive):\n- schedule of values / declared total contract works value\n- policy schedule showing total insured value\n\nCommon pitfalls:\n- Using contract price rather than the 'total insured value' used for policy classification (ensure the value is the insured value as declared).",
+                "source": "Synthetic Policy Wording \u2014 Clause 2: Interpretation; Clause 9; Clause 9B",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "construction-all-risks"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "car.notification.within_period",
+            "label": "Notification Within 30 Days",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the loss was notified to underwriters within 30 days of discovery.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Was the loss notified to underwriters within 30 days of discovery?",
+            "weight": 3,
+            "notes": [
+              {
+                "note_text": "WHY: The endorsement requires notification within 30 days of discovery; failure to notify in time makes the claim void.",
+                "source": "Synthetic Policy Wording \u2014 Clause 11: Notification compliance",
+                "metadata": {
+                  "type": "why",
+                  "section": "construction-all-risks"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nClause 11(1) requires the insured to notify underwriters of any loss or damage within 30 days of discovery. Clause 11(2) states late notification renders the claim void under this endorsement, notwithstanding satisfaction of all other conditions.\n\nSupporting evidence for timely notification:\n- broker/underwriter acknowledgement email\n- claim reference creation timestamp\n- portal submission receipt\n- recorded letter/email with sent date",
+                "source": "Synthetic Policy Wording \u2014 Clause 11: Notification compliance",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "construction-all-risks"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "car.contract.jct_compliant",
+            "label": "JCT-Compliant Contract",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether a JCT-compliant construction contract was in place at the date of loss.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "If the damaged property is an existing structure, was a JCT-compliant (or equivalent approved) construction contract in place on the date of loss?",
+            "weight": 6,
+            "notes": [
+              {
+                "note_text": "WHY: Where the damaged property is an existing structure, the endorsement requires a JCT-compliant contract to be in place at the date of loss.",
+                "source": "Synthetic Policy Wording \u2014 Clause 10: Existing structures condition; Clause 2: Interpretation",
+                "metadata": {
+                  "type": "why",
+                  "section": "construction-all-risks"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nIf the property suffering loss or damage is an existing structure, the insured must have in place a JCT-compliant construction contract at the date of loss. If the property is not an existing structure, this requirement does not arise under the endorsement.\n\nWhat can count (per the endorsement definition):\n- JCT standard form contract; or\n- an equivalent approved form (where the insurer/underwriters accept the equivalence)\n\nTypical evidence:\n- executed contract (signature pages + relevant schedules)\n- contract particulars showing contract form and effective date\n- endorsements/variations confirming the form in force at the loss date\n\nPotential pitfalls:\n- a draft contract not executed may not show the contract 'in place'\n- a contract executed after the loss date will not satisfy 'in place at the date of loss'",
+                "source": "Synthetic Policy Wording \u2014 Clause 10: Existing structures condition; Clause 2: Interpretation",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "construction-all-risks"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "car.defect.was_known_prior",
+            "label": "Defect Known Before Commencement",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the defect was known (or ought reasonably to have been known) before commencement of works.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Was the defect known (or should it reasonably have been known) before work commenced?",
+            "weight": 7,
+            "notes": [
+              {
+                "note_text": "WHY: Even for very large projects, enhanced cover may not apply if the defect was known before work started.",
+                "source": "Synthetic Policy Wording \u2014 Clause 9A: Known defect limitation",
+                "metadata": {
+                  "type": "why",
+                  "section": "construction-all-risks"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nClause 9A limits the pioneer infrastructure override in Clause 9(3).\n\nRule (Clause 9A(1)):\n- The pioneer infrastructure override does not apply where the defect giving rise to the claim was known to the insured, or ought reasonably to have been known, prior to the commencement of works.\n\nDefinition of 'known' (Clause 9A(3)):\n- A defect is 'known' if it was identified in any survey, inspection report, or design review conducted before the date of commencement.\n\nEvidence considerations (non-exhaustive):\n- pre-commencement surveys and inspection reports\n- design review records and meeting minutes\n- correspondence acknowledging the defect before work commenced\n\nInteraction with the exception in Clause 9A(2):\n- If the defect was known, enhanced cover may still apply if the insured obtained a qualifying independent engineer assessment before commencement (captured separately).",
+                "source": "Synthetic Policy Wording \u2014 Clause 9A: Known defect limitation",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "construction-all-risks"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "car.defect.has_engineer_assessment",
+            "label": "Independent Engineer Assessment Obtained",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the insured obtained a written assessment from an independent chartered engineer confirming the known defect was not material.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Before work commenced, did you obtain a written assessment from an independent chartered engineer confirming the defect was not material to the structural integrity of the Works?",
+            "weight": 8,
+            "notes": [
+              {
+                "note_text": "WHY: A pre-commencement independent engineer assessment can preserve enhanced cover even if the defect was known beforehand.",
+                "source": "Synthetic Policy Wording \u2014 Clause 9A: Known defect limitation",
+                "metadata": {
+                  "type": "why",
+                  "section": "construction-all-risks"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nClause 9A(2) creates an exception to the known-defect limitation in Clause 9A(1).\n\nException (Clause 9A(2)):\n- Clause 9A(1) does not apply where the insured obtained, prior to commencement of works, a written assessment from an independent chartered engineer confirming the known defect was not material to the structural integrity of the Works.\n\nWhat typically qualifies (non-exhaustive):\n- a written report/letter\n- authored by an independent chartered engineer\n- expressly addressing materiality to structural integrity\n- dated before commencement of works\n\nWhat typically does not qualify (non-exhaustive):\n- internal opinions from the insured's own staff without independence\n- informal emails lacking an assessment of structural integrity\n- assessments obtained after commencement (timing is explicit)\n\nNote:\n- This exception is narrowly framed and only affects the application of the Clause 9A(1) limitation; it does not override the absolute rectification cost exclusion in Clause 6.",
+                "source": "Synthetic Policy Wording \u2014 Clause 9A: Known defect limitation",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "construction-all-risks"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "car.component.installed_by_subcontractor",
+            "label": "Installed by Subcontractor",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the defective component was installed or fabricated by a subcontractor.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Was the defective component installed or fabricated by a subcontractor (not the principal contractor)?",
+            "weight": 6,
+            "notes": [
+              {
+                "note_text": "WHY: If a subcontractor installed or fabricated the defective component, the project value threshold for enhanced cover is higher.",
+                "source": "Synthetic Policy Wording \u2014 Clause 9B: Subcontractor defect modifier",
+                "metadata": {
+                  "type": "why",
+                  "section": "construction-all-risks"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nClause 9B changes the enhanced cover threshold (the threshold relevant to Clause 9(1)) based on who installed/fabricated the defective component.\n\nRules:\n- Clause 9B(1): If the defective component was installed/fabricated by a subcontractor (not the principal contractor), the enhanced cover threshold increases from GBP 100m to GBP 200m.\n- Clause 9B(2): This does not change the pioneer infrastructure threshold (GBP 500m).\n- Clause 9B(3): If installed directly by the principal contractor, the thresholds under Clause 9 apply without modification.\n\nEvidence (non-exhaustive):\n- subcontract agreements / work packages\n- installation records / ITP sign-offs indicating installer\n- fabrication certificates showing fabricator identity",
+                "source": "Synthetic Policy Wording \u2014 Clause 9B: Subcontractor defect modifier",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "construction-all-risks"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          }
+        ],
+        "version": "v6",
+        "status": "active",
+        "effective_from": {
+          "$date": "2026-05-17T20:53:56.227Z"
+        },
+        "effective_to": null,
+        "supersedes": "construction-all-risks:20260508-215c0c38",
+        "last_edited": null,
+        "edit_count": 0,
+        "edit_notes": "",
+        "metadata": {
+          "total_rules": 8,
+          "total_fields": 14,
+          "complexity_score": 1,
+          "estimated_evaluation_time_ms": 10,
+          "tags": [
+            "developer_api",
+            "agent_generated",
+            "construction-all-risks"
+          ],
+          "description": "Generated via agent authoring for project proj_vZZH2QJer2CU2PEe",
+          "last_validated": null,
+          "validation_status": "agent_validated"
+        },
+        "provenance": {
+          "generation_run_id": "job_kP26m2Xt4Y-VnEzC",
+          "source_documents": [],
+          "generation_timestamp": {
+            "$date": "2026-05-17T20:53:56.226Z"
+          },
+          "llm_model": "claude-sonnet-4-6",
+          "llm_temperature": 0.0,
+          "prompt_version": "",
+          "human_review_status": "unreviewed",
+          "edited_by": "agent",
+          "snapshot_id": "snap_20260517_fff94177",
+          "pass_rate_progression": [
+            [
+              3,
+              70,
+              70
+            ]
+          ],
+          "turns_used": 3,
+          "elapsed_seconds": 448.3,
+          "tokens_input": 33667,
+          "tokens_output": 32195
+        }
+      }
+    ],
+    "projects": [],
+    "guidance_hints": [],
+    "test_run_results": []
+  }
+}

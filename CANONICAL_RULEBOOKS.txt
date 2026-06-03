@@ -1,0 +1,29 @@
+# Canonical public rulebooks — single source of truth for the public catalog.
+#
+# Format: <rulebook_slug>	<example_dir_relative_to_aethis_examples_root>
+#
+# Each line declares one of the public-facing demonstration rulebooks.
+# The slug is the only identifier exposed in docs, READMEs, and dashboards;
+# rulebook_id (rb_<urlsafe>) is internal. Re-publishing under an existing
+# slug repoints atomically, archiving the previous holder.
+#
+# The example directory holds the canonical `scripts/publish-rulebook.sh`
+# that creates the rulebook + authors each ruleset via the project pipeline
+# + publishes into the rulebook (A.9 bridge) + promotes to live + (for
+# multi-ruleset examples) sets outcome_logic.
+#
+# When adding a new canonical rulebook:
+#   1. Add a line here with the new slug + example dir.
+#   2. Run: make rebuild-canonical-rulebooks  (loops `publish-rulebook.sh`
+#      in each example dir).
+#   3. Commit any updated state in `<example>/.aethis/state.json` (optional).
+#
+# Note: the pre-converged manifest CANONICAL_BUNDLES.txt is retired —
+# slug nesting like `aethis/uk-fsm/child-eligibility` belonged to the
+# rulebookless slug-publish flow and no longer maps to a top-level
+# identifier in the converged model.
+
+aethis/spacecraft-crew-certification	spacecraft-crew-certification
+aethis/construction-all-risks	construction-all-risks
+aethis/consumer-credit-prequalification	consumer-credit-prequalification
+aethis/uk-fsm	uk-free-school-meals
