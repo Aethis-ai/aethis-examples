@@ -1,0 +1,670 @@
+{
+  "artifact_version": 1,
+  "ruleset_id": "uk-fsm-household-criteria:20260517-1a490a24",
+  "source_env": "prod",
+  "source_database": "Rules",
+  "created_at": "2026-05-17T21:00:15.335303+00:00",
+  "options": {
+    "with_sources": true,
+    "with_rulebook": false
+  },
+  "collections": {
+    "rule_bundles_dsl": [
+      {
+        "_id": {
+          "$oid": "6a0a1daa4ba3003a0600b721"
+        },
+        "bundle_id": "uk-fsm-household-criteria:20260517-1a490a24",
+        "section_id": "uk-fsm-household-criteria",
+        "tenant_id": "user_39E6Y4c6po7HO70DSDjcB0Ve56u",
+        "visibility": "public",
+        "slug": "aethis/uk-fsm/household-criteria",
+        "python_source": "\n# FREE SCHOOL MEALS \u2014 ELIGIBILITY RULES\n\nfield_receives_universal_credit = FieldDefinition(\n    key=\"household.receives_universal_credit\",\n    label=\"Household receives Universal Credit\",\n    sort=Sort.BOOL,\n    description=\"Whether the household (applicant or someone they live with) is in receipt of Universal Credit.\",\n    question=\"Are you, or is someone you live with, currently in receipt of Universal Credit?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Universal Credit is one of the qualifying benefits under Regulation 4(a) \u2014 if you receive it and your net earnings are within the threshold, you may qualify for free school meals.\",\n            source=\"Regulation 4 \u2014 Qualifying criteria (means-tested routes) (FSM Regulations 2014)\",\n            metadata={\"type\": \"why\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Regulation 4(a) provides that Universal Credit is a qualifying route for free school \"\n                \"meals provided that the household's net earnings do not exceed \u00a37,400 per year. \"\n                \"This figure is net earnings after deduction of income tax and national insurance \"\n                \"contributions, as calculated by the Universal Credit system. \"\n                \"The threshold applies at the time of the most recent UC monthly assessment period.\"\n            ),\n            source=\"Regulation 4(a) \u2014 FSM Regulations 2014\",\n            metadata={\"type\": \"legal_background\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n    ],\n)\n\nfield_annual_net_earnings = FieldDefinition(\n    key=\"household.annual_net_earnings\",\n    label=\"Household annual net earnings (UC)\",\n    sort=Sort.INT,\n    description=\"Annual net earned income used in the Universal Credit calculation.\",\n    question=\"If you are on Universal Credit, what are your household's annual net earnings shown in your most recent Universal Credit assessment?\",\n    weight=4,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Universal Credit only qualifies for free school meals if your household's net earnings are below the set limit.\",\n            source=\"Guidance Note \u2014 Universal Credit income threshold (FSM Regulations 2014 supporting note)\",\n            metadata={\"type\": \"why\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Under Regulation 4(a), Universal Credit is a qualifying route only if the household's \"\n                \"net earnings do not exceed \u00a37,400 per year.\\n\\n\"\n                \"How the net earnings figure is defined for this test (Guidance Note):\\n\"\n                \"- It is the figure calculated by the Universal Credit system\\n\"\n                \"- It is 'net earnings after deduction of income tax and national insurance contributions'\\n\"\n                \"- It applies to the net earned income of all members of the household\\n\\n\"\n                \"What is not included in this UC earnings threshold (Guidance Note):\\n\"\n                \"- Unearned income (e.g., savings interest, investments, rental income) is not included \"\n                \"in this threshold calculation\\n\\n\"\n                \"Timing rule (Guidance Note):\\n\"\n                \"- The threshold is assessed at the time of the most recent UC monthly assessment period.\"\n            ),\n            source=\"Guidance Note \u2014 Universal Credit income threshold (FSM Regulations 2014 supporting note)\",\n            metadata={\"type\": \"legal_background\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n    ],\n)\n\nfield_receives_income_support = FieldDefinition(\n    key=\"household.receives_income_support\",\n    label=\"Household receives Income Support\",\n    sort=Sort.BOOL,\n    description=\"Whether the household is in receipt of Income Support under the Social Security Contributions and Benefits Act 1992.\",\n    question=\"Are you, or is someone you live with, currently in receipt of Income Support?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Income Support is one of the qualifying benefits under Regulation 4(b) that may make you eligible for free school meals.\",\n            source=\"Regulation 4 \u2014 Qualifying criteria (means-tested routes) (FSM Regulations 2014)\",\n            metadata={\"type\": \"why\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Regulation 4(b) provides that a person in receipt of Income Support under the \"\n                \"Social Security Contributions and Benefits Act 1992 meets a qualifying criterion \"\n                \"for free school meals. No additional income or earnings threshold applies to this route.\"\n            ),\n            source=\"Regulation 4(b) \u2014 FSM Regulations 2014\",\n            metadata={\"type\": \"legal_background\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n    ],\n)\n\nfield_receives_income_based_jsa = FieldDefinition(\n    key=\"household.receives_income_based_jsa\",\n    label=\"Household receives income-based JSA\",\n    sort=Sort.BOOL,\n    description=\"Whether the household is in receipt of income-based Jobseeker's Allowance under the Jobseekers Act 1995.\",\n    question=\"Are you, or is someone you live with, currently in receipt of income-based Jobseeker's Allowance (JSA)?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Income-based JSA is one of the qualifying benefits under Regulation 4(c) that may make you eligible for free school meals.\",\n            source=\"Regulation 4 \u2014 Qualifying criteria (means-tested routes) (FSM Regulations 2014)\",\n            metadata={\"type\": \"why\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Regulation 4(c) provides that a person in receipt of income-based Jobseeker's Allowance \"\n                \"under the Jobseekers Act 1995 meets a qualifying criterion for free school meals. \"\n                \"Note: only income-based JSA qualifies; contribution-based JSA does not.\"\n            ),\n            source=\"Regulation 4(c) \u2014 FSM Regulations 2014\",\n            metadata={\"type\": \"legal_background\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n    ],\n)\n\nfield_receives_income_related_esa = FieldDefinition(\n    key=\"household.receives_income_related_esa\",\n    label=\"Household receives income-related ESA\",\n    sort=Sort.BOOL,\n    description=\"Whether the household is in receipt of income-related Employment and Support Allowance under the Welfare Reform Act 2007.\",\n    question=\"Are you, or is someone you live with, currently in receipt of income-related Employment and Support Allowance (ESA)?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Income-related ESA is one of the qualifying benefits under Regulation 4(d) that may make you eligible for free school meals.\",\n            source=\"Regulation 4 \u2014 Qualifying criteria (means-tested routes) (FSM Regulations 2014)\",\n            metadata={\"type\": \"why\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Regulation 4(d) provides that a person in receipt of income-related Employment and \"\n                \"Support Allowance under the Welfare Reform Act 2007 meets a qualifying criterion for \"\n                \"free school meals. Note: only income-related ESA qualifies; contribution-based ESA does not.\"\n            ),\n            source=\"Regulation 4(d) \u2014 FSM Regulations 2014\",\n            metadata={\"type\": \"legal_background\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n    ],\n)\n\nfield_receives_child_tax_credit_only = FieldDefinition(\n    key=\"household.receives_child_tax_credit_only\",\n    label=\"Household receives Child Tax Credit (no Working Tax Credit)\",\n    sort=Sort.BOOL,\n    description=\"Whether the household receives Child Tax Credit but not Working Tax Credit, and HMRC-calculated annual gross income does not exceed \u00a316,190.\",\n    question=\"Are you (or someone you live with) entitled to Child Tax Credit but NOT Working Tax Credit, with an HMRC-calculated annual income at or below \u00a316,190?\",\n    weight=3,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Child Tax Credit (without Working Tax Credit and below the income threshold) is a qualifying route under Regulation 4(e).\",\n            source=\"Regulation 4 \u2014 Qualifying criteria (means-tested routes) (FSM Regulations 2014)\",\n            metadata={\"type\": \"why\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Regulation 4(e) includes Child Tax Credit as a qualifying route, but only where both \"\n                \"conditions are satisfied:\\n\"\n                \"- The person is not entitled to Working Tax Credit; AND\\n\"\n                \"- The annual gross income (as calculated by HMRC) does not exceed \u00a316,190.\\n\\n\"\n                \"This single boolean field encodes both sub-conditions (no WTC + income <= \u00a316,190), \"\n                \"meaning it should be answered 'true' only when the full Regulation 4(e) test is met.\"\n            ),\n            source=\"Regulation 4(e) \u2014 FSM Regulations 2014\",\n            metadata={\"type\": \"legal_background\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n    ],\n)\n\nfield_receives_nass_support = FieldDefinition(\n    key=\"household.receives_nass_support\",\n    label=\"Household receives NASS asylum support\",\n    sort=Sort.BOOL,\n    description=\"Whether the household receives support under Part VI of the Immigration and Asylum Act 1999 (NASS).\",\n    question=\"Do you (or anyone you live with) currently receive asylum support from the National Asylum Support Service (NASS)?\",\n    weight=4,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Some households qualify for free school meals because they receive certain types of support, including asylum support (NASS).\",\n            source=\"Regulation 4 \u2014 Qualifying criteria (means-tested routes) (fsm_regulations_2014_reg4)\",\n            metadata={\"type\": \"why\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Regulation 4 of the Free School Lunches and Milk (Universal Credit) (England) Order 2014 \"\n                \"(as reflected in this extract) includes, as a qualifying criterion, receiving \"\n                \"'support under Part VI of the Immigration and Asylum Act 1999 (support provided by the \"\n                \"National Asylum Support Service - NASS)'.\\n\\n\"\n                \"What this field captures\\n\"\n                \"- Whether the applicant (or someone the applicant lives with) is in receipt of NASS \"\n                \"support under Part VI of the Immigration and Asylum Act 1999.\\n\\n\"\n                \"Evidence (typical examples)\\n\"\n                \"- Documentation or correspondence confirming asylum support (NASS) award/ongoing entitlement.\\n\\n\"\n                \"Not accepted / not sufficient on its own\\n\"\n                \"- General immigration status documents that do not show Part VI/NASS support.\\n\\n\"\n                \"Notes\\n\"\n                \"- The legal test in Regulation 4 is framed as 'the person, or a person with whom the \"\n                \"person lives, is in receipt of' the listed support types; this field supports that route \"\n                \"for NASS support.\"\n            ),\n            source=\"Regulation 4 \u2014 Qualifying criteria (means-tested routes) (fsm_regulations_2014_reg4:regulation_4_qualifying_criteria_means_t_5a120b)\",\n            metadata={\"type\": \"legal_background\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n    ],\n)\n\nfield_is_looked_after = FieldDefinition(\n    key=\"child.is_looked_after\",\n    label=\"Child is looked after by a local authority\",\n    sort=Sort.BOOL,\n    description=\"Whether the child is looked after by a local authority within the meaning of Children Act 1989 s.22.\",\n    question=\"Is the child looked after by a local authority (for example, accommodated under section 20 or subject to a care order)?\",\n    weight=5,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Looked-after children are entitled to free school meals regardless of household income or benefits.\",\n            source=\"Regulation 4A \u2014 Looked-after children and care leavers (FSM Regulations 2014)\",\n            metadata={\"type\": \"why\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Regulation 4A provides an unconditional qualifying criterion where the person 'is looked \"\n                \"after by a local authority' within the meaning of Children Act 1989 section 22.\\n\\n\"\n                \"Children Act 1989 section 22 definition: a child is 'looked after' if:\\n\"\n                \"- The local authority is providing accommodation for the child under section 20; OR\\n\"\n                \"- The child is subject to a care order\\n\\n\"\n                \"Effect on eligibility:\\n\"\n                \"- If the child is looked after, entitlement to free school meals applies without reference \"\n                \"to Regulation 4 income/benefit tests.\\n\\n\"\n                \"Possible evidence in practice:\\n\"\n                \"- Local authority confirmation letter of looked-after status\\n\"\n                \"- Care order documentation or official statement that the child is accommodated under s.20\\n\\n\"\n                \"Not accepted / not sufficient on their own:\\n\"\n                \"- Informal arrangements without local authority looked-after status under the Children \"\n                \"Act definition\"\n            ),\n            source=\"Regulation 4A \u2014 Looked-after children and care leavers (FSM Regulations 2014) and Children Act 1989 s.22 (definitions excerpt in pack)\",\n            metadata={\"type\": \"legal_background\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n    ],\n)\n\nfield_is_care_leaver = FieldDefinition(\n    key=\"child.is_care_leaver\",\n    label=\"Child is a care leaver\",\n    sort=Sort.BOOL,\n    description=\"Whether the child is a care leaver within the meaning of Children Act 1989 ss.23A or 23C.\",\n    question=\"Is the child a care leaver (for example, a 'relevant child' aged 16-17 or a 'former relevant child' aged 18 or over)?\",\n    weight=6,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Care leavers are entitled to free school meals without needing to meet the household income or benefits tests.\",\n            source=\"Regulation 4A \u2014 Looked-after children and care leavers (FSM Regulations 2014)\",\n            metadata={\"type\": \"why\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Regulation 4A provides that a person is within a qualifying criterion if the person \"\n                \"'has left care and is a care leaver' as defined in Children Act 1989 section 23A or 23C.\\n\\n\"\n                \"Definitions:\\n\"\n                \"- Section 23A ('relevant child'): a child who (among other conditions) is aged 16 or 17\\n\"\n                \"- Section 23C ('former relevant child'): a person aged 18 or above who has been a \"\n                \"relevant child and continues to receive support from the responsible authority\\n\\n\"\n                \"Effect on eligibility:\\n\"\n                \"- Looked-after children and care leavers qualify 'without reference to the household's \"\n                \"income or benefit receipt' (unconditional route).\\n\\n\"\n                \"Possible evidence in practice:\\n\"\n                \"- Letter from the responsible local authority confirming care leaver status and category\\n\"\n                \"- Documentation showing ongoing support from the responsible authority\\n\\n\"\n                \"Not accepted / not sufficient on their own:\\n\"\n                \"- A personal statement without confirmation of statutory care-leaver status\"\n            ),\n            source=\"Regulation 4A \u2014 Looked-after children and care leavers (FSM Regulations 2014) and Children Act 1989 ss.23A/23C (definitions excerpt in pack)\",\n            metadata={\"type\": \"legal_background\", \"section\": \"uk-fsm-household-criteria\"},\n        ),\n    ],\n)\n\n# \u2500\u2500 CRITERIA \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n# All criteria share the group \"fsm_qualifying_criterion\" \u2014 they are OR'd\n# (any one satisfied = eligible).\n\ncriterion_uc = Criterion(\n    id=\"fsm_uc_route\",\n    title=\"Universal Credit with net earnings at or below \u00a37,400/year\",\n    group=\"fsm_qualifying_criterion\",\n    expr=Op(operator=Operator.AND, args=[\n        Op(operator=Operator.EQ, args=[\n            FieldRef(key=\"household.receives_universal_credit\"),\n            Const(sort=Sort.BOOL, value=True),\n        ]),\n        Op(operator=Operator.LE, args=[\n            FieldRef(key=\"household.annual_net_earnings\"),\n            Const(sort=Sort.INT, value=7400),\n        ]),\n    ]),\n    waivable=False,\n    notes=\"Regulation 4(a): UC with household net earnings <= \u00a37,400/year.\",\n)\n\ncriterion_income_support = Criterion(\n    id=\"fsm_income_support_route\",\n    title=\"Income Support\",\n    group=\"fsm_qualifying_criterion\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"household.receives_income_support\"),\n        Const(sort=Sort.BOOL, value=True),\n    ]),\n    waivable=False,\n    notes=\"Regulation 4(b): Income Support under Social Security Contributions and Benefits Act 1992.\",\n)\n\ncriterion_jsa = Criterion(\n    id=\"fsm_income_based_jsa_route\",\n    title=\"Income-based Jobseeker's Allowance\",\n    group=\"fsm_qualifying_criterion\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"household.receives_income_based_jsa\"),\n        Const(sort=Sort.BOOL, value=True),\n    ]),\n    waivable=False,\n    notes=\"Regulation 4(c): Income-based JSA under the Jobseekers Act 1995.\",\n)\n\ncriterion_esa = Criterion(\n    id=\"fsm_income_related_esa_route\",\n    title=\"Income-related Employment and Support Allowance\",\n    group=\"fsm_qualifying_criterion\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"household.receives_income_related_esa\"),\n        Const(sort=Sort.BOOL, value=True),\n    ]),\n    waivable=False,\n    notes=\"Regulation 4(d): Income-related ESA under the Welfare Reform Act 2007.\",\n)\n\ncriterion_ctc = Criterion(\n    id=\"fsm_child_tax_credit_only_route\",\n    title=\"Child Tax Credit (no Working Tax Credit, income <= \u00a316,190)\",\n    group=\"fsm_qualifying_criterion\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"household.receives_child_tax_credit_only\"),\n        Const(sort=Sort.BOOL, value=True),\n    ]),\n    waivable=False,\n    notes=\"Regulation 4(e): CTC without WTC and HMRC gross income <= \u00a316,190.\",\n)\n\ncriterion_nass = Criterion(\n    id=\"fsm_nass_support_route\",\n    title=\"NASS asylum support (Part VI Immigration and Asylum Act 1999)\",\n    group=\"fsm_qualifying_criterion\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"household.receives_nass_support\"),\n        Const(sort=Sort.BOOL, value=True),\n    ]),\n    waivable=False,\n    notes=\"Regulation 4(f): Support under Part VI of the Immigration and Asylum Act 1999.\",\n)\n\ncriterion_looked_after = Criterion(\n    id=\"fsm_looked_after_child_route\",\n    title=\"Child looked after by local authority (Children Act 1989 s.22)\",\n    group=\"fsm_qualifying_criterion\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"child.is_looked_after\"),\n        Const(sort=Sort.BOOL, value=True),\n    ]),\n    waivable=False,\n    notes=\"Regulation 4A(a): Child is looked after by a local authority \u2014 unconditional entitlement.\",\n)\n\ncriterion_care_leaver = Criterion(\n    id=\"fsm_care_leaver_route\",\n    title=\"Care leaver (Children Act 1989 ss.23A/23C)\",\n    group=\"fsm_qualifying_criterion\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"child.is_care_leaver\"),\n        Const(sort=Sort.BOOL, value=True),\n    ]),\n    waivable=False,\n    notes=\"Regulation 4A(b): Child is a care leaver \u2014 unconditional entitlement.\",\n)\n",
+        "python_source_hash": "75f8885628e96d03906abe27b9a16e648d734dc81f57e74de82ad45d9db4e4aa",
+        "compiled_bundle": {
+          "name": "uk-fsm-household-criteria",
+          "jurisdiction": "uk",
+          "instrument": "agent_generated",
+          "version": "v1",
+          "effective_from": {
+            "$date": "2026-05-17T00:00:00Z"
+          },
+          "effective_to": null,
+          "criteria": [
+            {
+              "id": "fsm_uc_route",
+              "title": "Universal Credit with net earnings at or below \u00a37,400/year",
+              "expr": {
+                "type": "op",
+                "operator": "and",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "household.receives_universal_credit"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Bool",
+                        "value": true,
+                        "field_context": null
+                      }
+                    ]
+                  },
+                  {
+                    "type": "op",
+                    "operator": "<=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "household.annual_net_earnings"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Int",
+                        "value": 7400,
+                        "field_context": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              "group": "fsm_qualifying_criterion",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Regulation 4(a): UC with household net earnings <= \u00a37,400/year.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "fsm_income_support_route",
+              "title": "Income Support",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "household.receives_income_support"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "fsm_qualifying_criterion",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Regulation 4(b): Income Support under Social Security Contributions and Benefits Act 1992.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "fsm_income_based_jsa_route",
+              "title": "Income-based Jobseeker's Allowance",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "household.receives_income_based_jsa"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "fsm_qualifying_criterion",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Regulation 4(c): Income-based JSA under the Jobseekers Act 1995.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "fsm_income_related_esa_route",
+              "title": "Income-related Employment and Support Allowance",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "household.receives_income_related_esa"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "fsm_qualifying_criterion",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Regulation 4(d): Income-related ESA under the Welfare Reform Act 2007.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "fsm_child_tax_credit_only_route",
+              "title": "Child Tax Credit (no Working Tax Credit, income <= \u00a316,190)",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "household.receives_child_tax_credit_only"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "fsm_qualifying_criterion",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Regulation 4(e): CTC without WTC and HMRC gross income <= \u00a316,190.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "fsm_nass_support_route",
+              "title": "NASS asylum support (Part VI Immigration and Asylum Act 1999)",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "household.receives_nass_support"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "fsm_qualifying_criterion",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Regulation 4(f): Support under Part VI of the Immigration and Asylum Act 1999.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "fsm_looked_after_child_route",
+              "title": "Child looked after by local authority (Children Act 1989 s.22)",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "child.is_looked_after"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "fsm_qualifying_criterion",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Regulation 4A(a): Child is looked after by a local authority \u2014 unconditional entitlement.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "fsm_care_leaver_route",
+              "title": "Care leaver (Children Act 1989 ss.23A/23C)",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "child.is_care_leaver"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "fsm_qualifying_criterion",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Regulation 4A(b): Child is a care leaver \u2014 unconditional entitlement.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            }
+          ],
+          "outcome_logic": null
+        },
+        "compiled_fields": [
+          {
+            "key": "household.receives_universal_credit",
+            "label": "Household receives Universal Credit",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the household (applicant or someone they live with) is in receipt of Universal Credit.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Are you, or is someone you live with, currently in receipt of Universal Credit?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: Universal Credit is one of the qualifying benefits under Regulation 4(a) \u2014 if you receive it and your net earnings are within the threshold, you may qualify for free school meals.",
+                "source": "Regulation 4 \u2014 Qualifying criteria (means-tested routes) (FSM Regulations 2014)",
+                "metadata": {
+                  "type": "why",
+                  "section": "uk-fsm-household-criteria"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nRegulation 4(a) provides that Universal Credit is a qualifying route for free school meals provided that the household's net earnings do not exceed \u00a37,400 per year. This figure is net earnings after deduction of income tax and national insurance contributions, as calculated by the Universal Credit system. The threshold applies at the time of the most recent UC monthly assessment period.",
+                "source": "Regulation 4(a) \u2014 FSM Regulations 2014",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "uk-fsm-household-criteria"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "household.annual_net_earnings",
+            "label": "Household annual net earnings (UC)",
+            "sort": "Int",
+            "enum_values": null,
+            "description": "Annual net earned income used in the Universal Credit calculation.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "If you are on Universal Credit, what are your household's annual net earnings shown in your most recent Universal Credit assessment?",
+            "weight": 4,
+            "notes": [
+              {
+                "note_text": "WHY: Universal Credit only qualifies for free school meals if your household's net earnings are below the set limit.",
+                "source": "Guidance Note \u2014 Universal Credit income threshold (FSM Regulations 2014 supporting note)",
+                "metadata": {
+                  "type": "why",
+                  "section": "uk-fsm-household-criteria"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nUnder Regulation 4(a), Universal Credit is a qualifying route only if the household's net earnings do not exceed \u00a37,400 per year.\n\nHow the net earnings figure is defined for this test (Guidance Note):\n- It is the figure calculated by the Universal Credit system\n- It is 'net earnings after deduction of income tax and national insurance contributions'\n- It applies to the net earned income of all members of the household\n\nWhat is not included in this UC earnings threshold (Guidance Note):\n- Unearned income (e.g., savings interest, investments, rental income) is not included in this threshold calculation\n\nTiming rule (Guidance Note):\n- The threshold is assessed at the time of the most recent UC monthly assessment period.",
+                "source": "Guidance Note \u2014 Universal Credit income threshold (FSM Regulations 2014 supporting note)",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "uk-fsm-household-criteria"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "household.receives_income_support",
+            "label": "Household receives Income Support",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the household is in receipt of Income Support under the Social Security Contributions and Benefits Act 1992.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Are you, or is someone you live with, currently in receipt of Income Support?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: Income Support is one of the qualifying benefits under Regulation 4(b) that may make you eligible for free school meals.",
+                "source": "Regulation 4 \u2014 Qualifying criteria (means-tested routes) (FSM Regulations 2014)",
+                "metadata": {
+                  "type": "why",
+                  "section": "uk-fsm-household-criteria"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nRegulation 4(b) provides that a person in receipt of Income Support under the Social Security Contributions and Benefits Act 1992 meets a qualifying criterion for free school meals. No additional income or earnings threshold applies to this route.",
+                "source": "Regulation 4(b) \u2014 FSM Regulations 2014",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "uk-fsm-household-criteria"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "household.receives_income_based_jsa",
+            "label": "Household receives income-based JSA",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the household is in receipt of income-based Jobseeker's Allowance under the Jobseekers Act 1995.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Are you, or is someone you live with, currently in receipt of income-based Jobseeker's Allowance (JSA)?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: Income-based JSA is one of the qualifying benefits under Regulation 4(c) that may make you eligible for free school meals.",
+                "source": "Regulation 4 \u2014 Qualifying criteria (means-tested routes) (FSM Regulations 2014)",
+                "metadata": {
+                  "type": "why",
+                  "section": "uk-fsm-household-criteria"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nRegulation 4(c) provides that a person in receipt of income-based Jobseeker's Allowance under the Jobseekers Act 1995 meets a qualifying criterion for free school meals. Note: only income-based JSA qualifies; contribution-based JSA does not.",
+                "source": "Regulation 4(c) \u2014 FSM Regulations 2014",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "uk-fsm-household-criteria"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "household.receives_income_related_esa",
+            "label": "Household receives income-related ESA",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the household is in receipt of income-related Employment and Support Allowance under the Welfare Reform Act 2007.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Are you, or is someone you live with, currently in receipt of income-related Employment and Support Allowance (ESA)?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: Income-related ESA is one of the qualifying benefits under Regulation 4(d) that may make you eligible for free school meals.",
+                "source": "Regulation 4 \u2014 Qualifying criteria (means-tested routes) (FSM Regulations 2014)",
+                "metadata": {
+                  "type": "why",
+                  "section": "uk-fsm-household-criteria"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nRegulation 4(d) provides that a person in receipt of income-related Employment and Support Allowance under the Welfare Reform Act 2007 meets a qualifying criterion for free school meals. Note: only income-related ESA qualifies; contribution-based ESA does not.",
+                "source": "Regulation 4(d) \u2014 FSM Regulations 2014",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "uk-fsm-household-criteria"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "household.receives_child_tax_credit_only",
+            "label": "Household receives Child Tax Credit (no Working Tax Credit)",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the household receives Child Tax Credit but not Working Tax Credit, and HMRC-calculated annual gross income does not exceed \u00a316,190.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Are you (or someone you live with) entitled to Child Tax Credit but NOT Working Tax Credit, with an HMRC-calculated annual income at or below \u00a316,190?",
+            "weight": 3,
+            "notes": [
+              {
+                "note_text": "WHY: Child Tax Credit (without Working Tax Credit and below the income threshold) is a qualifying route under Regulation 4(e).",
+                "source": "Regulation 4 \u2014 Qualifying criteria (means-tested routes) (FSM Regulations 2014)",
+                "metadata": {
+                  "type": "why",
+                  "section": "uk-fsm-household-criteria"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nRegulation 4(e) includes Child Tax Credit as a qualifying route, but only where both conditions are satisfied:\n- The person is not entitled to Working Tax Credit; AND\n- The annual gross income (as calculated by HMRC) does not exceed \u00a316,190.\n\nThis single boolean field encodes both sub-conditions (no WTC + income <= \u00a316,190), meaning it should be answered 'true' only when the full Regulation 4(e) test is met.",
+                "source": "Regulation 4(e) \u2014 FSM Regulations 2014",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "uk-fsm-household-criteria"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "household.receives_nass_support",
+            "label": "Household receives NASS asylum support",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the household receives support under Part VI of the Immigration and Asylum Act 1999 (NASS).",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Do you (or anyone you live with) currently receive asylum support from the National Asylum Support Service (NASS)?",
+            "weight": 4,
+            "notes": [
+              {
+                "note_text": "WHY: Some households qualify for free school meals because they receive certain types of support, including asylum support (NASS).",
+                "source": "Regulation 4 \u2014 Qualifying criteria (means-tested routes) (fsm_regulations_2014_reg4)",
+                "metadata": {
+                  "type": "why",
+                  "section": "uk-fsm-household-criteria"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nRegulation 4 of the Free School Lunches and Milk (Universal Credit) (England) Order 2014 (as reflected in this extract) includes, as a qualifying criterion, receiving 'support under Part VI of the Immigration and Asylum Act 1999 (support provided by the National Asylum Support Service - NASS)'.\n\nWhat this field captures\n- Whether the applicant (or someone the applicant lives with) is in receipt of NASS support under Part VI of the Immigration and Asylum Act 1999.\n\nEvidence (typical examples)\n- Documentation or correspondence confirming asylum support (NASS) award/ongoing entitlement.\n\nNot accepted / not sufficient on its own\n- General immigration status documents that do not show Part VI/NASS support.\n\nNotes\n- The legal test in Regulation 4 is framed as 'the person, or a person with whom the person lives, is in receipt of' the listed support types; this field supports that route for NASS support.",
+                "source": "Regulation 4 \u2014 Qualifying criteria (means-tested routes) (fsm_regulations_2014_reg4:regulation_4_qualifying_criteria_means_t_5a120b)",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "uk-fsm-household-criteria"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "child.is_looked_after",
+            "label": "Child is looked after by a local authority",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the child is looked after by a local authority within the meaning of Children Act 1989 s.22.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Is the child looked after by a local authority (for example, accommodated under section 20 or subject to a care order)?",
+            "weight": 5,
+            "notes": [
+              {
+                "note_text": "WHY: Looked-after children are entitled to free school meals regardless of household income or benefits.",
+                "source": "Regulation 4A \u2014 Looked-after children and care leavers (FSM Regulations 2014)",
+                "metadata": {
+                  "type": "why",
+                  "section": "uk-fsm-household-criteria"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nRegulation 4A provides an unconditional qualifying criterion where the person 'is looked after by a local authority' within the meaning of Children Act 1989 section 22.\n\nChildren Act 1989 section 22 definition: a child is 'looked after' if:\n- The local authority is providing accommodation for the child under section 20; OR\n- The child is subject to a care order\n\nEffect on eligibility:\n- If the child is looked after, entitlement to free school meals applies without reference to Regulation 4 income/benefit tests.\n\nPossible evidence in practice:\n- Local authority confirmation letter of looked-after status\n- Care order documentation or official statement that the child is accommodated under s.20\n\nNot accepted / not sufficient on their own:\n- Informal arrangements without local authority looked-after status under the Children Act definition",
+                "source": "Regulation 4A \u2014 Looked-after children and care leavers (FSM Regulations 2014) and Children Act 1989 s.22 (definitions excerpt in pack)",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "uk-fsm-household-criteria"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "child.is_care_leaver",
+            "label": "Child is a care leaver",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the child is a care leaver within the meaning of Children Act 1989 ss.23A or 23C.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Is the child a care leaver (for example, a 'relevant child' aged 16-17 or a 'former relevant child' aged 18 or over)?",
+            "weight": 6,
+            "notes": [
+              {
+                "note_text": "WHY: Care leavers are entitled to free school meals without needing to meet the household income or benefits tests.",
+                "source": "Regulation 4A \u2014 Looked-after children and care leavers (FSM Regulations 2014)",
+                "metadata": {
+                  "type": "why",
+                  "section": "uk-fsm-household-criteria"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nRegulation 4A provides that a person is within a qualifying criterion if the person 'has left care and is a care leaver' as defined in Children Act 1989 section 23A or 23C.\n\nDefinitions:\n- Section 23A ('relevant child'): a child who (among other conditions) is aged 16 or 17\n- Section 23C ('former relevant child'): a person aged 18 or above who has been a relevant child and continues to receive support from the responsible authority\n\nEffect on eligibility:\n- Looked-after children and care leavers qualify 'without reference to the household's income or benefit receipt' (unconditional route).\n\nPossible evidence in practice:\n- Letter from the responsible local authority confirming care leaver status and category\n- Documentation showing ongoing support from the responsible authority\n\nNot accepted / not sufficient on their own:\n- A personal statement without confirmation of statutory care-leaver status",
+                "source": "Regulation 4A \u2014 Looked-after children and care leavers (FSM Regulations 2014) and Children Act 1989 ss.23A/23C (definitions excerpt in pack)",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "uk-fsm-household-criteria"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          }
+        ],
+        "version": "v5",
+        "status": "active",
+        "effective_from": {
+          "$date": "2026-05-17T19:57:30.758Z"
+        },
+        "effective_to": null,
+        "supersedes": "uk-fsm-household-criteria:20260419-9211d379",
+        "last_edited": null,
+        "edit_count": 0,
+        "edit_notes": "",
+        "metadata": {
+          "total_rules": 8,
+          "total_fields": 9,
+          "complexity_score": 1,
+          "estimated_evaluation_time_ms": 10,
+          "tags": [
+            "developer_api",
+            "agent_generated",
+            "uk-fsm-household-criteria"
+          ],
+          "description": "Generated via agent authoring for project proj_wzv3-yJr4Y2F29iJ",
+          "last_validated": null,
+          "validation_status": "agent_validated"
+        },
+        "provenance": {
+          "generation_run_id": "job_DHPvO-J_-HuiPxID",
+          "source_documents": [],
+          "generation_timestamp": {
+            "$date": "2026-05-17T19:57:30.757Z"
+          },
+          "llm_model": "claude-sonnet-4-6",
+          "llm_temperature": 0.0,
+          "prompt_version": "",
+          "human_review_status": "unreviewed",
+          "edited_by": "agent",
+          "snapshot_id": "snap_20260517_dba925d8",
+          "pass_rate_progression": [
+            [
+              5,
+              44,
+              44
+            ]
+          ],
+          "turns_used": 5,
+          "elapsed_seconds": 448.8,
+          "tokens_input": 12295,
+          "tokens_output": 35670
+        }
+      }
+    ],
+    "projects": [],
+    "guidance_hints": [],
+    "test_run_results": []
+  }
+}

@@ -1,0 +1,389 @@
+{
+  "artifact_version": 1,
+  "ruleset_id": "concessionary-travel-pass:20260717-952f0a90",
+  "source_env": "prod",
+  "source_database": "Rules",
+  "created_at": "2026-07-17T12:29:01.308264+00:00",
+  "options": {
+    "with_sources": true,
+    "with_rulebook": false
+  },
+  "collections": {
+    "rule_bundles_dsl": [
+      {
+        "_id": {
+          "$oid": "6a5a1dd68f934b03930a63c0"
+        },
+        "bundle_id": "concessionary-travel-pass:20260717-952f0a90",
+        "section_id": "concessionary-travel-pass",
+        "name": "Concessionary Travel Pass",
+        "tenant_id": "tenant_aethis",
+        "visibility": "public",
+        "internal_only": false,
+        "slug": "aethis/concessionary-travel-pass",
+        "python_source": "\n# Concessionary Travel Pass Act 2051 \u2014 Eligibility Rules\n# No imports needed \u2014 types are provided automatically by the DSL runtime.\n\n# ---------------------------------------------------------------------------\n# FIELD DEFINITIONS\n# ---------------------------------------------------------------------------\n\nfield_is_uk_resident = FieldDefinition(\n    key=\"travel.applicant.is_uk_resident\",\n    label=\"UK Residency\",\n    sort=Sort.BOOL,\n    description=\"Is the applicant ordinarily resident in the United Kingdom at the date of application?\",\n    question=\"Is the applicant ordinarily resident in the United Kingdom at the date of application?\",\n    weight=1,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: We need to confirm UK residency because the Concessionary Travel Pass is only available to those ordinarily resident in the United Kingdom at the time of application.\",\n            source=\"source.md#source/Section 3: Residency requirement\",\n            metadata={\"type\": \"why\", \"section\": \"residency_check\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 3(1) of the Concessionary Travel Pass Act 2051 requires that an applicant \"\n                \"be ordinarily resident in the United Kingdom at the date of application. Section 3(2) \"\n                \"states that an applicant who is not ordinarily resident is not eligible for a pass \"\n                \"regardless of whether any other requirement is satisfied. 'Ordinarily resident' has \"\n                \"its ordinary meaning at common law (Section 2).\"\n            ),\n            source=\"source.md#source/Section 3: Residency requirement\",\n            metadata={\"type\": \"legal_background\", \"section\": \"residency_check\"},\n        ),\n    ],\n)\n\nfield_date_of_birth = FieldDefinition(\n    key=\"travel.applicant.date_of_birth\",\n    label=\"Date of Birth\",\n    sort=Sort.DATE,\n    description=\"What is the applicant's date of birth?\",\n    question=\"What is the applicant's date of birth?\",\n    weight=1,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: The applicant's date of birth is used to determine whether the applicant has reached pass age (66 completed whole years) by the date of application.\",\n            source=\"source.md#source/Section 4: The age route\",\n            metadata={\"type\": \"why\", \"section\": \"age_route\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 4(1) of the Concessionary Travel Pass Act 2051 provides that an applicant \"\n                \"qualifies via the age route where the applicant has reached 'pass age' at the date \"\n                \"of application. Section 2 defines 'pass age' as 66 years, reckoned as the number of \"\n                \"completed whole years between the applicant's date of birth and the date of application. \"\n                \"Section 4(2) clarifies that pass age is reached on the applicant's 66th birthday \u2014 the \"\n                \"applicant is treated as 65 on the day before that birthday and 66 from that birthday \"\n                \"onward, including where the date of birth falls on 29 February.\"\n            ),\n            source=\"source.md#source/Section 4: The age route\",\n            metadata={\"type\": \"legal_background\", \"section\": \"age_route\"},\n        ),\n    ],\n)\n\nfield_application_date = FieldDefinition(\n    key=\"travel.application.date\",\n    label=\"Application Date\",\n    sort=Sort.DATE,\n    description=\"What is the date of the application?\",\n    question=\"What is the date of the application?\",\n    weight=1,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: The application date is the reference point against which residency, age, and certificate validity are assessed.\",\n            source=\"source.md#source/Section 6: Overall eligibility\",\n            metadata={\"type\": \"why\", \"section\": \"age_route\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 3(1) requires ordinary residence 'at the date of application'. Section 4(1) \"\n                \"requires that pass age be reached 'at the date of application'. The application date \"\n                \"is therefore a mandatory anchor point for all time-sensitive eligibility assessments \"\n                \"under the Concessionary Travel Pass Act 2051.\"\n            ),\n            source=\"source.md#source/Section 6: Overall eligibility\",\n            metadata={\"type\": \"legal_background\", \"section\": \"age_route\"},\n        ),\n    ],\n)\n\nfield_has_disability_certificate = FieldDefinition(\n    key=\"travel.applicant.has_disability_certificate\",\n    label=\"Disability Certificate\",\n    sort=Sort.BOOL,\n    description=\"Does the applicant hold a valid qualifying disability certificate issued by the Authority?\",\n    question=\"Does the applicant hold a valid qualifying disability certificate issued by the Authority?\",\n    weight=3,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Holding a valid qualifying disability certificate is an alternative route to eligibility, irrespective of the applicant's age.\",\n            source=\"source.md#source/Section 5: The disability route\",\n            metadata={\"type\": \"why\", \"section\": \"disability_route\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 5(1) of the Concessionary Travel Pass Act 2051 provides that an applicant who \"\n                \"holds a valid qualifying disability certificate qualifies for a pass via the disability \"\n                \"route, irrespective of the applicant's age. Section 5(2) clarifies that the disability \"\n                \"route and the age route are independent; an applicant satisfying either (or both) has \"\n                \"satisfied the eligibility requirement in Section 6(1)(b). A 'qualifying disability \"\n                \"certificate' means a certificate of eligibility issued by the Authority under regulations \"\n                \"made pursuant to Section 5 (Section 2).\"\n            ),\n            source=\"source.md#source/Section 5: The disability route\",\n            metadata={\"type\": \"legal_background\", \"section\": \"disability_route\"},\n        ),\n    ],\n)\n\n# ---------------------------------------------------------------------------\n# CRITERIA\n# ---------------------------------------------------------------------------\n\n# --- Group 1: residency_check (mandatory \u2014 Section 3) ---\n\ncriterion_residency = Criterion(\n    id=\"residency_check\",\n    title=\"Applicant is ordinarily resident in the UK\",\n    group=\"residency_check\",\n    expr=Op(\n        operator=Operator.EQ,\n        args=[\n            FieldRef(key=\"travel.applicant.is_uk_resident\"),\n            Const(sort=Sort.BOOL, value=True),\n        ],\n    ),\n    waivable=False,\n    notes=\"The applicant must be ordinarily resident in the United Kingdom at the date of application (Section 3).\",\n    source_refs=[\"source.md#source/Section 3: Residency requirement\"],\n)\n\n# --- Group 2: eligibility_route (age OR disability \u2014 Section 4/5/6) ---\n# Criteria in the same group are OR'd, so both routes sit in \"eligibility_route\".\n\ncriterion_age_route = Criterion(\n    id=\"age_route\",\n    title=\"Applicant has reached pass age (66 completed whole years)\",\n    group=\"eligibility_route\",\n    expr=Op(\n        operator=Operator.GE,\n        args=[\n            Op(\n                operator=Operator.YEARS_BETWEEN,\n                args=[\n                    FieldRef(key=\"travel.applicant.date_of_birth\"),\n                    FieldRef(key=\"travel.application.date\"),\n                ],\n            ),\n            Const(sort=Sort.INT, value=66),\n        ],\n    ),\n    waivable=False,\n    notes=\"The applicant must have reached pass age \u2014 66 completed whole years \u2014 at the date of application (Section 4).\",\n    source_refs=[\n        \"source.md#source/Section 4: The age route\",\n        \"source.md#source/Section 2: Interpretation\",\n    ],\n)\n\ncriterion_disability_route = Criterion(\n    id=\"disability_route\",\n    title=\"Applicant holds a valid qualifying disability certificate\",\n    group=\"eligibility_route\",\n    expr=Op(\n        operator=Operator.EQ,\n        args=[\n            FieldRef(key=\"travel.applicant.has_disability_certificate\"),\n            Const(sort=Sort.BOOL, value=True),\n        ],\n    ),\n    waivable=False,\n    notes=\"The applicant must hold a valid qualifying disability certificate issued by the Authority (Section 5).\",\n    source_refs=[\"source.md#source/Section 5: The disability route\"],\n)\n",
+        "python_source_hash": "eef27d6df5e86e73101785179d45e6ca315dc8ff03abf4a89d9e05d3ed38ca0f",
+        "compiled_bundle": {
+          "name": "concessionary-travel-pass",
+          "jurisdiction": "uk",
+          "instrument": "agent_generated",
+          "version": "v1",
+          "effective_from": {
+            "$date": "2026-07-17T00:00:00Z"
+          },
+          "effective_to": null,
+          "criteria": [
+            {
+              "id": "residency_check",
+              "title": "Applicant is ordinarily resident in the UK",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "travel.applicant.is_uk_resident"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "residency_check",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "The applicant must be ordinarily resident in the United Kingdom at the date of application (Section 3).",
+              "provenance": {
+                "anchors": [
+                  {
+                    "doc_id": "source.md",
+                    "section_path": "source/Section 3: Residency requirement",
+                    "start_char": null,
+                    "end_char": null,
+                    "quote": "Section 3: Residency requirement\n\n(1) An applicant for a concessionary travel pass must be ordinarily\n    resident in the United Kingdom at the date of application.\n\n(2) An applicant who is not ordinarily resident in the United Kingdom is\n    not eligible for a pass under this Act, regardless of whe"
+                  }
+                ],
+                "notes": null
+              },
+              "source_refs": [
+                "source.md#source/Section 3: Residency requirement"
+              ],
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "age_route",
+              "title": "Applicant has reached pass age (66 completed whole years)",
+              "expr": {
+                "type": "op",
+                "operator": ">=",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": "years_between",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "travel.applicant.date_of_birth"
+                      },
+                      {
+                        "type": "field_ref",
+                        "key": "travel.application.date"
+                      }
+                    ]
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Int",
+                    "value": 66,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "eligibility_route",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "The applicant must have reached pass age \u2014 66 completed whole years \u2014 at the date of application (Section 4).",
+              "provenance": {
+                "anchors": [
+                  {
+                    "doc_id": "source.md",
+                    "section_path": "source/Section 4: The age route",
+                    "start_char": null,
+                    "end_char": null,
+                    "quote": "Section 4: The age route\n\n(1) An applicant qualifies for a pass via the age route where the\n    applicant has reached pass age at the date of application.\n\n(2) For the avoidance of doubt, pass age is reached on the applicant's\n    66th birthday, determined by counting the number of completed whole\n "
+                  },
+                  {
+                    "doc_id": "source.md",
+                    "section_path": "source/Section 2: Interpretation",
+                    "start_char": null,
+                    "end_char": null,
+                    "quote": "Section 2: Interpretation\n\nIn this Act\u2014\n\n- \"the Authority\" means the Transport Concessions Authority;\n- \"pass age\" means 66 years, reckoned as the number of **completed whole\n  years** between the applicant's date of birth and the date of the\n  application \u2014 that is, whether the applicant's 66th bir"
+                  }
+                ],
+                "notes": null
+              },
+              "source_refs": [
+                "source.md#source/Section 4: The age route",
+                "source.md#source/Section 2: Interpretation"
+              ],
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "disability_route",
+              "title": "Applicant holds a valid qualifying disability certificate",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "travel.applicant.has_disability_certificate"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "eligibility_route",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "The applicant must hold a valid qualifying disability certificate issued by the Authority (Section 5).",
+              "provenance": {
+                "anchors": [
+                  {
+                    "doc_id": "source.md",
+                    "section_path": "source/Section 5: The disability route",
+                    "start_char": null,
+                    "end_char": null,
+                    "quote": "Section 5: The disability route\n\n(1) An applicant who holds a valid qualifying disability certificate\n    qualifies for a pass via the disability route, irrespective of the\n    applicant's age.\n\n(2) The disability route and the age route are independent; an applicant\n    who satisfies either route ("
+                  }
+                ],
+                "notes": null
+              },
+              "source_refs": [
+                "source.md#source/Section 5: The disability route"
+              ],
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            }
+          ],
+          "outcome_logic": null
+        },
+        "compiled_fields": [
+          {
+            "key": "travel.applicant.is_uk_resident",
+            "label": "UK Residency",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Is the applicant ordinarily resident in the United Kingdom at the date of application?",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Is the applicant ordinarily resident in the United Kingdom at the date of application?",
+            "weight": 1,
+            "notes": [
+              {
+                "note_text": "WHY: We need to confirm UK residency because the Concessionary Travel Pass is only available to those ordinarily resident in the United Kingdom at the time of application.",
+                "source": "source.md#source/Section 3: Residency requirement",
+                "metadata": {
+                  "type": "why",
+                  "section": "residency_check"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 3(1) of the Concessionary Travel Pass Act 2051 requires that an applicant be ordinarily resident in the United Kingdom at the date of application. Section 3(2) states that an applicant who is not ordinarily resident is not eligible for a pass regardless of whether any other requirement is satisfied. 'Ordinarily resident' has its ordinary meaning at common law (Section 2).",
+                "source": "source.md#source/Section 3: Residency requirement",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "residency_check"
+                }
+              }
+            ],
+            "x_ui_widget": null,
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-07-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "travel.applicant.date_of_birth",
+            "label": "Date of Birth",
+            "sort": "Date",
+            "enum_values": null,
+            "description": "What is the applicant's date of birth?",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the applicant's date of birth?",
+            "weight": 1,
+            "notes": [
+              {
+                "note_text": "WHY: The applicant's date of birth is used to determine whether the applicant has reached pass age (66 completed whole years) by the date of application.",
+                "source": "source.md#source/Section 4: The age route",
+                "metadata": {
+                  "type": "why",
+                  "section": "age_route"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 4(1) of the Concessionary Travel Pass Act 2051 provides that an applicant qualifies via the age route where the applicant has reached 'pass age' at the date of application. Section 2 defines 'pass age' as 66 years, reckoned as the number of completed whole years between the applicant's date of birth and the date of application. Section 4(2) clarifies that pass age is reached on the applicant's 66th birthday \u2014 the applicant is treated as 65 on the day before that birthday and 66 from that birthday onward, including where the date of birth falls on 29 February.",
+                "source": "source.md#source/Section 4: The age route",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "age_route"
+                }
+              }
+            ],
+            "x_ui_widget": null,
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-07-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "travel.application.date",
+            "label": "Application Date",
+            "sort": "Date",
+            "enum_values": null,
+            "description": "What is the date of the application?",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the date of the application?",
+            "weight": 1,
+            "notes": [
+              {
+                "note_text": "WHY: The application date is the reference point against which residency, age, and certificate validity are assessed.",
+                "source": "source.md#source/Section 6: Overall eligibility",
+                "metadata": {
+                  "type": "why",
+                  "section": "age_route"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 3(1) requires ordinary residence 'at the date of application'. Section 4(1) requires that pass age be reached 'at the date of application'. The application date is therefore a mandatory anchor point for all time-sensitive eligibility assessments under the Concessionary Travel Pass Act 2051.",
+                "source": "source.md#source/Section 6: Overall eligibility",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "age_route"
+                }
+              }
+            ],
+            "x_ui_widget": null,
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-07-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "travel.applicant.has_disability_certificate",
+            "label": "Disability Certificate",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Does the applicant hold a valid qualifying disability certificate issued by the Authority?",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Does the applicant hold a valid qualifying disability certificate issued by the Authority?",
+            "weight": 3,
+            "notes": [
+              {
+                "note_text": "WHY: Holding a valid qualifying disability certificate is an alternative route to eligibility, irrespective of the applicant's age.",
+                "source": "source.md#source/Section 5: The disability route",
+                "metadata": {
+                  "type": "why",
+                  "section": "disability_route"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 5(1) of the Concessionary Travel Pass Act 2051 provides that an applicant who holds a valid qualifying disability certificate qualifies for a pass via the disability route, irrespective of the applicant's age. Section 5(2) clarifies that the disability route and the age route are independent; an applicant satisfying either (or both) has satisfied the eligibility requirement in Section 6(1)(b). A 'qualifying disability certificate' means a certificate of eligibility issued by the Authority under regulations made pursuant to Section 5 (Section 2).",
+                "source": "source.md#source/Section 5: The disability route",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "disability_route"
+                }
+              }
+            ],
+            "x_ui_widget": null,
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-07-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          }
+        ],
+        "version": "v3",
+        "status": "active",
+        "effective_from": {
+          "$date": "2026-07-17T12:19:34.086Z"
+        },
+        "effective_to": null,
+        "supersedes": null,
+        "state": "live",
+        "rulebook_id": "rb_WbAtmQxYIH0ekrDh",
+        "ruleset_name": "pass_eligibility",
+        "last_edited": null,
+        "edit_count": 0,
+        "edit_notes": "",
+        "metadata": {
+          "total_rules": 3,
+          "total_fields": 4,
+          "complexity_score": 1,
+          "estimated_evaluation_time_ms": 10,
+          "tags": [
+            "developer_api",
+            "agent_generated",
+            "concessionary-travel-pass"
+          ],
+          "description": "Eligibility rules for Concessionary Travel Pass",
+          "last_validated": null,
+          "validation_status": "agent_validated"
+        },
+        "provenance": {
+          "generation_run_id": "job_0DLPc5KhEjd3GByk",
+          "source_documents": [],
+          "generation_timestamp": {
+            "$date": "2026-07-17T12:19:34.077Z"
+          },
+          "llm_model": "claude-sonnet-4-6",
+          "llm_temperature": 0.0,
+          "prompt_version": "",
+          "human_review_status": "unreviewed",
+          "edited_by": "agent",
+          "snapshot_id": "snap_20260717_7a8f4c40",
+          "pass_rate_progression": [
+            [
+              2,
+              6,
+              6
+            ]
+          ],
+          "turns_used": 2,
+          "elapsed_seconds": 70.4,
+          "tokens_input": 5159,
+          "tokens_output": 6699
+        }
+      }
+    ],
+    "projects": [],
+    "guidance_hints": [],
+    "test_run_results": []
+  }
+}

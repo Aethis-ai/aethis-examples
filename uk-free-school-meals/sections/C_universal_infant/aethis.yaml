@@ -1,0 +1,7 @@
+project: uk-fsm-universal-infant
+project_id: proj_ode63LEkzMV9tNhH
+section_id: universal_infant_fsm
+domain: uk_fsm
+api_key_env: AETHIS_API_KEY
+
+live_ruleset_id: uk-fsm-universal-infant:20260526-804697b4
