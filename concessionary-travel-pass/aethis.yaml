@@ -1,0 +1,3 @@
+project: concessionary-travel-pass
+api_key_env: AETHIS_API_KEY
+live_ruleset_id: concessionary-travel-pass:20260717-952f0a90

@@ -1,0 +1,22 @@
+hints:
+  - >
+    The following fields are used to capture applicant data for crew
+    certification assessment. These field keys and types define the data
+    contract between the intake system and the eligibility engine:
+    space.crew.species (enum: Human, Vogon, Magrathean, Betelgeusian, Dolphin),
+    space.crew.age (integer),
+    space.crew.flight_hours (integer),
+    space.crew.has_pilot_license (boolean),
+    space.crew.has_gaa_exam (boolean),
+    space.crew.has_approved_provider_cert (boolean),
+    space.crew.has_radiation_cert (boolean),
+    space.crew.has_towel (boolean),
+    space.medical.cert_valid (boolean),
+    space.mission.type (enum: orbital, suborbital, lunar),
+    space.vessel.propulsion_type (enum: Infinite Improbability Drive, Bistromathics, Conventional, Heart of Gold Special)
+
+  - >
+    The eligibility assessment is structured around these requirement
+    areas: species eligibility, flight readiness, medical certification,
+    medical certificate validity, radiation certification, and towel
+    compliance.

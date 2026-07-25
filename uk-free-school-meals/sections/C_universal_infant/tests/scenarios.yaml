@@ -1,0 +1,36 @@
+tests:
+  - name: "Reception class child — eligible (UIFSM)"
+    inputs:
+      child.year_group: reception
+    expect:
+      outcome: eligible
+
+  - name: "Year 1 child — eligible (UIFSM)"
+    inputs:
+      child.year_group: year_1
+    expect:
+      outcome: eligible
+
+  - name: "Year 2 child — eligible (UIFSM)"
+    inputs:
+      child.year_group: year_2
+    expect:
+      outcome: eligible
+
+  - name: "Year 3 child — not eligible for UIFSM (must use means-tested Section B)"
+    inputs:
+      child.year_group: year_3
+    expect:
+      outcome: not_eligible
+
+  - name: "Year 6 child — not eligible for UIFSM"
+    inputs:
+      child.year_group: year_6
+    expect:
+      outcome: not_eligible
+
+  - name: "Year 7 (secondary school) — not eligible for UIFSM"
+    inputs:
+      child.year_group: year_7_plus
+    expect:
+      outcome: not_eligible

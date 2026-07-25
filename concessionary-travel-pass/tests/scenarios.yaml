@@ -1,0 +1,64 @@
+# Date fields are given as integer ordinals (days since year 1 —
+# Python `date(y, m, d).toordinal()`), not ISO strings. `/decide` accepts
+# either shape at runtime, but the authoring-pipeline test-run/generate
+# path (aethis-core aethis_core/elig/utils.py) only accepts the ordinal
+# form, so scenarios.yaml is written in the form both paths accept.
+#
+#   1960-03-15 -> 715584   2026-03-15 -> 739690   2026-03-14 -> 739689
+#   2000-02-29 -> 730179   2066-02-28 -> 754285   2066-03-01 -> 754286
+#   2000-01-01 -> 730120   2026-07-17 -> 739814   1950-01-01 -> 711858
+
+tests:
+  - name: "Age route — exactly on the 66th birthday (Section 4)"
+    inputs:
+      travel.applicant.is_uk_resident: true
+      travel.applicant.date_of_birth: 715584   # 1960-03-15
+      travel.application.date: 739690          # 2026-03-15 (exactly 66 completed years)
+      travel.applicant.has_disability_certificate: false
+    expect:
+      outcome: eligible
+
+  - name: "Age route — one day before the 66th birthday (Section 4)"
+    inputs:
+      travel.applicant.is_uk_resident: true
+      travel.applicant.date_of_birth: 715584    # 1960-03-15
+      travel.application.date: 739689           # 2026-03-14 (65 completed years)
+      travel.applicant.has_disability_certificate: false
+    expect:
+      outcome: not_eligible
+
+  - name: "Leap-day birth — day before the effective 66th birthday in a non-leap year"
+    inputs:
+      travel.applicant.is_uk_resident: true
+      travel.applicant.date_of_birth: 730179     # 2000-02-29
+      travel.application.date: 754285            # 2066-02-28 (still 65 — 2066 has no Feb 29)
+      travel.applicant.has_disability_certificate: false
+    expect:
+      outcome: not_eligible
+
+  - name: "Leap-day birth — effective 66th birthday reached in a non-leap year (completed-years, not days/365)"
+    inputs:
+      travel.applicant.is_uk_resident: true
+      travel.applicant.date_of_birth: 730179     # 2000-02-29
+      travel.application.date: 754286            # 2066-03-01 (66 — the leap birthday "occurs" here)
+      travel.applicant.has_disability_certificate: false
+    expect:
+      outcome: eligible
+
+  - name: "Disability route — young applicant, no age eligibility, still qualifies (Section 5)"
+    inputs:
+      travel.applicant.is_uk_resident: true
+      travel.applicant.date_of_birth: 730120     # 2000-01-01 (26 years old)
+      travel.application.date: 739814            # 2026-07-17
+      travel.applicant.has_disability_certificate: true
+    expect:
+      outcome: eligible
+
+  - name: "Not ordinarily resident — disqualifying regardless of age or disability (Section 3)"
+    inputs:
+      travel.applicant.is_uk_resident: false
+      travel.applicant.date_of_birth: 711858     # 1950-01-01 (76 years old)
+      travel.application.date: 739814            # 2026-07-17
+      travel.applicant.has_disability_certificate: true
+    expect:
+      outcome: not_eligible

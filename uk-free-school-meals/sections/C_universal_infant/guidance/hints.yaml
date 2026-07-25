@@ -1,0 +1,18 @@
+hints:
+  - >
+    This section determines eligibility for Universal Infant Free School Meals (UIFSM),
+    which applies automatically to all children in Reception, Year 1, and Year 2 at
+    state-funded schools. There is NO income test and NO benefit test for UIFSM.
+    A single field — child.year_group — determines eligibility for this section.
+
+  - >
+    The child.year_group field should be an enum. The values that qualify are:
+    reception, year_1, year_2. Values year_3 and above do NOT qualify under this section
+    (those children must meet the means-tested criteria in Section B instead).
+    Do not add an income or benefit field to this section.
+
+  - >
+    Section C operates independently of Section B. In the rulebook, the outcome logic is:
+    Section A AND (Section B OR Section C). A Year 1 child at a state-funded school
+    passes Section C, which means Section B is not needed — the child is eligible even
+    if the household has a high income.

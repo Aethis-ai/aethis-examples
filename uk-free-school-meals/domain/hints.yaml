@@ -1,0 +1,37 @@
+domain: uk_fsm
+
+hints:
+  - process_type: field_extraction
+    adherence: exact
+    guidance_text: >
+      All income thresholds refer to net annual household income after deduction of
+      income tax and national insurance contributions, as calculated by HMRC or the
+      Universal Credit system. The household includes the child's parents or legal
+      guardians who live with the child. Income from a non-resident parent is not
+      counted. Express income values in whole pounds sterling (GBP) per year.
+
+  - process_type: field_extraction
+    adherence: guided
+    guidance_text: >
+      Use a consistent field naming convention: child.* for fields relating to the
+      child, household.* for fields relating to the household or parents, and
+      school.* for fields relating to the school. This matches the data contract
+      used by the intake system.
+
+  - process_type: section_discovery
+    adherence: exact
+    guidance_text: >
+      Universal Infant Free School Meals (UIFSM) is a separate automatic entitlement
+      for children in Reception, Year 1, and Year 2. It must be modelled as a
+      completely separate section (universal_infant_fsm) with no income test.
+      Do not merge it with the means-tested household criteria section.
+
+  - process_type: section_discovery
+    adherence: guided
+    guidance_text: >
+      The three sections are: child_eligibility (is the child the right age at a
+      qualifying school?), household_qualifying_criteria (does the household receive
+      a qualifying benefit or have a qualifying circumstance?), and universal_infant_fsm
+      (is the child in Reception, Year 1, or Year 2, regardless of means?).
+      The outcome logic is: child_eligibility AND (household_qualifying_criteria OR
+      universal_infant_fsm).

@@ -1,0 +1,7 @@
+project: uk-fsm-household-criteria
+project_id: proj_ImZUN44kBf5XVquw
+section_id: household_qualifying_criteria
+domain: uk_fsm
+api_key_env: AETHIS_API_KEY
+
+live_ruleset_id: uk-fsm-household-criteria:20260526-3e469c2c

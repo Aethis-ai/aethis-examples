@@ -1,0 +1,41 @@
+# UK Free School Meals — Rulebook Composition
+#
+# Composes three independent section bundles into a single eligibility determination.
+#
+# Outcome logic: Section A AND (Section B OR Section C)
+#
+# - Section A (child_eligibility): child is aged 4–15 at a state-funded school
+# - Section B (household_qualifying_criteria): household meets means-tested criteria
+# - Section C (universal_infant_fsm): child is in Reception, Year 1, or Year 2
+#
+# A child in Reception to Year 2 passes Section C and is eligible regardless
+# of household income. Older children need to pass both A and B.
+
+rulebook:
+  name: UK Free School Meals Eligibility
+  domain: uk_fsm
+  version: "1.0"
+
+  sections:
+    - section_id: child_eligibility
+      pin_mode: latest_active
+      description: "Child age and school type gate — must pass for all routes"
+
+    - section_id: household_qualifying_criteria
+      pin_mode: latest_active
+      description: "Means-tested route — qualifying benefits or circumstances"
+
+    - section_id: universal_infant_fsm
+      pin_mode: latest_active
+      description: "Universal route — Reception to Year 2, income-blind"
+
+  # How section outcomes combine.
+  # ALL sections must reach a decision (eligible or not_eligible).
+  # If any section returns undetermined, the overall outcome is undetermined.
+  outcome_logic: "A AND (B OR C)"
+  outcome_logic_notes: >
+    Section A is a prerequisite gate — both B and C require A to pass.
+    Section B and Section C are alternative routes; passing either is sufficient.
+    This matches the statutory structure: UIFSM (C) is an automatic entitlement
+    layered on top of the means-tested entitlement (B), sharing the same
+    child eligibility gate (A).

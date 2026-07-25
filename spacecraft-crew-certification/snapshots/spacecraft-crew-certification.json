@@ -1,0 +1,1064 @@
+{
+  "artifact_version": 1,
+  "ruleset_id": "spacecraft-crew-certification:20260517-c59647a5",
+  "source_env": "prod",
+  "source_database": "Rules",
+  "created_at": "2026-05-17T21:00:21.226085+00:00",
+  "options": {
+    "with_sources": true,
+    "with_rulebook": false
+  },
+  "collections": {
+    "rule_bundles_dsl": [
+      {
+        "_id": {
+          "$oid": "6a0a1c8b4ba3003a0600b71e"
+        },
+        "bundle_id": "spacecraft-crew-certification:20260517-c59647a5",
+        "section_id": "spacecraft-crew-certification",
+        "tenant_id": "user_39E6Y4c6po7HO70DSDjcB0Ve56u",
+        "visibility": "public",
+        "slug": "aethis/spacecraft-crew-certification",
+        "python_source": "\n# \u2500\u2500 FIELD DEFINITIONS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\nfield_species = FieldDefinition(\n    key=\"space.crew.species\", label=\"Crew Species\", sort=Sort.ENUM,\n    description=\"The species of the crew member applicant.\",\n    question=\"What is the applicant's species?\",\n    weight=1,\n    enum_values=[\"Human\", \"Vogon\", \"Magrathean\", \"Betelgeusian\", \"Dolphin\"],\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Your species determines whether you are eligible under the Spacecraft Crew Certification Act 2049, as certain species are excluded by international treaty.\",\n            source=\"Synthetic Legal Document \u2014 Section 3: Species eligibility\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 3(1) requires that an applicant for crew certification must be of an eligible species. \"\n                \"Section 3(2) excludes Vogon nationals by virtue of the Galactic Diplomatic Exclusion Treaty 2045. \"\n                \"Section 3(3) mandates that where the applicant is a Vogon, the application must be refused \"\n                \"without consideration of any other requirement.\\n\\n\"\n                \"Eligible species include: Human, Magrathean, Betelgeusian, Dolphin.\\n\"\n                \"Ineligible species: Vogon (excluded by treaty).\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 3: Species eligibility\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_age = FieldDefinition(\n    key=\"space.crew.age\", label=\"Crew Age\", sort=Sort.INT,\n    description=\"The age of the applicant in years.\",\n    question=\"What is the applicant's age?\",\n    weight=1,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Your age determines whether you qualify for the age-based exemption from flight readiness requirements under Section 6.\",\n            source=\"Synthetic Legal Document \u2014 Section 6: Age exemption from flight readiness\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 6(1) provides that an applicant aged 60 or over is exempt from the flight readiness \"\n                \"requirement in Section 4, subject to subsection (2). Section 6(2) disapplies the exemption \"\n                \"where the mission type is 'orbital', unless subsection (3) applies. Section 6(3) provides \"\n                \"that an applicant with 1000+ flight hours is exempt from Section 4 regardless of mission type.\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 6: Age exemption from flight readiness\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_flight_hours = FieldDefinition(\n    key=\"space.crew.flight_hours\", label=\"Flight Hours\", sort=Sort.INT,\n    description=\"Total accumulated flight hours of the applicant.\",\n    question=\"How many flight hours has the applicant accumulated?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: A minimum of 500 flight hours is required to demonstrate flight readiness under Section 4; 1000+ hours also unlocks the unconditional age exemption under Section 6(3).\",\n            source=\"Synthetic Legal Document \u2014 Section 4: Flight readiness\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 4(1)(a) requires not fewer than 500 flight hours for flight readiness. \"\n                \"Section 6(3) grants a universal exemption from Section 4 for applicants with 1000 or more \"\n                \"flight hours, irrespective of mission type or age.\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 4: Flight readiness\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_has_pilot_license = FieldDefinition(\n    key=\"space.crew.has_pilot_license\", label=\"Has Pilot Licence\", sort=Sort.BOOL,\n    description=\"Whether the applicant holds a valid pilot licence issued or recognised by the Authority.\",\n    question=\"Does the applicant hold a valid pilot licence?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: A valid pilot licence issued or recognised by the Galactic Aviation Authority is required for flight readiness under Section 4(1)(b).\",\n            source=\"Synthetic Legal Document \u2014 Section 4: Flight readiness\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 4(1)(b) requires that the applicant holds a valid pilot licence issued or recognised \"\n                \"by the Authority. A licence from another body must have formal recognition/validation by the \"\n                \"Galactic Aviation Authority to satisfy this requirement.\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 4: Flight readiness\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_pilot_licence_issuing_status = FieldDefinition(\n    key=\"pilot_licence.issuing_status\", label=\"Pilot Licence Issuing Status\", sort=Sort.ENUM,\n    description=\"Whether the applicant's pilot licence is issued by the Authority, recognised by the Authority, or neither.\",\n    question=\"Is your pilot licence issued by the Galactic Aviation Authority, recognised by it, or neither?\",\n    weight=4,\n    enum_values=[\"issued_by_authority\", \"recognised_by_authority\", \"not_issued_or_recognised\"],\n    notes=[\n        FieldNote(\n            note_text=\"WHY: The law requires your pilot licence to be issued or recognised by the Galactic Aviation Authority, so we need to know its status.\",\n            source=\"Synthetic Legal Document \u2014 Section 4: Flight readiness\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 4(1)(b) requires that the applicant holds a valid pilot licence \\\"issued or recognised by the Authority\\\".\\n\\n\"\n                \"Allowed statuses for evaluation:\\n\"\n                \"- issued_by_authority\\n\"\n                \"- recognised_by_authority\\n\"\n                \"- not_issued_or_recognised\\n\\n\"\n                \"Accepted evidence (examples):\\n\"\n                \"- A pilot licence document explicitly issued by the Galactic Aviation Authority\\n\"\n                \"- A pilot licence accompanied by a formal recognition/validation document or registry entry from the Authority\\n\\n\"\n                \"Not accepted (examples):\\n\"\n                \"- A licence with no issuer information\\n\"\n                \"- A licence from another body with no evidence of recognition by the Authority\\n\\n\"\n                \"Note:\\n\"\n                \"- This field captures the source/recognition aspect only; the separate question of whether the licence is currently valid may require additional evidence in practice if validity is disputed.\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 4: Flight readiness\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_pilot_licence_expiry_date = FieldDefinition(\n    key=\"pilot_licence.expiry_date\", label=\"Pilot Licence Expiry Date\", sort=Sort.DATE,\n    description=\"The expiry date of the pilot licence.\",\n    question=\"What is the expiry date (valid until date) on your pilot licence?\",\n    weight=5,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: The rules require a valid pilot licence, and the expiry date helps confirm it is still valid when you apply.\",\n            source=\"Synthetic Legal Document \u2014 Section 4: Flight readiness\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 4(1)(b) requires the applicant to hold a \\\"valid pilot licence\\\" issued or recognised by the Authority. While the Act does not define 'valid', a standard way to evidence validity is that the licence has not expired at the relevant time (typically the application date).\\n\\n\"\n                \"Accepted evidence:\\n\"\n                \"- A pilot licence document showing an expiry date / valid-until date\\n\"\n                \"- Where the licence has no printed expiry: an official licensing registry extract confirming current validity\\n\\n\"\n                \"Not accepted on its own:\\n\"\n                \"- A photo/scan with the expiry date obscured\\n\"\n                \"- An expired licence without evidence of renewal or current validity\\n\\n\"\n                \"Important:\\n\"\n                \"- If the licence has an expiry date, it should generally be on or after the application date for the licence to be treated as valid for the application assessment.\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 4: Flight readiness\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_has_gaa_exam = FieldDefinition(\n    key=\"space.crew.has_gaa_exam\", label=\"Has GAA Medical Exam\", sort=Sort.BOOL,\n    description=\"Whether the applicant has passed a GAA medical examination.\",\n    question=\"Has the applicant passed a GAA medical examination?\",\n    weight=3,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Passing a GAA medical examination is Route A for satisfying the medical certification requirement under Section 5(1)(a).\",\n            source=\"Synthetic Legal Document \u2014 Section 5: Medical certification\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 5(1)(a) provides that the applicant may hold a valid medical certificate obtained via \"\n                \"Route A: an examination conducted by the Galactic Aviation Authority. Either Route A or Route B \"\n                \"(approved provider certificate) is sufficient per Section 5(2).\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 5: Medical certification\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_has_approved_provider_cert = FieldDefinition(\n    key=\"space.crew.has_approved_provider_cert\", label=\"Has Approved Provider Certificate\", sort=Sort.BOOL,\n    description=\"Whether the applicant holds an approved provider medical certificate.\",\n    question=\"Does the applicant hold an approved provider medical certificate?\",\n    weight=3,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: An approved provider medical certificate is Route B for satisfying the medical certification requirement under Section 5(1)(b).\",\n            source=\"Synthetic Legal Document \u2014 Section 5: Medical certification\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 5(1)(b) provides that the applicant may hold a valid medical certificate obtained via \"\n                \"Route B: a certification issued by an approved provider. Section 5(2) confirms that either \"\n                \"Route A or Route B is sufficient.\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 5: Medical certification\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_application_date = FieldDefinition(\n    key=\"application.date\", label=\"Application Date\", sort=Sort.DATE,\n    description=\"Date the crew certification application is made.\",\n    question=\"What is the date of your crew certification application?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: We need your application date to check whether time-limited certificates (like your medical certificate) are still valid when you apply.\",\n            source=\"Synthetic Legal Document \u2014 Section 5A: Medical certificate validity period\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 5A(2) requires that the applicant's medical certificate be valid \\\"at the date of application\\\". Section 5A(1) defines the validity period as 730 days from the medical certificate's date of issue.\\n\\n\"\n                \"This means the application date is used as the reference point when checking time-based requirements.\\n\\n\"\n                \"Common evidence that may support the application date (administrative records):\\n\"\n                \"- A dated online submission confirmation\\n\"\n                \"- A dated paper application receipt\\n\\n\"\n                \"Not accepted on its own (typically insufficient/unsupported):\\n\"\n                \"- An undated draft application\\n\"\n                \"- A date stated by the applicant without any associated submission/receipt record\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 5A: Medical certificate validity period\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_medical_cert_issue_date = FieldDefinition(\n    key=\"medical_certificate.issue_date\", label=\"Medical Certificate Issue Date\", sort=Sort.DATE,\n    description=\"The issue date of the medical certificate relied upon for Section 5/5A.\",\n    question=\"What is the issue date on your medical certificate?\",\n    weight=3,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: We need the issue date to confirm your medical certificate is still within its 730-day validity period when you apply.\",\n            source=\"Synthetic Legal Document \u2014 Section 5A: Medical certificate validity period\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 5A(1) states that a medical certificate obtained under Section 5 is valid for 730 days from the date of issue. Section 5A(2) requires it to be valid at the date of application.\\n\\n\"\n                \"Accepted evidence (the certificate itself should show this):\\n\"\n                \"- A medical certificate issued by the Galactic Aviation Authority (Route A) showing an issue date\\n\"\n                \"- A medical certificate issued by an approved provider (Route B) showing an issue date\\n\\n\"\n                \"Not accepted (by itself):\\n\"\n                \"- A statement that an examination occurred without a certificate issue date\\n\"\n                \"- A booking confirmation for an examination (no issued certificate)\\n\\n\"\n                \"Practical note:\\n\"\n                \"- If multiple medical certificates exist, the relevant issue date is the one on the certificate relied upon for the application.\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 5A: Medical certificate validity period\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_medical_cert_valid = FieldDefinition(\n    key=\"space.medical.cert_valid\", label=\"Medical Certificate Valid\", sort=Sort.BOOL,\n    description=\"Whether the medical certificate is within 730 days of the application date.\",\n    question=\"Is the medical certificate within 730 days of application?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Section 5A requires your medical certificate to be valid at the date of application, i.e. issued no more than 730 days before the application date.\",\n            source=\"Synthetic Legal Document \u2014 Section 5A: Medical certificate validity period\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 5A(1) sets the validity period for a medical certificate at 730 days from issue. \"\n                \"Section 5A(2) requires that the certificate is valid at the date of application. \"\n                \"This boolean field captures whether that condition is met.\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 5A: Medical certificate validity period\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_mission_type = FieldDefinition(\n    key=\"space.mission.type\", label=\"Mission Type\", sort=Sort.ENUM,\n    description=\"The type of the mission: orbital, suborbital, or lunar.\",\n    question=\"What is the mission type?\",\n    weight=1,\n    enum_values=[\"orbital\", \"suborbital\", \"lunar\"],\n    notes=[\n        FieldNote(\n            note_text=\"WHY: The mission type affects flight readiness exemptions (Section 6) and determines whether a radiation protection certificate is required (Section 7).\",\n            source=\"Synthetic Legal Document \u2014 Section 6 & Section 7\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 6(2) disapplies the age-based flight readiness exemption for orbital missions unless \"\n                \"Section 6(3) applies (1000+ flight hours). Section 7(1)(a) requires a radiation protection \"\n                \"certificate for orbital missions; Section 7(2) confirms none is needed for suborbital or lunar.\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 6 & Section 7\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_has_radiation_cert = FieldDefinition(\n    key=\"space.crew.has_radiation_cert\", label=\"Has Radiation Protection Certificate\", sort=Sort.BOOL,\n    description=\"Whether the applicant holds a valid radiation protection certificate.\",\n    question=\"Does the applicant hold a radiation protection certificate?\",\n    weight=4,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: A valid radiation protection certificate is required for orbital missions under Section 7(1)(a).\",\n            source=\"Synthetic Legal Document \u2014 Section 7: Mission-specific requirements\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 7(1)(a) requires that where the mission type is 'orbital', the applicant must hold \"\n                \"a valid radiation protection certificate. Section 7(2) confirms that no such certificate is \"\n                \"required for suborbital or lunar missions.\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 7: Mission-specific requirements\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_radiation_cert_expiry_date = FieldDefinition(\n    key=\"radiation_certificate.expiry_date\", label=\"Radiation Certificate Expiry Date\", sort=Sort.DATE,\n    description=\"The expiry date of the radiation protection certificate.\",\n    question=\"What is the expiry date (valid until date) on your radiation protection certificate (if you have one)?\",\n    weight=6,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: For orbital missions you must hold a valid radiation protection certificate, and the expiry date helps confirm it is still valid when needed.\",\n            source=\"Synthetic Legal Document \u2014 Section 7: Mission-specific requirements\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 7(1)(a) requires that where the mission type is \\\"orbital\\\", the applicant must hold a \\\"valid radiation protection certificate\\\". Section 7(2) confirms no such certificate is required for \\\"suborbital\\\" or \\\"lunar\\\" missions.\\n\\n\"\n                \"The Act does not specify a validity period for radiation protection certificates; therefore, validity is typically evidenced by the certificate's own validity/expiry information (or an issuing body register confirming current validity).\\n\\n\"\n                \"Accepted evidence:\\n\"\n                \"- A radiation protection certificate showing a valid-until/expiry date\\n\"\n                \"- An official register entry or letter from the issuing body confirming it is currently valid\\n\\n\"\n                \"Not accepted (examples):\\n\"\n                \"- Proof of attendance on a course without issuance of a certificate\\n\"\n                \"- An expired certificate with no evidence of renewal/current validity\\n\\n\"\n                \"Scope reminder:\\n\"\n                \"- This field is only relevant if the mission type is orbital; it can be left blank/not applicable for suborbital and lunar missions.\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 7: Mission-specific requirements\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_propulsion_type = FieldDefinition(\n    key=\"space.vessel.propulsion_type\", label=\"Vessel Propulsion Type\", sort=Sort.ENUM,\n    description=\"The propulsion type of the vessel.\",\n    question=\"What type of propulsion system does the vessel use?\",\n    weight=2,\n    enum_values=[\"Infinite Improbability Drive\", \"Bistromathics\", \"Conventional\", \"Heart of Gold Special\"],\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Only approved propulsion types are permitted under Section 8; Conventional propulsion is not approved.\",\n            source=\"Synthetic Legal Document \u2014 Section 8: Equipment compliance\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 8(1) requires the vessel's propulsion system to be of an approved type. \"\n                \"Section 8(2) lists the approved types as: Infinite Improbability Drive, Bistromathics, \"\n                \"and Heart of Gold Special. Section 8(3) explicitly excludes Conventional propulsion.\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 8: Equipment compliance\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\nfield_has_towel = FieldDefinition(\n    key=\"space.crew.has_towel\", label=\"Has Towel\", sort=Sort.BOOL,\n    description=\"Whether the applicant carries a towel.\",\n    question=\"Does the applicant carry a towel?\",\n    weight=1,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Carrying a towel is a mandatory safety requirement under Section 9 and the Interstellar Hitchhiker Safety Regulations 2042.\",\n            source=\"Synthetic Legal Document \u2014 Section 9: Towel compliance\",\n            metadata={\"type\": \"why\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Section 9(1) requires that the applicant must carry a towel at all times during the mission, \"\n                \"in accordance with the Interstellar Hitchhiker Safety Regulations 2042. This is a mandatory \"\n                \"requirement with no exemptions provided in the Act.\"\n            ),\n            source=\"Synthetic Legal Document \u2014 Section 9: Towel compliance\",\n            metadata={\"type\": \"legal_background\", \"section\": \"spacecraft-crew-certification\"},\n        ),\n    ],\n)\n\n# \u2500\u2500 CRITERIA \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n# GROUP 1: Species eligibility (Section 3)\nrule_species_eligible = Criterion(\n    id=\"species_eligible\",\n    title=\"Applicant is of an eligible species\",\n    group=\"species_eligibility\",\n    expr=Op(operator=Operator.NOT, args=[\n        Op(operator=Operator.EQ, args=[\n            FieldRef(key=\"space.crew.species\"),\n            Const(sort=Sort.ENUM, value=\"Vogon\"),\n        ]),\n    ]),\n    waivable=False,\n    notes=\"Section 3: Vogon nationals are excluded by the Galactic Diplomatic Exclusion Treaty 2045.\",\n)\n\n# GROUP 2: Flight readiness (Section 4 subject to Section 6 exemptions)\nrule_flight_readiness_exempt_1000hrs = Criterion(\n    id=\"flight_readiness_exempt_1000hrs\",\n    title=\"Exempt from flight readiness \u2014 1000+ flight hours (Section 6(3))\",\n    group=\"flight_readiness\",\n    expr=Op(operator=Operator.GE, args=[\n        FieldRef(key=\"space.crew.flight_hours\"),\n        Const(sort=Sort.INT, value=1000),\n    ]),\n    waivable=False,\n    notes=\"Section 6(3): 1000+ flight hours grants universal exemption from Section 4.\",\n)\n\nrule_flight_readiness_exempt_age = Criterion(\n    id=\"flight_readiness_exempt_age\",\n    title=\"Exempt from flight readiness \u2014 age 60+ on non-orbital mission (Section 6(1))\",\n    group=\"flight_readiness\",\n    expr=Op(operator=Operator.AND, args=[\n        Op(operator=Operator.GE, args=[\n            FieldRef(key=\"space.crew.age\"),\n            Const(sort=Sort.INT, value=60),\n        ]),\n        Op(operator=Operator.IN, args=[\n            FieldRef(key=\"space.mission.type\"),\n            Const(sort=Sort.ENUM, value=\"suborbital\"),\n            Const(sort=Sort.ENUM, value=\"lunar\"),\n        ]),\n    ]),\n    waivable=False,\n    notes=\"Section 6(1)/(2): Age 60+ exemption applies only on non-orbital missions.\",\n)\n\nrule_flight_readiness_met = Criterion(\n    id=\"flight_readiness_met\",\n    title=\"Flight readiness requirements met (Section 4)\",\n    group=\"flight_readiness\",\n    expr=Op(operator=Operator.AND, args=[\n        Op(operator=Operator.GE, args=[\n            FieldRef(key=\"space.crew.flight_hours\"),\n            Const(sort=Sort.INT, value=500),\n        ]),\n        Op(operator=Operator.EQ, args=[\n            FieldRef(key=\"space.crew.has_pilot_license\"),\n            Const(sort=Sort.BOOL, value=True),\n        ]),\n    ]),\n    waivable=False,\n    notes=\"Section 4(1): Must have 500+ flight hours and a valid pilot licence.\",\n)\n\n# GROUP 3: Medical certification (Section 5) \u2014 Route A or Route B (OR'd)\nrule_medical_gaa = Criterion(\n    id=\"medical_gaa_exam\",\n    title=\"Medical certification via GAA examination (Section 5 Route A)\",\n    group=\"medical_certification\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"space.crew.has_gaa_exam\"),\n        Const(sort=Sort.BOOL, value=True),\n    ]),\n    waivable=False,\n    notes=\"Section 5(1)(a): Route A \u2014 GAA medical examination.\",\n)\n\nrule_medical_approved_provider = Criterion(\n    id=\"medical_approved_provider\",\n    title=\"Medical certification via approved provider (Section 5 Route B)\",\n    group=\"medical_certification\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"space.crew.has_approved_provider_cert\"),\n        Const(sort=Sort.BOOL, value=True),\n    ]),\n    waivable=False,\n    notes=\"Section 5(1)(b): Route B \u2014 approved provider certificate.\",\n)\n\n# GROUP 4: Medical certificate validity (Section 5A)\nrule_medical_cert_validity = Criterion(\n    id=\"medical_cert_validity\",\n    title=\"Medical certificate within 730-day validity period (Section 5A)\",\n    group=\"medical_cert_validity\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"space.medical.cert_valid\"),\n        Const(sort=Sort.BOOL, value=True),\n    ]),\n    waivable=False,\n    notes=\"Section 5A: Medical certificate must be within 730 days of issue at application date.\",\n)\n\n# GROUP 5: Radiation protection certificate (Section 7)\nrule_radiation_cert = Criterion(\n    id=\"radiation_cert_orbital\",\n    title=\"Radiation protection certificate required for orbital missions (Section 7)\",\n    group=\"radiation_certification\",\n    expr=Op(operator=Operator.IMPLIES, args=[\n        Op(operator=Operator.EQ, args=[\n            FieldRef(key=\"space.mission.type\"),\n            Const(sort=Sort.ENUM, value=\"orbital\"),\n        ]),\n        Op(operator=Operator.EQ, args=[\n            FieldRef(key=\"space.crew.has_radiation_cert\"),\n            Const(sort=Sort.BOOL, value=True),\n        ]),\n    ]),\n    waivable=False,\n    notes=\"Section 7(1)(a): Orbital missions require a valid radiation protection certificate.\",\n)\n\n# GROUP 6: Propulsion type compliance (Section 8)\nrule_propulsion_approved = Criterion(\n    id=\"propulsion_approved\",\n    title=\"Vessel propulsion system is of an approved type (Section 8)\",\n    group=\"propulsion_compliance\",\n    expr=Op(operator=Operator.IN, args=[\n        FieldRef(key=\"space.vessel.propulsion_type\"),\n        Const(sort=Sort.ENUM, value=\"Infinite Improbability Drive\"),\n        Const(sort=Sort.ENUM, value=\"Bistromathics\"),\n        Const(sort=Sort.ENUM, value=\"Heart of Gold Special\"),\n    ]),\n    waivable=False,\n    notes=\"Section 8(2): Only Infinite Improbability Drive, Bistromathics, and Heart of Gold Special are approved.\",\n)\n\n# GROUP 7: Towel compliance (Section 9)\nrule_towel = Criterion(\n    id=\"towel_compliance\",\n    title=\"Applicant carries a towel (Section 9)\",\n    group=\"towel_compliance\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"space.crew.has_towel\"),\n        Const(sort=Sort.BOOL, value=True),\n    ]),\n    waivable=False,\n    notes=\"Section 9(1): Applicant must carry a towel at all times.\",\n)\n",
+        "python_source_hash": "b3242cc43762b7b6e8660d9a595a7e8e4ea128898045632cf4726f19267b5514",
+        "compiled_bundle": {
+          "name": "spacecraft-crew-certification",
+          "jurisdiction": "uk",
+          "instrument": "agent_generated",
+          "version": "v1",
+          "effective_from": {
+            "$date": "2026-05-17T00:00:00Z"
+          },
+          "effective_to": null,
+          "criteria": [
+            {
+              "id": "species_eligible",
+              "title": "Applicant is of an eligible species",
+              "expr": {
+                "type": "op",
+                "operator": "not",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "space.crew.species"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Enum",
+                        "value": "Vogon",
+                        "field_context": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              "group": "species_eligibility",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 3: Vogon nationals are excluded by the Galactic Diplomatic Exclusion Treaty 2045.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "flight_readiness_exempt_1000hrs",
+              "title": "Exempt from flight readiness \u2014 1000+ flight hours (Section 6(3))",
+              "expr": {
+                "type": "op",
+                "operator": ">=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "space.crew.flight_hours"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Int",
+                    "value": 1000,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "flight_readiness",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 6(3): 1000+ flight hours grants universal exemption from Section 4.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "flight_readiness_exempt_age",
+              "title": "Exempt from flight readiness \u2014 age 60+ on non-orbital mission (Section 6(1))",
+              "expr": {
+                "type": "op",
+                "operator": "and",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": ">=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "space.crew.age"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Int",
+                        "value": 60,
+                        "field_context": null
+                      }
+                    ]
+                  },
+                  {
+                    "type": "op",
+                    "operator": "in",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "space.mission.type"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Enum",
+                        "value": "suborbital",
+                        "field_context": null
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Enum",
+                        "value": "lunar",
+                        "field_context": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              "group": "flight_readiness",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 6(1)/(2): Age 60+ exemption applies only on non-orbital missions.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "flight_readiness_met",
+              "title": "Flight readiness requirements met (Section 4)",
+              "expr": {
+                "type": "op",
+                "operator": "and",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": ">=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "space.crew.flight_hours"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Int",
+                        "value": 500,
+                        "field_context": null
+                      }
+                    ]
+                  },
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "space.crew.has_pilot_license"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Bool",
+                        "value": true,
+                        "field_context": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              "group": "flight_readiness",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 4(1): Must have 500+ flight hours and a valid pilot licence.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "medical_gaa_exam",
+              "title": "Medical certification via GAA examination (Section 5 Route A)",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "space.crew.has_gaa_exam"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "medical_certification",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 5(1)(a): Route A \u2014 GAA medical examination.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "medical_approved_provider",
+              "title": "Medical certification via approved provider (Section 5 Route B)",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "space.crew.has_approved_provider_cert"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "medical_certification",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 5(1)(b): Route B \u2014 approved provider certificate.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "medical_cert_validity",
+              "title": "Medical certificate within 730-day validity period (Section 5A)",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "space.medical.cert_valid"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "medical_cert_validity",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 5A: Medical certificate must be within 730 days of issue at application date.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "radiation_cert_orbital",
+              "title": "Radiation protection certificate required for orbital missions (Section 7)",
+              "expr": {
+                "type": "op",
+                "operator": "=>",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "space.mission.type"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Enum",
+                        "value": "orbital",
+                        "field_context": null
+                      }
+                    ]
+                  },
+                  {
+                    "type": "op",
+                    "operator": "=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "space.crew.has_radiation_cert"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Bool",
+                        "value": true,
+                        "field_context": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              "group": "radiation_certification",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 7(1)(a): Orbital missions require a valid radiation protection certificate.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "propulsion_approved",
+              "title": "Vessel propulsion system is of an approved type (Section 8)",
+              "expr": {
+                "type": "op",
+                "operator": "in",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "space.vessel.propulsion_type"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Enum",
+                    "value": "Infinite Improbability Drive",
+                    "field_context": null
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Enum",
+                    "value": "Bistromathics",
+                    "field_context": null
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Enum",
+                    "value": "Heart of Gold Special",
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "propulsion_compliance",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 8(2): Only Infinite Improbability Drive, Bistromathics, and Heart of Gold Special are approved.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "towel_compliance",
+              "title": "Applicant carries a towel (Section 9)",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "space.crew.has_towel"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Bool",
+                    "value": true,
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "towel_compliance",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Section 9(1): Applicant must carry a towel at all times.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            }
+          ],
+          "outcome_logic": null
+        },
+        "compiled_fields": [
+          {
+            "key": "space.crew.species",
+            "label": "Crew Species",
+            "sort": "Enum",
+            "enum_values": [
+              "Human",
+              "Vogon",
+              "Magrathean",
+              "Betelgeusian",
+              "Dolphin"
+            ],
+            "description": "The species of the crew member applicant.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the applicant's species?",
+            "weight": 1,
+            "notes": [
+              {
+                "note_text": "WHY: Your species determines whether you are eligible under the Spacecraft Crew Certification Act 2049, as certain species are excluded by international treaty.",
+                "source": "Synthetic Legal Document \u2014 Section 3: Species eligibility",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 3(1) requires that an applicant for crew certification must be of an eligible species. Section 3(2) excludes Vogon nationals by virtue of the Galactic Diplomatic Exclusion Treaty 2045. Section 3(3) mandates that where the applicant is a Vogon, the application must be refused without consideration of any other requirement.\n\nEligible species include: Human, Magrathean, Betelgeusian, Dolphin.\nIneligible species: Vogon (excluded by treaty).",
+                "source": "Synthetic Legal Document \u2014 Section 3: Species eligibility",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "space.crew.age",
+            "label": "Crew Age",
+            "sort": "Int",
+            "enum_values": null,
+            "description": "The age of the applicant in years.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the applicant's age?",
+            "weight": 1,
+            "notes": [
+              {
+                "note_text": "WHY: Your age determines whether you qualify for the age-based exemption from flight readiness requirements under Section 6.",
+                "source": "Synthetic Legal Document \u2014 Section 6: Age exemption from flight readiness",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 6(1) provides that an applicant aged 60 or over is exempt from the flight readiness requirement in Section 4, subject to subsection (2). Section 6(2) disapplies the exemption where the mission type is 'orbital', unless subsection (3) applies. Section 6(3) provides that an applicant with 1000+ flight hours is exempt from Section 4 regardless of mission type.",
+                "source": "Synthetic Legal Document \u2014 Section 6: Age exemption from flight readiness",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "space.crew.flight_hours",
+            "label": "Flight Hours",
+            "sort": "Int",
+            "enum_values": null,
+            "description": "Total accumulated flight hours of the applicant.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "How many flight hours has the applicant accumulated?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: A minimum of 500 flight hours is required to demonstrate flight readiness under Section 4; 1000+ hours also unlocks the unconditional age exemption under Section 6(3).",
+                "source": "Synthetic Legal Document \u2014 Section 4: Flight readiness",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 4(1)(a) requires not fewer than 500 flight hours for flight readiness. Section 6(3) grants a universal exemption from Section 4 for applicants with 1000 or more flight hours, irrespective of mission type or age.",
+                "source": "Synthetic Legal Document \u2014 Section 4: Flight readiness",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "space.crew.has_pilot_license",
+            "label": "Has Pilot Licence",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the applicant holds a valid pilot licence issued or recognised by the Authority.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Does the applicant hold a valid pilot licence?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: A valid pilot licence issued or recognised by the Galactic Aviation Authority is required for flight readiness under Section 4(1)(b).",
+                "source": "Synthetic Legal Document \u2014 Section 4: Flight readiness",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 4(1)(b) requires that the applicant holds a valid pilot licence issued or recognised by the Authority. A licence from another body must have formal recognition/validation by the Galactic Aviation Authority to satisfy this requirement.",
+                "source": "Synthetic Legal Document \u2014 Section 4: Flight readiness",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "pilot_licence.issuing_status",
+            "label": "Pilot Licence Issuing Status",
+            "sort": "Enum",
+            "enum_values": [
+              "issued_by_authority",
+              "recognised_by_authority",
+              "not_issued_or_recognised"
+            ],
+            "description": "Whether the applicant's pilot licence is issued by the Authority, recognised by the Authority, or neither.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Is your pilot licence issued by the Galactic Aviation Authority, recognised by it, or neither?",
+            "weight": 4,
+            "notes": [
+              {
+                "note_text": "WHY: The law requires your pilot licence to be issued or recognised by the Galactic Aviation Authority, so we need to know its status.",
+                "source": "Synthetic Legal Document \u2014 Section 4: Flight readiness",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 4(1)(b) requires that the applicant holds a valid pilot licence \"issued or recognised by the Authority\".\n\nAllowed statuses for evaluation:\n- issued_by_authority\n- recognised_by_authority\n- not_issued_or_recognised\n\nAccepted evidence (examples):\n- A pilot licence document explicitly issued by the Galactic Aviation Authority\n- A pilot licence accompanied by a formal recognition/validation document or registry entry from the Authority\n\nNot accepted (examples):\n- A licence with no issuer information\n- A licence from another body with no evidence of recognition by the Authority\n\nNote:\n- This field captures the source/recognition aspect only; the separate question of whether the licence is currently valid may require additional evidence in practice if validity is disputed.",
+                "source": "Synthetic Legal Document \u2014 Section 4: Flight readiness",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "pilot_licence.expiry_date",
+            "label": "Pilot Licence Expiry Date",
+            "sort": "Date",
+            "enum_values": null,
+            "description": "The expiry date of the pilot licence.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the expiry date (valid until date) on your pilot licence?",
+            "weight": 5,
+            "notes": [
+              {
+                "note_text": "WHY: The rules require a valid pilot licence, and the expiry date helps confirm it is still valid when you apply.",
+                "source": "Synthetic Legal Document \u2014 Section 4: Flight readiness",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 4(1)(b) requires the applicant to hold a \"valid pilot licence\" issued or recognised by the Authority. While the Act does not define 'valid', a standard way to evidence validity is that the licence has not expired at the relevant time (typically the application date).\n\nAccepted evidence:\n- A pilot licence document showing an expiry date / valid-until date\n- Where the licence has no printed expiry: an official licensing registry extract confirming current validity\n\nNot accepted on its own:\n- A photo/scan with the expiry date obscured\n- An expired licence without evidence of renewal or current validity\n\nImportant:\n- If the licence has an expiry date, it should generally be on or after the application date for the licence to be treated as valid for the application assessment.",
+                "source": "Synthetic Legal Document \u2014 Section 4: Flight readiness",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "space.crew.has_gaa_exam",
+            "label": "Has GAA Medical Exam",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the applicant has passed a GAA medical examination.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Has the applicant passed a GAA medical examination?",
+            "weight": 3,
+            "notes": [
+              {
+                "note_text": "WHY: Passing a GAA medical examination is Route A for satisfying the medical certification requirement under Section 5(1)(a).",
+                "source": "Synthetic Legal Document \u2014 Section 5: Medical certification",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 5(1)(a) provides that the applicant may hold a valid medical certificate obtained via Route A: an examination conducted by the Galactic Aviation Authority. Either Route A or Route B (approved provider certificate) is sufficient per Section 5(2).",
+                "source": "Synthetic Legal Document \u2014 Section 5: Medical certification",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "space.crew.has_approved_provider_cert",
+            "label": "Has Approved Provider Certificate",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the applicant holds an approved provider medical certificate.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Does the applicant hold an approved provider medical certificate?",
+            "weight": 3,
+            "notes": [
+              {
+                "note_text": "WHY: An approved provider medical certificate is Route B for satisfying the medical certification requirement under Section 5(1)(b).",
+                "source": "Synthetic Legal Document \u2014 Section 5: Medical certification",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 5(1)(b) provides that the applicant may hold a valid medical certificate obtained via Route B: a certification issued by an approved provider. Section 5(2) confirms that either Route A or Route B is sufficient.",
+                "source": "Synthetic Legal Document \u2014 Section 5: Medical certification",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "application.date",
+            "label": "Application Date",
+            "sort": "Date",
+            "enum_values": null,
+            "description": "Date the crew certification application is made.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the date of your crew certification application?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: We need your application date to check whether time-limited certificates (like your medical certificate) are still valid when you apply.",
+                "source": "Synthetic Legal Document \u2014 Section 5A: Medical certificate validity period",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 5A(2) requires that the applicant's medical certificate be valid \"at the date of application\". Section 5A(1) defines the validity period as 730 days from the medical certificate's date of issue.\n\nThis means the application date is used as the reference point when checking time-based requirements.\n\nCommon evidence that may support the application date (administrative records):\n- A dated online submission confirmation\n- A dated paper application receipt\n\nNot accepted on its own (typically insufficient/unsupported):\n- An undated draft application\n- A date stated by the applicant without any associated submission/receipt record",
+                "source": "Synthetic Legal Document \u2014 Section 5A: Medical certificate validity period",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "medical_certificate.issue_date",
+            "label": "Medical Certificate Issue Date",
+            "sort": "Date",
+            "enum_values": null,
+            "description": "The issue date of the medical certificate relied upon for Section 5/5A.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the issue date on your medical certificate?",
+            "weight": 3,
+            "notes": [
+              {
+                "note_text": "WHY: We need the issue date to confirm your medical certificate is still within its 730-day validity period when you apply.",
+                "source": "Synthetic Legal Document \u2014 Section 5A: Medical certificate validity period",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 5A(1) states that a medical certificate obtained under Section 5 is valid for 730 days from the date of issue. Section 5A(2) requires it to be valid at the date of application.\n\nAccepted evidence (the certificate itself should show this):\n- A medical certificate issued by the Galactic Aviation Authority (Route A) showing an issue date\n- A medical certificate issued by an approved provider (Route B) showing an issue date\n\nNot accepted (by itself):\n- A statement that an examination occurred without a certificate issue date\n- A booking confirmation for an examination (no issued certificate)\n\nPractical note:\n- If multiple medical certificates exist, the relevant issue date is the one on the certificate relied upon for the application.",
+                "source": "Synthetic Legal Document \u2014 Section 5A: Medical certificate validity period",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "space.medical.cert_valid",
+            "label": "Medical Certificate Valid",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the medical certificate is within 730 days of the application date.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Is the medical certificate within 730 days of application?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: Section 5A requires your medical certificate to be valid at the date of application, i.e. issued no more than 730 days before the application date.",
+                "source": "Synthetic Legal Document \u2014 Section 5A: Medical certificate validity period",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 5A(1) sets the validity period for a medical certificate at 730 days from issue. Section 5A(2) requires that the certificate is valid at the date of application. This boolean field captures whether that condition is met.",
+                "source": "Synthetic Legal Document \u2014 Section 5A: Medical certificate validity period",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "space.mission.type",
+            "label": "Mission Type",
+            "sort": "Enum",
+            "enum_values": [
+              "orbital",
+              "suborbital",
+              "lunar"
+            ],
+            "description": "The type of the mission: orbital, suborbital, or lunar.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the mission type?",
+            "weight": 1,
+            "notes": [
+              {
+                "note_text": "WHY: The mission type affects flight readiness exemptions (Section 6) and determines whether a radiation protection certificate is required (Section 7).",
+                "source": "Synthetic Legal Document \u2014 Section 6 & Section 7",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 6(2) disapplies the age-based flight readiness exemption for orbital missions unless Section 6(3) applies (1000+ flight hours). Section 7(1)(a) requires a radiation protection certificate for orbital missions; Section 7(2) confirms none is needed for suborbital or lunar.",
+                "source": "Synthetic Legal Document \u2014 Section 6 & Section 7",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "space.crew.has_radiation_cert",
+            "label": "Has Radiation Protection Certificate",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the applicant holds a valid radiation protection certificate.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Does the applicant hold a radiation protection certificate?",
+            "weight": 4,
+            "notes": [
+              {
+                "note_text": "WHY: A valid radiation protection certificate is required for orbital missions under Section 7(1)(a).",
+                "source": "Synthetic Legal Document \u2014 Section 7: Mission-specific requirements",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 7(1)(a) requires that where the mission type is 'orbital', the applicant must hold a valid radiation protection certificate. Section 7(2) confirms that no such certificate is required for suborbital or lunar missions.",
+                "source": "Synthetic Legal Document \u2014 Section 7: Mission-specific requirements",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "radiation_certificate.expiry_date",
+            "label": "Radiation Certificate Expiry Date",
+            "sort": "Date",
+            "enum_values": null,
+            "description": "The expiry date of the radiation protection certificate.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What is the expiry date (valid until date) on your radiation protection certificate (if you have one)?",
+            "weight": 6,
+            "notes": [
+              {
+                "note_text": "WHY: For orbital missions you must hold a valid radiation protection certificate, and the expiry date helps confirm it is still valid when needed.",
+                "source": "Synthetic Legal Document \u2014 Section 7: Mission-specific requirements",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 7(1)(a) requires that where the mission type is \"orbital\", the applicant must hold a \"valid radiation protection certificate\". Section 7(2) confirms no such certificate is required for \"suborbital\" or \"lunar\" missions.\n\nThe Act does not specify a validity period for radiation protection certificates; therefore, validity is typically evidenced by the certificate's own validity/expiry information (or an issuing body register confirming current validity).\n\nAccepted evidence:\n- A radiation protection certificate showing a valid-until/expiry date\n- An official register entry or letter from the issuing body confirming it is currently valid\n\nNot accepted (examples):\n- Proof of attendance on a course without issuance of a certificate\n- An expired certificate with no evidence of renewal/current validity\n\nScope reminder:\n- This field is only relevant if the mission type is orbital; it can be left blank/not applicable for suborbital and lunar missions.",
+                "source": "Synthetic Legal Document \u2014 Section 7: Mission-specific requirements",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "space.vessel.propulsion_type",
+            "label": "Vessel Propulsion Type",
+            "sort": "Enum",
+            "enum_values": [
+              "Infinite Improbability Drive",
+              "Bistromathics",
+              "Conventional",
+              "Heart of Gold Special"
+            ],
+            "description": "The propulsion type of the vessel.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What type of propulsion system does the vessel use?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: Only approved propulsion types are permitted under Section 8; Conventional propulsion is not approved.",
+                "source": "Synthetic Legal Document \u2014 Section 8: Equipment compliance",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 8(1) requires the vessel's propulsion system to be of an approved type. Section 8(2) lists the approved types as: Infinite Improbability Drive, Bistromathics, and Heart of Gold Special. Section 8(3) explicitly excludes Conventional propulsion.",
+                "source": "Synthetic Legal Document \u2014 Section 8: Equipment compliance",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "space.crew.has_towel",
+            "label": "Has Towel",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the applicant carries a towel.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Does the applicant carry a towel?",
+            "weight": 1,
+            "notes": [
+              {
+                "note_text": "WHY: Carrying a towel is a mandatory safety requirement under Section 9 and the Interstellar Hitchhiker Safety Regulations 2042.",
+                "source": "Synthetic Legal Document \u2014 Section 9: Towel compliance",
+                "metadata": {
+                  "type": "why",
+                  "section": "spacecraft-crew-certification"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nSection 9(1) requires that the applicant must carry a towel at all times during the mission, in accordance with the Interstellar Hitchhiker Safety Regulations 2042. This is a mandatory requirement with no exemptions provided in the Act.",
+                "source": "Synthetic Legal Document \u2014 Section 9: Towel compliance",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "spacecraft-crew-certification"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          }
+        ],
+        "version": "v1",
+        "status": "active",
+        "effective_from": {
+          "$date": "2026-05-17T19:52:43.285Z"
+        },
+        "effective_to": null,
+        "supersedes": null,
+        "last_edited": {
+          "$date": "2026-05-17T20:10:01.045Z"
+        },
+        "edit_count": 0,
+        "edit_notes": "",
+        "metadata": {
+          "total_rules": 10,
+          "total_fields": 16,
+          "complexity_score": 1,
+          "estimated_evaluation_time_ms": 10,
+          "tags": [
+            "developer_api",
+            "agent_generated",
+            "spacecraft-crew-certification"
+          ],
+          "description": "Generated via agent authoring for project proj_YFGW9XkQiiV83lqB",
+          "last_validated": null,
+          "validation_status": "agent_validated"
+        },
+        "provenance": {
+          "generation_run_id": "job_OQmaBGOaRidMpnFo",
+          "source_documents": [],
+          "generation_timestamp": {
+            "$date": "2026-05-17T19:52:43.284Z"
+          },
+          "llm_model": "claude-sonnet-4-6",
+          "llm_temperature": 0.0,
+          "prompt_version": "",
+          "human_review_status": "unreviewed",
+          "edited_by": "agent",
+          "snapshot_id": "snap_20260517_7b22cbfd",
+          "pass_rate_progression": [
+            [
+              11,
+              10,
+              10
+            ]
+          ],
+          "turns_used": 11,
+          "elapsed_seconds": 1166.5,
+          "tokens_input": 82069,
+          "tokens_output": 88413
+        }
+      }
+    ],
+    "projects": [],
+    "guidance_hints": [],
+    "test_run_results": []
+  }
+}

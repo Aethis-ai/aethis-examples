@@ -1,0 +1,106 @@
+tests:
+  - name: "Adverse credit history — immediate decline (Section 3)"
+    inputs:
+      credit.has_adverse_history: true
+    expect:
+      outcome: not_eligible
+
+  - name: "Unemployed applicant — excluded employment status (Section 4)"
+    inputs:
+      credit.has_adverse_history: false
+      credit.employment_status: unemployed
+      credit.gross_annual_income: 30000
+      credit.dti_percent: 20
+      credit.credit_score_band: good
+      credit.product_type: unsecured
+      credit.stress_test_passed: true
+      credit.is_existing_customer: false
+    expect:
+      outcome: not_eligible
+
+  - name: "Good standalone applicant — approved (all checks pass)"
+    inputs:
+      credit.has_adverse_history: false
+      credit.employment_status: employed
+      credit.gross_annual_income: 35000
+      credit.has_joint_applicant: false
+      credit.dti_percent: 25
+      credit.credit_score_band: good
+      credit.product_type: unsecured
+      credit.stress_test_passed: true
+      credit.is_existing_customer: false
+    expect:
+      outcome: eligible
+
+  - name: "Low sole income, joint application rescues — approved (Section 5 Route B)"
+    inputs:
+      credit.has_adverse_history: false
+      credit.employment_status: employed
+      credit.gross_annual_income: 12000
+      credit.has_joint_applicant: true
+      credit.joint_annual_income: 18000
+      credit.dti_percent: 20
+      credit.credit_score_band: good
+      credit.product_type: unsecured
+      credit.stress_test_passed: true
+      credit.is_existing_customer: false
+    expect:
+      outcome: eligible
+
+  - name: "High DTI but existing customer — approved (Section 10 exemption)"
+    inputs:
+      credit.has_adverse_history: false
+      credit.employment_status: employed
+      credit.gross_annual_income: 40000
+      credit.has_joint_applicant: false
+      credit.dti_percent: 55
+      credit.credit_score_band: excellent
+      credit.product_type: unsecured
+      credit.stress_test_passed: true
+      credit.is_existing_customer: true
+    expect:
+      outcome: eligible
+
+  - name: "Stress test failure — declined (Section 9)"
+    inputs:
+      credit.has_adverse_history: false
+      credit.employment_status: employed
+      credit.gross_annual_income: 28000
+      credit.has_joint_applicant: false
+      credit.dti_percent: 30
+      credit.credit_score_band: good
+      credit.product_type: secured
+      credit.ltv_percent: 70
+      credit.stress_test_passed: false
+      credit.is_existing_customer: false
+    expect:
+      outcome: not_eligible
+
+  - name: "Secured loan, LTV too high — declined (Section 8)"
+    inputs:
+      credit.has_adverse_history: false
+      credit.employment_status: self_employed
+      credit.gross_annual_income: 50000
+      credit.has_joint_applicant: false
+      credit.dti_percent: 20
+      credit.credit_score_band: excellent
+      credit.product_type: secured
+      credit.ltv_percent: 92
+      credit.stress_test_passed: true
+      credit.is_existing_customer: false
+    expect:
+      outcome: not_eligible
+
+  - name: "Fair credit on unsecured — declined (Section 7, needs good+)"
+    inputs:
+      credit.has_adverse_history: false
+      credit.employment_status: employed
+      credit.gross_annual_income: 30000
+      credit.has_joint_applicant: false
+      credit.dti_percent: 25
+      credit.credit_score_band: fair
+      credit.product_type: unsecured
+      credit.stress_test_passed: true
+      credit.is_existing_customer: false
+    expect:
+      outcome: not_eligible

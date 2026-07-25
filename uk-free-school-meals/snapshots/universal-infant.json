@@ -1,0 +1,249 @@
+{
+  "artifact_version": 1,
+  "ruleset_id": "uk-fsm-universal-infant:20260517-647dfbff",
+  "source_env": "prod",
+  "source_database": "Rules",
+  "created_at": "2026-05-17T21:00:18.428645+00:00",
+  "options": {
+    "with_sources": true,
+    "with_rulebook": false
+  },
+  "collections": {
+    "rule_bundles_dsl": [
+      {
+        "_id": {
+          "$oid": "6a0a184a4ba3003a0600b713"
+        },
+        "bundle_id": "uk-fsm-universal-infant:20260517-647dfbff",
+        "section_id": "uk-fsm-universal-infant",
+        "tenant_id": "user_39E6Y4c6po7HO70DSDjcB0Ve56u",
+        "visibility": "public",
+        "slug": "aethis/uk-fsm/universal-infant",
+        "python_source": "\n# Universal Infant Free School Meals (UIFSM) \u2014 Section C\n# Source: Children and Families Act 2014, s.105 and\n#         The Education (Free School Lunches) (England) Regulations 2014, Regulation 5\n\n# FIELD DEFINITIONS\n\nchild_year_group = FieldDefinition(\n    key=\"child.year_group\",\n    label=\"Child Year Group\",\n    sort=Sort.ENUM,\n    enum_values=[\"reception\", \"year_1\", \"year_2\", \"year_3\", \"year_4\", \"year_5\", \"year_6\", \"year_7_plus\"],\n    description=\"The pupil's current school year group (e.g., Reception, Year 1, Year 2). Universal infant free school meals apply only to Reception, Year 1, and Year 2.\",\n    question=\"What year group is the pupil currently in at school?\",\n    weight=1,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Universal infant free school meals are only guaranteed for pupils in Reception, Year 1, or Year 2, so we need the pupil's year group to check whether the universal entitlement applies.\",\n            source=\"The Education (Free School Lunches) (England) Regulations 2014, regulation 5 \u2014 Universal entitlement for pupils in reception class or years 1 or 2\",\n            metadata={\"type\": \"why\", \"section\": \"uk-fsm-universal-infant\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Universal infant free school meals (UIFSM) apply to every registered pupil at a relevant school who is in one of the specified year groups:\\n\"\n                \"- Reception class (also called \\\"Year R\\\")\\n\"\n                \"- Year 1\\n\"\n                \"- Year 2\\n\\n\"\n                \"This universal entitlement applies \\\"without reference\\\" to the means-tested qualifying criteria used for other pupils, and it applies regardless of:\\n\"\n                \"- household income, or\\n\"\n                \"- benefit status.\\n\\n\"\n                \"Year group meaning (typical ages, for context only):\\n\"\n                \"- Reception: typically age 4\u20135\\n\"\n                \"- Year 1: typically age 5\u20136\\n\"\n                \"- Year 2: typically age 6\u20137\\n\\n\"\n                \"Not covered by this universal rule:\\n\"\n                \"- Year 3 and above (these pupils would need to qualify under the separate means-tested entitlement route).\\n\\n\"\n                \"Evidence/examples a school may use to confirm year group (non-exhaustive):\\n\"\n                \"- the school's own management information system (MIS) record\\n\"\n                \"- admission/enrolment record showing class/year placement\\n\\n\"\n                \"This field captures the underlying fact (year group). The eligibility decision (whether UIFSM applies) is assessed separately using the year-group rule.\"\n            ),\n            source=\"fsm_regulations_2014_reg5.md \u2014 Regulation 5 (Universal entitlement) and 'Year group definitions' (cross-ref to Children and Families Act 2014 s.105)\",\n            metadata={\"type\": \"legal_background\", \"section\": \"uk-fsm-universal-infant\"},\n        ),\n    ],\n)\n\npupil_is_registered = FieldDefinition(\n    key=\"pupil.is_registered_at_school\",\n    label=\"Pupil Registered at School\",\n    sort=Sort.BOOL,\n    description=\"Whether the child is a registered pupil at the school (as opposed to, for example, not enrolled or not on roll).\",\n    question=\"Is the pupil registered (on roll) at the school?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: The universal entitlement is for registered pupils, so we need to confirm the pupil is on the school roll.\",\n            source=\"The Education (Free School Lunches) (England) Regulations 2014, regulation 5 \u2014 Universal entitlement for pupils in reception class or years 1 or 2\",\n            metadata={\"type\": \"why\", \"section\": \"uk-fsm-universal-infant\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"The universal entitlement under the UIFSM rule applies to \\\"every registered pupil\\\" at a relevant school who is in Reception, Year 1, or Year 2.\\n\\n\"\n                \"What \\u201cregistered pupil\\u201d generally means in practice:\\n\"\n                \"- the pupil is enrolled and recorded as on roll at the school.\\n\\n\"\n                \"Examples of evidence/records commonly used (non-exhaustive):\\n\"\n                \"- school roll / MIS enrolment status\\n\"\n                \"- admissions/enrolment paperwork\\n\\n\"\n                \"Not sufficient on its own (examples):\\n\"\n                \"- an intention to apply for a place (not yet enrolled)\\n\"\n                \"- informal attendance without being on roll\\n\\n\"\n                \"This field records the underlying status (registered or not). Year-group and school-type conditions are assessed separately.\"\n            ),\n            source=\"Children and Families Act 2014, s.105(1) and The Education (Free School Lunches) (England) Regulations 2014, regulation 5\",\n            metadata={\"type\": \"legal_background\", \"section\": \"uk-fsm-universal-infant\"},\n        ),\n    ],\n)\n\nschool_is_relevant = FieldDefinition(\n    key=\"school.is_relevant_school\",\n    label=\"School is Relevant School\",\n    sort=Sort.BOOL,\n    description=\"Whether the school is a 'relevant school' for the purpose of the UIFSM duty/entitlement.\",\n    question=\"Is the pupil's school a 'relevant school' for free school meal rules?\",\n    weight=6,\n    notes=[\n        FieldNote(\n            note_text=\"WHY: Universal infant free school meals only apply at 'relevant schools', so we need to confirm the school is within the scope of the legal duty.\",\n            source=\"Children and Families Act 2014, s.105(3) and The Education (Free School Lunches) (England) Regulations 2014, regulation 5\",\n            metadata={\"type\": \"why\", \"section\": \"uk-fsm-universal-infant\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"The statutory duty and the universal entitlement are framed around pupils at a \\u201crelevant school\\u201d. The Children and Families Act 2014 provides that \\u201crelevant school\\u201d has the same meaning as in the Education Act 1996.\\n\\n\"\n                \"Operationally, this field is intended to capture whether the school the pupil attends is within the categories of school covered by the free school lunch regulations.\\n\\n\"\n                \"Evidence/examples that may be used to support this (non-exhaustive):\\n\"\n                \"- the school's establishment type as recorded on official registers (e.g., Get Information About Schools)\\n\"\n                \"- local authority records showing the school is within scope for free school lunch provision\\n\\n\"\n                \"Not-accepted/insufficient on its own (examples):\\n\"\n                \"- a parent's assumption that a setting is a school if it is not legally within scope\\n\"\n                \"- childcare/early years settings that are not treated as relevant schools for these regulations\\n\\n\"\n                \"Note: This pack does not reproduce the Education Act 1996 definition; where needed, the establishment's legal category should be checked against the Education Act 1996 meaning of \\\"relevant school\\\".\"\n            ),\n            source=\"Children and Families Act 2014, s.105(3) (cross-ref Education Act 1996) and The Education (Free School Lunches) (England) Regulations 2014, regulation 5\",\n            metadata={\"type\": \"legal_background\", \"section\": \"uk-fsm-universal-infant\"},\n        ),\n    ],\n)\n\n# RULES (CRITERIA)\n\n# Rule: The pupil must be in Reception, Year 1, or Year 2 to qualify for UIFSM.\n# Test cases use \"child.year_group\" with values: reception, year_1, year_2, year_3, year_6, year_7_plus\nrule_uifsm_year_group = Criterion(\n    id=\"uifsm_year_group\",\n    title=\"Pupil is in Reception, Year 1, or Year 2 (UIFSM)\",\n    group=\"uifsm_year_group\",\n    expr=Op(\n        operator=Operator.IN,\n        args=[\n            FieldRef(key=\"child.year_group\"),\n            Const(sort=Sort.ENUM, value=\"reception\"),\n            Const(sort=Sort.ENUM, value=\"year_1\"),\n            Const(sort=Sort.ENUM, value=\"year_2\"),\n        ],\n    ),\n    waivable=False,\n    notes=(\n        \"Every registered pupil in Reception, Year 1, or Year 2 is entitled to a free school lunch \"\n        \"under Regulation 5 of The Education (Free School Lunches) (England) Regulations 2014, \"\n        \"regardless of family income or benefit status. \"\n        \"Source: Children and Families Act 2014, s.105 and Regulation 5.\"\n    ),\n)\n",
+        "python_source_hash": "c66ec65f3a3d04e019d2f2461cdeb2b76f32ef06ec7cb1bc0984613b1d6e270a",
+        "compiled_bundle": {
+          "name": "uk-fsm-universal-infant",
+          "jurisdiction": "uk",
+          "instrument": "agent_generated",
+          "version": "v1",
+          "effective_from": {
+            "$date": "2026-05-17T00:00:00Z"
+          },
+          "effective_to": null,
+          "criteria": [
+            {
+              "id": "uifsm_year_group",
+              "title": "Pupil is in Reception, Year 1, or Year 2 (UIFSM)",
+              "expr": {
+                "type": "op",
+                "operator": "in",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "child.year_group"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Enum",
+                    "value": "reception",
+                    "field_context": null
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Enum",
+                    "value": "year_1",
+                    "field_context": null
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Enum",
+                    "value": "year_2",
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "uifsm_year_group",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Every registered pupil in Reception, Year 1, or Year 2 is entitled to a free school lunch under Regulation 5 of The Education (Free School Lunches) (England) Regulations 2014, regardless of family income or benefit status. Source: Children and Families Act 2014, s.105 and Regulation 5.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            }
+          ],
+          "outcome_logic": null
+        },
+        "compiled_fields": [
+          {
+            "key": "child.year_group",
+            "label": "Child Year Group",
+            "sort": "Enum",
+            "enum_values": [
+              "reception",
+              "year_1",
+              "year_2",
+              "year_3",
+              "year_4",
+              "year_5",
+              "year_6",
+              "year_7_plus"
+            ],
+            "description": "The pupil's current school year group (e.g., Reception, Year 1, Year 2). Universal infant free school meals apply only to Reception, Year 1, and Year 2.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What year group is the pupil currently in at school?",
+            "weight": 1,
+            "notes": [
+              {
+                "note_text": "WHY: Universal infant free school meals are only guaranteed for pupils in Reception, Year 1, or Year 2, so we need the pupil's year group to check whether the universal entitlement applies.",
+                "source": "The Education (Free School Lunches) (England) Regulations 2014, regulation 5 \u2014 Universal entitlement for pupils in reception class or years 1 or 2",
+                "metadata": {
+                  "type": "why",
+                  "section": "uk-fsm-universal-infant"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nUniversal infant free school meals (UIFSM) apply to every registered pupil at a relevant school who is in one of the specified year groups:\n- Reception class (also called \"Year R\")\n- Year 1\n- Year 2\n\nThis universal entitlement applies \"without reference\" to the means-tested qualifying criteria used for other pupils, and it applies regardless of:\n- household income, or\n- benefit status.\n\nYear group meaning (typical ages, for context only):\n- Reception: typically age 4\u20135\n- Year 1: typically age 5\u20136\n- Year 2: typically age 6\u20137\n\nNot covered by this universal rule:\n- Year 3 and above (these pupils would need to qualify under the separate means-tested entitlement route).\n\nEvidence/examples a school may use to confirm year group (non-exhaustive):\n- the school's own management information system (MIS) record\n- admission/enrolment record showing class/year placement\n\nThis field captures the underlying fact (year group). The eligibility decision (whether UIFSM applies) is assessed separately using the year-group rule.",
+                "source": "fsm_regulations_2014_reg5.md \u2014 Regulation 5 (Universal entitlement) and 'Year group definitions' (cross-ref to Children and Families Act 2014 s.105)",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "uk-fsm-universal-infant"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "pupil.is_registered_at_school",
+            "label": "Pupil Registered at School",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the child is a registered pupil at the school (as opposed to, for example, not enrolled or not on roll).",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Is the pupil registered (on roll) at the school?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: The universal entitlement is for registered pupils, so we need to confirm the pupil is on the school roll.",
+                "source": "The Education (Free School Lunches) (England) Regulations 2014, regulation 5 \u2014 Universal entitlement for pupils in reception class or years 1 or 2",
+                "metadata": {
+                  "type": "why",
+                  "section": "uk-fsm-universal-infant"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nThe universal entitlement under the UIFSM rule applies to \"every registered pupil\" at a relevant school who is in Reception, Year 1, or Year 2.\n\nWhat \u201cregistered pupil\u201d generally means in practice:\n- the pupil is enrolled and recorded as on roll at the school.\n\nExamples of evidence/records commonly used (non-exhaustive):\n- school roll / MIS enrolment status\n- admissions/enrolment paperwork\n\nNot sufficient on its own (examples):\n- an intention to apply for a place (not yet enrolled)\n- informal attendance without being on roll\n\nThis field records the underlying status (registered or not). Year-group and school-type conditions are assessed separately.",
+                "source": "Children and Families Act 2014, s.105(1) and The Education (Free School Lunches) (England) Regulations 2014, regulation 5",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "uk-fsm-universal-infant"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "school.is_relevant_school",
+            "label": "School is Relevant School",
+            "sort": "Bool",
+            "enum_values": null,
+            "description": "Whether the school is a 'relevant school' for the purpose of the UIFSM duty/entitlement.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "Is the pupil's school a 'relevant school' for free school meal rules?",
+            "weight": 6,
+            "notes": [
+              {
+                "note_text": "WHY: Universal infant free school meals only apply at 'relevant schools', so we need to confirm the school is within the scope of the legal duty.",
+                "source": "Children and Families Act 2014, s.105(3) and The Education (Free School Lunches) (England) Regulations 2014, regulation 5",
+                "metadata": {
+                  "type": "why",
+                  "section": "uk-fsm-universal-infant"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nThe statutory duty and the universal entitlement are framed around pupils at a \u201crelevant school\u201d. The Children and Families Act 2014 provides that \u201crelevant school\u201d has the same meaning as in the Education Act 1996.\n\nOperationally, this field is intended to capture whether the school the pupil attends is within the categories of school covered by the free school lunch regulations.\n\nEvidence/examples that may be used to support this (non-exhaustive):\n- the school's establishment type as recorded on official registers (e.g., Get Information About Schools)\n- local authority records showing the school is within scope for free school lunch provision\n\nNot-accepted/insufficient on its own (examples):\n- a parent's assumption that a setting is a school if it is not legally within scope\n- childcare/early years settings that are not treated as relevant schools for these regulations\n\nNote: This pack does not reproduce the Education Act 1996 definition; where needed, the establishment's legal category should be checked against the Education Act 1996 meaning of \"relevant school\".",
+                "source": "Children and Families Act 2014, s.105(3) (cross-ref Education Act 1996) and The Education (Free School Lunches) (England) Regulations 2014, regulation 5",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "uk-fsm-universal-infant"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          }
+        ],
+        "version": "v5",
+        "status": "active",
+        "effective_from": {
+          "$date": "2026-05-17T19:34:34.811Z"
+        },
+        "effective_to": null,
+        "supersedes": "uk-fsm-universal-infant:20260419-8beb4aed",
+        "last_edited": null,
+        "edit_count": 0,
+        "edit_notes": "",
+        "metadata": {
+          "total_rules": 1,
+          "total_fields": 3,
+          "complexity_score": 1,
+          "estimated_evaluation_time_ms": 10,
+          "tags": [
+            "developer_api",
+            "agent_generated",
+            "uk-fsm-universal-infant"
+          ],
+          "description": "Generated via agent authoring for project proj_rSgueljj7h5u49mZ",
+          "last_validated": null,
+          "validation_status": "agent_validated"
+        },
+        "provenance": {
+          "generation_run_id": "job_Z2L0BiK-a6JvekIc",
+          "source_documents": [],
+          "generation_timestamp": {
+            "$date": "2026-05-17T19:34:34.811Z"
+          },
+          "llm_model": "claude-sonnet-4-6",
+          "llm_temperature": 0.0,
+          "prompt_version": "",
+          "human_review_status": "unreviewed",
+          "edited_by": "agent",
+          "snapshot_id": "snap_20260517_d624e56d",
+          "pass_rate_progression": [
+            [
+              3,
+              12,
+              12
+            ]
+          ],
+          "turns_used": 3,
+          "elapsed_seconds": 77.9,
+          "tokens_input": 7402,
+          "tokens_output": 9345
+        }
+      }
+    ],
+    "projects": [],
+    "guidance_hints": [],
+    "test_run_results": []
+  }
+}

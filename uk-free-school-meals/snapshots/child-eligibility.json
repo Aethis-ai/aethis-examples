@@ -1,0 +1,249 @@
+{
+  "artifact_version": 1,
+  "ruleset_id": "uk-fsm-child-eligibility:20260517-91f8c86c",
+  "source_env": "prod",
+  "source_database": "Rules",
+  "created_at": "2026-05-17T21:00:12.499713+00:00",
+  "options": {
+    "with_sources": true,
+    "with_rulebook": false
+  },
+  "collections": {
+    "rule_bundles_dsl": [
+      {
+        "_id": {
+          "$oid": "6a0a16464ba3003a0600b6ad"
+        },
+        "bundle_id": "uk-fsm-child-eligibility:20260517-91f8c86c",
+        "section_id": "uk-fsm-child-eligibility",
+        "tenant_id": "user_39E6Y4c6po7HO70DSDjcB0Ve56u",
+        "visibility": "public",
+        "slug": "aethis/uk-fsm/child-eligibility",
+        "python_source": "\n# No imports needed \u2014 types are provided automatically by the DSL runtime.\n\n# \u2500\u2500 FIELD DEFINITIONS \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\nchild_age = FieldDefinition(\n    key=\"child.age\",\n    label=\"Child's Age at Start of School Year\",\n    sort=Sort.INT,\n    description=\"Child's age in whole years at the start of the relevant academic year (1 September).\",\n    question=\"How old was the child at the start of the school year (on 1 September)?\",\n    weight=2,\n    notes=[\n        FieldNote(\n            note_text=(\n                \"WHY: The rules treat a child as 'under 16' based on their age at the start of the \"\n                \"school year. A child must be at least 4 (Reception age) and under 16 to be within \"\n                \"scope of these free school meal entitlement rules.\"\n            ),\n            source=\"The Education (Free School Lunches) (England) Regulations 2014, Regulation 3(1)\u2013(2)\",\n            metadata={\"type\": \"why\", \"section\": \"uk-fsm-child-eligibility\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Regulation 3(1) of the Education (Free School Lunches) (England) Regulations 2014 \"\n                \"provides entitlement where the pupil is 'aged under 16' (or aged 16 to 18 and a \"\n                \"relevant sixth-form pupil). Regulation 3(2) clarifies that whether a child is \"\n                \"'aged under 16' is based on their age at the start of the school year.\\n\\n\"\n                \"Section 512ZA of the Education Act 1996 further states that compulsory school age \"\n                \"begins at the start of the term following a child's fifth birthday, but in practice \"\n                \"provision applies from the start of the Reception year (age 4\u20135).\\n\\n\"\n                \"A child aged 3 or below is not yet in Reception and is outside the scope of these \"\n                \"rules. A child who is 16 or over at the start of the school year is also outside \"\n                \"scope unless they qualify as a relevant sixth-form pupil under a separate route.\\n\\n\"\n                \"Typical evidence:\\n\"\n                \"- Date of birth (birth certificate or passport)\\n\"\n                \"- School records showing date of birth\\n\\n\"\n                \"Not accepted on its own:\\n\"\n                \"- An estimate without any documentary basis\"\n            ),\n            source=\"The Education (Free School Lunches) (England) Regulations 2014, Regulation 3(1)\u2013(2); Education Act 1996, s.512ZA\",\n            metadata={\"type\": \"legal_background\", \"section\": \"uk-fsm-child-eligibility\"},\n        ),\n    ],\n)\n\nchild_school_type = FieldDefinition(\n    key=\"child.school_type\",\n    label=\"School Type\",\n    sort=Sort.ENUM,\n    enum_values=[\"state_funded\", \"independent\", \"home_educated\"],\n    description=\"The type of school the child attends. Only state-funded schools (maintained schools and Academies) are within scope.\",\n    question=\"What type of school does the child attend?\",\n    weight=3,\n    notes=[\n        FieldNote(\n            note_text=(\n                \"WHY: Only children at certain types of school \u2014 specifically state-funded schools \"\n                \"(maintained schools, Academies, non-maintained special schools and pupil referral \"\n                \"units) \u2014 are covered by the legal definition of a 'relevant school' for free school \"\n                \"meals. Independent (fee-paying) schools and home education are not in scope.\"\n            ),\n            source=\"Education Act 1996, s.512ZA; The Education (Free School Lunches) (England) Regulations 2014, Regulation 3\",\n            metadata={\"type\": \"why\", \"section\": \"uk-fsm-child-eligibility\"},\n        ),\n        FieldNote(\n            note_text=(\n                \"LEGAL BACKGROUND:\\n\\n\"\n                \"Education Act 1996 section 512ZA defines 'relevant school' for the prescribed \"\n                \"descriptions of pupils entitled to free school meals under section 512(1)(a). \"\n                \"Regulation 3 of the Education (Free School Lunches) (England) Regulations 2014 \"\n                \"adopts that concept.\\n\\n\"\n                \"Qualifying (in-scope) categories:\\n\"\n                \"- A school maintained by a local authority in England (community schools, voluntary \"\n                \"aided, voluntary controlled, foundation, community special schools per SSFA 1998 s.114)\\n\"\n                \"- An Academy\\n\"\n                \"- A non-maintained special school\\n\"\n                \"- A pupil referral unit\\n\\n\"\n                \"These are captured under the value 'state_funded' for this field.\\n\\n\"\n                \"Explicitly not within scope:\\n\"\n                \"- Independent schools (fee-paying) \u2014 value: 'independent'\\n\"\n                \"- Home-educated children \u2014 value: 'home_educated'\\n\\n\"\n                \"Typical evidence:\\n\"\n                \"- The school's status on official listings (maintained/academy/PRU etc.)\\n\"\n                \"- A letter/email from the school confirming its type/status\\n\\n\"\n                \"Not accepted for this element:\\n\"\n                \"- Private tuition arrangements\\n\"\n                \"- Unregistered provision\"\n            ),\n            source=\"Education Act 1996, ss.512 and 512ZA; School Standards and Framework Act 1998, s.114; The Education (Free School Lunches) (England) Regulations 2014, Regulation 3(2)\",\n            metadata={\"type\": \"legal_background\", \"section\": \"uk-fsm-child-eligibility\"},\n        ),\n    ],\n)\n\n# \u2500\u2500 CRITERIA \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n\n# Group 1: Age eligibility\n# Child must be aged 4 or over AND under 16 at the start of the school year.\n# Section 512ZA confirms in practice provision applies from Reception (age 4\u20135).\n# Regulation 3(1)\u2013(2) sets the upper bound at \"aged under 16\" assessed at start of school year.\n\nrule_age_eligibility = Criterion(\n    id=\"age_eligibility\",\n    title=\"Child is aged 4 to 15 at the start of the school year\",\n    group=\"age_eligibility\",\n    expr=Op(operator=Operator.AND, args=[\n        Op(operator=Operator.GE, args=[\n            FieldRef(key=\"child.age\"),\n            Const(sort=Sort.INT, value=4),\n        ]),\n        Op(operator=Operator.LE, args=[\n            FieldRef(key=\"child.age\"),\n            Const(sort=Sort.INT, value=15),\n        ]),\n    ]),\n    waivable=False,\n    notes=(\n        \"Child must be at least 4 (Reception age) and at most 15 at the start of the school year. \"\n        \"Per Regulation 3(1)\u2013(2) of the Education (Free School Lunches) (England) Regulations 2014, \"\n        \"entitlement applies to pupils aged under 16 (assessed at the start of the school year). \"\n        \"Section 512ZA of the Education Act 1996 confirms that in practice provision applies from \"\n        \"Reception (age 4\u20135). A child who is 3 or younger is not yet in Reception; a child aged 16 \"\n        \"or over falls outside this route (a separate sixth-form route may apply).\"\n    ),\n)\n\n# Group 2: School type eligibility\n# Child must attend a state-funded school (maintained/academy/non-maintained special/PRU).\n# Independent schools and home education are explicitly out of scope.\n\nrule_school_type_eligibility = Criterion(\n    id=\"school_type_eligibility\",\n    title=\"Child attends a state-funded (relevant) school\",\n    group=\"school_type_eligibility\",\n    expr=Op(operator=Operator.EQ, args=[\n        FieldRef(key=\"child.school_type\"),\n        Const(sort=Sort.ENUM, value=\"state_funded\"),\n    ]),\n    waivable=False,\n    notes=(\n        \"Child must attend a 'relevant school' within the meaning of Education Act 1996 s.512ZA: \"\n        \"a maintained school, Academy, non-maintained special school, or pupil referral unit. \"\n        \"Independent (fee-paying) schools and home education are explicitly excluded.\"\n    ),\n)\n",
+        "python_source_hash": "396cb75cebe542e424d3fd6b74fee8a19630e17c58764a8b1a4abc90d427ce66",
+        "compiled_bundle": {
+          "name": "uk-fsm-child-eligibility",
+          "jurisdiction": "uk",
+          "instrument": "agent_generated",
+          "version": "v1",
+          "effective_from": {
+            "$date": "2026-05-17T00:00:00Z"
+          },
+          "effective_to": null,
+          "criteria": [
+            {
+              "id": "age_eligibility",
+              "title": "Child is aged 4 to 15 at the start of the school year",
+              "expr": {
+                "type": "op",
+                "operator": "and",
+                "args": [
+                  {
+                    "type": "op",
+                    "operator": ">=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "child.age"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Int",
+                        "value": 4,
+                        "field_context": null
+                      }
+                    ]
+                  },
+                  {
+                    "type": "op",
+                    "operator": "<=",
+                    "args": [
+                      {
+                        "type": "field_ref",
+                        "key": "child.age"
+                      },
+                      {
+                        "type": "const",
+                        "sort": "Int",
+                        "value": 15,
+                        "field_context": null
+                      }
+                    ]
+                  }
+                ]
+              },
+              "group": "age_eligibility",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Child must be at least 4 (Reception age) and at most 15 at the start of the school year. Per Regulation 3(1)\u2013(2) of the Education (Free School Lunches) (England) Regulations 2014, entitlement applies to pupils aged under 16 (assessed at the start of the school year). Section 512ZA of the Education Act 1996 confirms that in practice provision applies from Reception (age 4\u20135). A child who is 3 or younger is not yet in Reception; a child aged 16 or over falls outside this route (a separate sixth-form route may apply).",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            },
+            {
+              "id": "school_type_eligibility",
+              "title": "Child attends a state-funded (relevant) school",
+              "expr": {
+                "type": "op",
+                "operator": "=",
+                "args": [
+                  {
+                    "type": "field_ref",
+                    "key": "child.school_type"
+                  },
+                  {
+                    "type": "const",
+                    "sort": "Enum",
+                    "value": "state_funded",
+                    "field_context": null
+                  }
+                ]
+              },
+              "group": "school_type_eligibility",
+              "waivable": false,
+              "fail_code": null,
+              "notes": "Child must attend a 'relevant school' within the meaning of Education Act 1996 s.512ZA: a maintained school, Academy, non-maintained special school, or pupil referral unit. Independent (fee-paying) schools and home education are explicitly excluded.",
+              "provenance": null,
+              "source_refs": null,
+              "review_required": false,
+              "review_reason": null,
+              "satisfaction_paths": null,
+              "is_complex_requirement": false
+            }
+          ],
+          "outcome_logic": null
+        },
+        "compiled_fields": [
+          {
+            "key": "child.age",
+            "label": "Child's Age at Start of School Year",
+            "sort": "Int",
+            "enum_values": null,
+            "description": "Child's age in whole years at the start of the relevant academic year (1 September).",
+            "provenance": null,
+            "source_refs": null,
+            "question": "How old was the child at the start of the school year (on 1 September)?",
+            "weight": 2,
+            "notes": [
+              {
+                "note_text": "WHY: The rules treat a child as 'under 16' based on their age at the start of the school year. A child must be at least 4 (Reception age) and under 16 to be within scope of these free school meal entitlement rules.",
+                "source": "The Education (Free School Lunches) (England) Regulations 2014, Regulation 3(1)\u2013(2)",
+                "metadata": {
+                  "type": "why",
+                  "section": "uk-fsm-child-eligibility"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nRegulation 3(1) of the Education (Free School Lunches) (England) Regulations 2014 provides entitlement where the pupil is 'aged under 16' (or aged 16 to 18 and a relevant sixth-form pupil). Regulation 3(2) clarifies that whether a child is 'aged under 16' is based on their age at the start of the school year.\n\nSection 512ZA of the Education Act 1996 further states that compulsory school age begins at the start of the term following a child's fifth birthday, but in practice provision applies from the start of the Reception year (age 4\u20135).\n\nA child aged 3 or below is not yet in Reception and is outside the scope of these rules. A child who is 16 or over at the start of the school year is also outside scope unless they qualify as a relevant sixth-form pupil under a separate route.\n\nTypical evidence:\n- Date of birth (birth certificate or passport)\n- School records showing date of birth\n\nNot accepted on its own:\n- An estimate without any documentary basis",
+                "source": "The Education (Free School Lunches) (England) Regulations 2014, Regulation 3(1)\u2013(2); Education Act 1996, s.512ZA",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "uk-fsm-child-eligibility"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          },
+          {
+            "key": "child.school_type",
+            "label": "School Type",
+            "sort": "Enum",
+            "enum_values": [
+              "state_funded",
+              "independent",
+              "home_educated"
+            ],
+            "description": "The type of school the child attends. Only state-funded schools (maintained schools and Academies) are within scope.",
+            "provenance": null,
+            "source_refs": null,
+            "question": "What type of school does the child attend?",
+            "weight": 3,
+            "notes": [
+              {
+                "note_text": "WHY: Only children at certain types of school \u2014 specifically state-funded schools (maintained schools, Academies, non-maintained special schools and pupil referral units) \u2014 are covered by the legal definition of a 'relevant school' for free school meals. Independent (fee-paying) schools and home education are not in scope.",
+                "source": "Education Act 1996, s.512ZA; The Education (Free School Lunches) (England) Regulations 2014, Regulation 3",
+                "metadata": {
+                  "type": "why",
+                  "section": "uk-fsm-child-eligibility"
+                }
+              },
+              {
+                "note_text": "LEGAL BACKGROUND:\n\nEducation Act 1996 section 512ZA defines 'relevant school' for the prescribed descriptions of pupils entitled to free school meals under section 512(1)(a). Regulation 3 of the Education (Free School Lunches) (England) Regulations 2014 adopts that concept.\n\nQualifying (in-scope) categories:\n- A school maintained by a local authority in England (community schools, voluntary aided, voluntary controlled, foundation, community special schools per SSFA 1998 s.114)\n- An Academy\n- A non-maintained special school\n- A pupil referral unit\n\nThese are captured under the value 'state_funded' for this field.\n\nExplicitly not within scope:\n- Independent schools (fee-paying) \u2014 value: 'independent'\n- Home-educated children \u2014 value: 'home_educated'\n\nTypical evidence:\n- The school's status on official listings (maintained/academy/PRU etc.)\n- A letter/email from the school confirming its type/status\n\nNot accepted for this element:\n- Private tuition arrangements\n- Unregistered provision",
+                "source": "Education Act 1996, ss.512 and 512ZA; School Standards and Framework Act 1998, s.114; The Education (Free School Lunches) (England) Regulations 2014, Regulation 3(2)",
+                "metadata": {
+                  "type": "legal_background",
+                  "section": "uk-fsm-child-eligibility"
+                }
+              }
+            ],
+            "version": "v1",
+            "effective_from": {
+              "$date": "2026-05-17T00:00:00Z"
+            },
+            "effective_to": null,
+            "supersedes": null
+          }
+        ],
+        "version": "v10",
+        "status": "active",
+        "effective_from": {
+          "$date": "2026-05-17T19:25:58.601Z"
+        },
+        "effective_to": null,
+        "supersedes": "uk-fsm-child-eligibility:20260517-0e9368b0",
+        "last_edited": null,
+        "edit_count": 0,
+        "edit_notes": "",
+        "metadata": {
+          "total_rules": 2,
+          "total_fields": 2,
+          "complexity_score": 1,
+          "estimated_evaluation_time_ms": 10,
+          "tags": [
+            "developer_api",
+            "agent_generated",
+            "uk-fsm-child-eligibility"
+          ],
+          "description": "Generated via agent authoring for project proj__6YA5B3-j7IlkafR",
+          "last_validated": null,
+          "validation_status": "agent_validated"
+        },
+        "provenance": {
+          "generation_run_id": "job_7116H6ELps8Tf-4z",
+          "source_documents": [],
+          "generation_timestamp": {
+            "$date": "2026-05-17T19:25:58.601Z"
+          },
+          "llm_model": "claude-sonnet-4-6",
+          "llm_temperature": 0.0,
+          "prompt_version": "",
+          "human_review_status": "unreviewed",
+          "edited_by": "agent",
+          "snapshot_id": "snap_20260517_fd939571",
+          "pass_rate_progression": [
+            [
+              3,
+              30,
+              30
+            ]
+          ],
+          "turns_used": 3,
+          "elapsed_seconds": 69.3,
+          "tokens_input": 6836,
+          "tokens_output": 6639
+        }
+      }
+    ],
+    "projects": [],
+    "guidance_hints": [],
+    "test_run_results": []
+  }
+}
