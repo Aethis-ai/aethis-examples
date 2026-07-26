@@ -6,6 +6,24 @@ Each example includes source legislation, golden test cases, and a one-command t
 
 **Documentation:** [docs.aethis.ai](https://docs.aethis.ai) · [OpenAPI spec](https://docs.aethis.ai/api-reference/openapi.json) · agents via MCP: `claude mcp add aethis -- npx -y aethis-mcp`
 
+## Start here
+
+**Run an example's test suite against the live API. No sign-up, no key:**
+
+```bash
+uv run run_tests.py construction-all-risks/
+```
+
+That is the whole first step. Everything below is optional, and each capability
+says up front what it costs you.
+
+| What you want to do | What you need | Where |
+|---|---|---|
+| Evaluate a public showcase ruleset — tests, decision routes, walk-through, REST | **Nothing.** Anonymous, no key | [Run tests](#run-tests), [Inspect decision routes](#inspect-decision-routes), [As a REST API](#as-a-rest-api) |
+| Repeated sweeps across every example | An Aethis API key (free sign-up) — the anonymous tier is capped per IP per day | [Run tests](#run-tests) |
+| Watch an agent call a decision and prove it did | **Your own** model-provider key, billed to your own account | [Agent quickstart](agent-quickstart/) |
+| Author and publish your own rulesets | An Aethis API key with authoring access — **invite-only, private beta** | [Request access](https://aethis.ai/developer-access) |
+
 ## The problem
 
 Engine accuracy: 100% across 225 scenarios spanning four rule domains, where frontier LLMs score 63–100% (Simpson 2026 §6). The construction-CAR scenarios below are one domain from that dataset.
@@ -118,6 +136,32 @@ Answer questions one at a time. The engine picks the next most informative quest
 uv run walk_through.py construction-all-risks/
 ```
 
+## Agent quickstart
+
+> Requires **your own** Anthropic API key, billed to your own account. Still no
+> Aethis credential.
+
+A LangGraph agent that uses an Aethis decision and prints the evidence — the
+pinned ruleset identity, the replay handles, and the verbatim passages the rules
+cite. If the agent skips the tool or invents a result, the run fails loudly
+instead of reporting a plausible answer.
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+uv run agent-quickstart/quickstart.py
+```
+
+There is also a free path that skips the model provider entirely and calls the
+decision tool directly:
+
+```bash
+uv run agent-quickstart/quickstart.py --tool-only
+```
+
+Prerequisites, cost and data-flow notes, and a recorded transcript:
+[`agent-quickstart/`](agent-quickstart/).
+
+
 ## How to use
 
 ### With AI agents (MCP)
@@ -132,6 +176,11 @@ claude mcp add aethis -- npx -y aethis-mcp
 Anonymous access works for individual public ruleset decisions and for browsing the public rulebook catalogue (`aethis rulebooks list`, no key needed); *deciding* against a composed rulebook (e.g. `aethis/uk-fsm`) requires an API key. See [aethis-mcp](https://github.com/Aethis-ai/aethis-mcp).
 
 ### With the CLI
+
+> **Authoring is invite-only.** `generate`, `test` and `publish` write rulesets
+> into your own tenant and need an API key with authoring access, currently in
+> private beta — [request access](https://aethis.ai/developer-access). Reading
+> and evaluating public rulesets needs no key at all.
 
 ```bash
 uv tool install aethis-cli

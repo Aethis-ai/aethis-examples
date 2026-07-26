@@ -1,0 +1,159 @@
+{
+  "decision_id": "dec_RELEASEfixture01",
+  "inputs_hash": "sha256:f27a28d009dfb8be22bea1537b7ff25ea5d8e2f46c466251b14806e348bfa750",
+  "decision_time": "2026-07-26T00:00:00.000000Z",
+  "engine_version": "aethis-core@0.49.0",
+  "decision": "not_eligible",
+  "ruleset_id": "spacecraft-crew-certification:20260517-c59647a5",
+  "slug": "aethis/spacecraft-crew-certification",
+  "rulebook_id": null,
+  "ruleset_version": "v4",
+  "fields_evaluated": 16,
+  "fields_provided": 1,
+  "missing_fields": [
+    "space.crew.age",
+    "space.crew.flight_hours",
+    "space.crew.has_pilot_license",
+    "pilot_licence.issuing_status",
+    "pilot_licence.expiry_date",
+    "space.crew.has_gaa_exam",
+    "space.crew.has_approved_provider_cert",
+    "application.date",
+    "medical_certificate.issue_date",
+    "space.medical.cert_valid",
+    "space.mission.type",
+    "space.crew.has_radiation_cert",
+    "radiation_certificate.expiry_date",
+    "space.vessel.propulsion_type",
+    "space.crew.has_towel"
+  ],
+  "next_question": null,
+  "optimal_path": null,
+  "field_errors": null,
+  "trace": null,
+  "explanation": {
+    "decision": "not_eligible",
+    "groups": [
+      {
+        "group": "species_eligibility",
+        "status": "not_satisfied",
+        "criteria": [
+          {
+            "criterion_id": "species_eligible",
+            "title": "Applicant is of an eligible species",
+            "status": "not_satisfied",
+            "source_references": [
+              {
+                "schema_version": 1,
+                "source_id": "SCCA2049#Part2/S3.2",
+                "title": "Spacecraft Crew Certification Act 2049",
+                "authority": "Galactic Aviation Authority (synthetic)",
+                "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md",
+                "locator": "Part 2, Section 3(2)",
+                "source_version": null,
+                "source_date": "2026-07-25",
+                "content_digest": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113",
+                "licence": "MIT",
+                "verified_at": "2026-07-25T00:00:00Z",
+                "quote": {
+                  "exact": "(2) A Vogon national is not an eligible species for the purposes of this Act,",
+                  "prefix": "(1) An applicant for crew certification must be of an eligible species.",
+                  "suffix": "    by virtue of the Galactic Diplomatic Exclusion Treaty 2045."
+                },
+                "media_type": "text",
+                "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md#:~:text=%282%29%20A%20Vogon%20national%20is%20not%20an%20eligible%20species%20for%20the%20purposes%20of%20this%20Act%2C"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "group": "flight_readiness",
+        "status": "pending",
+        "criteria": [
+          {
+            "criterion_id": "flight_readiness_exempt_1000hrs",
+            "title": "Exempt from flight readiness \u2014 1000+ flight hours (Section 6(3))",
+            "status": "pending"
+          },
+          {
+            "criterion_id": "flight_readiness_exempt_age",
+            "title": "Exempt from flight readiness \u2014 age 60+ on non-orbital mission (Section 6(1))",
+            "status": "pending"
+          },
+          {
+            "criterion_id": "flight_readiness_met",
+            "title": "Flight readiness requirements met (Section 4)",
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "group": "medical_certification",
+        "status": "pending",
+        "criteria": [
+          {
+            "criterion_id": "medical_gaa_exam",
+            "title": "Medical certification via GAA examination (Section 5 Route A)",
+            "status": "pending"
+          },
+          {
+            "criterion_id": "medical_approved_provider",
+            "title": "Medical certification via approved provider (Section 5 Route B)",
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "group": "medical_cert_validity",
+        "status": "pending",
+        "criteria": [
+          {
+            "criterion_id": "medical_cert_validity",
+            "title": "Medical certificate within 730-day validity period (Section 5A)",
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "group": "radiation_certification",
+        "status": "pending",
+        "criteria": [
+          {
+            "criterion_id": "radiation_cert_orbital",
+            "title": "Radiation protection certificate required for orbital missions (Section 7)",
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "group": "propulsion_compliance",
+        "status": "pending",
+        "criteria": [
+          {
+            "criterion_id": "propulsion_approved",
+            "title": "Vessel propulsion system is of an approved type (Section 8)",
+            "status": "pending"
+          }
+        ]
+      },
+      {
+        "group": "towel_compliance",
+        "status": "pending",
+        "criteria": [
+          {
+            "criterion_id": "towel_compliance",
+            "title": "Applicant carries a towel (Section 9)",
+            "status": "pending"
+          }
+        ]
+      }
+    ],
+    "unused_facts": []
+  },
+  "section_results": null,
+  "timing": null,
+  "graph_overlay": null,
+  "content_digest": "sha256:2c197c7a7323e9688264d26375007638c6b11fbd449676a780986649372e746d",
+  "_fixture": "Recorded from https://api.aethis.ai/api/v1/public/decide (engine aethis-core@0.46.3) and hand-completed to the release contract: resolved ruleset_version, content_digest and a publish-validated SourceReference. The reference's url, quote and content_digest are real and independently checkable \u2014 the digest is sha256 of spacecraft-crew-certification/sources/source.md and the quote occurs in it verbatim. engine_version, ruleset_version and content_digest are illustrative. This fixture is the deterministic oracle for the proof check; it is NOT a claim about what any currently deployed evaluator returns."
+}
