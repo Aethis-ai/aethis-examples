@@ -1,5 +1,7 @@
 # The Education (Free School Meals) (England) Regulations 2014 — Regulation 4
 
+> **Aethis demonstration material — not statutory text.** This synthetic extract was prepared for an intentionally simplified teaching model in April 2026. It contains paraphrase and model assumptions, including passages written in a legislative register. Its filename, headings and provision numbers do not establish an authentic legal quotation or current entitlement rule. The computational model and its fixed test expectations are retained; consult the actual authority separately.
+
 ## Regulation 4 — Qualifying criteria (means-tested routes)
 
 A person is within a qualifying criterion for the purposes of regulation 3 if the person, or a person with whom the person lives, is in receipt of—

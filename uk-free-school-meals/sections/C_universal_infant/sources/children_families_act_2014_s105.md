@@ -1,5 +1,7 @@
 # Children and Families Act 2014 — Section 105
 
+> **Aethis demonstration material — not statutory text.** This synthetic extract was prepared for an intentionally simplified teaching model in April 2026. It contains paraphrase and model assumptions, including passages written in a legislative register. Its filename, headings and provision numbers do not establish an authentic legal quotation or current entitlement rule. The computational model and its fixed test expectations are retained; consult the actual authority separately.
+
 ## Section 105 — Free school meals for children in reception class or years 1 or 2
 
 **105 Free school meals for children in reception class or years 1 or 2**

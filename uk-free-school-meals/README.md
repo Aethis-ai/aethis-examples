@@ -7,7 +7,9 @@ Meals (FSM) eligibility as the domain.
 It is designed to demonstrate **how multiple rulesets compose into a rulebook** —
 the most important concept for anyone authoring multi-criteria eligibility systems.
 
-> **Disclaimer:** This example is for illustrative purposes only. While it references real UK legislation, the rules, field definitions, and test cases have been intentionally simplified for demonstration — two parts of the real law are omitted (see [Exercises](#exercises) below). This example should not be relied upon for legal advice or to determine actual free school meal entitlement. Always refer to the authoritative legislation and seek appropriate professional guidance.
+> **Scope:** This is a dated, intentionally simplified Aethis composition demonstration, based on the demonstration corpus prepared in April 2026 and the rules published in July 2026. Its age, school-type, benefit and income assumptions are a fixed teaching model, not a complete statement of entitlement law. The exercises below extend that model; they are not an exhaustive list of legal omissions. Do not use the example to determine actual free school meal entitlement or as legal advice.
+>
+> **Citation review, 13 September 2026:** The cited school-attendance passage in Education Act 1996 s.512ZB(4A)(a) occurs unchanged in the current authority document. Other parts of that document were amended on 17 August 2026. Checking that passage verifies its text, not the legal completeness or currency of this model. Synthetic source files are Aethis-authored demonstration material, even where legacy filenames or headings resemble legislation.
 
 ---
 
@@ -15,7 +17,7 @@ the most important concept for anyone authoring multi-criteria eligibility syste
 
 | Step | What you'll do | Tools |
 |------|---------------|-------|
-| **Inspect the sections** | Review the source legislation, fields, and test cases for each ruleset | `sections/*` |
+| **Inspect the sections** | Review the labelled source material, fields, and fixed test cases | `sections/*` |
 | **Run the section tests** | Verify each ruleset against the live public API | `uv run run_tests.py ...` |
 | **Evaluate the rulebook** | Run a decision against the composed public rulebook | `POST /api/v1/public/decide` with `rulebook_id` |
 
@@ -26,7 +28,7 @@ public rulebook composes their outcomes into one final decision.
 
 ## Section structure
 
-UK Free School Meals eligibility has three distinct sections:
+The demonstration divides its fixed eligibility model into three sections:
 
 ```
 Section A — child_eligibility
@@ -39,7 +41,7 @@ Section B — household_qualifying_criteria
 
 Section C — universal_infant_fsm
   Is the child in Reception, Year 1, or Year 2?
-  (No income test — automatic entitlement under the Children and Families Act 2014)
+  (No income test in this simplified model)
 
 Outcome: A AND (B OR C)
 ```
@@ -52,17 +54,14 @@ of household income; a Year 6 child must pass Section B.
 
 ## Why three sections?
 
-The legislation creates two distinct entitlements that share a common eligibility
-gate (Section A):
+The demonstration models two routes with a shared prerequisite gate (Section A):
 
-1. **Means-tested entitlement** (A + B): The classic free school meals route,
-   dating from the Education Act 1996. Income and benefit criteria determine eligibility.
+1. **Household route** (A + B): The model evaluates its fixed income and benefit assumptions.
 
-2. **Universal Infant entitlement** (A + C): Introduced by the Children and Families
-   Act 2014. All Reception–Year 2 children qualify regardless of household income.
+2. **Infant route** (A + C): The model uses Reception–Year 2 without an income test. Section A still applies.
 
 Modelling these as three rulesets makes the structure explicit and testable independently.
-Each ruleset has its own source legislation, field spec, and test cases.
+Each ruleset has its own source material, field spec, and fixed test cases.
 
 ---
 
@@ -73,7 +72,7 @@ uk-free-school-meals/
 ├── README.md                          # This file
 ├── domain/hints.yaml                  # Cross-section guidance (applied to all sections)
 ├── rulebook.yaml                      # Composes all three rulesets + outcome logic (descriptive)
-├── sources/                           # Full statute texts (reference only)
+├── sources/                           # Demonstration source material (reference only)
 │   ├── education_act_1996.md
 │   ├── fsm_regulations_2014.md
 │   └── children_families_act_2014.md
@@ -82,7 +81,7 @@ uk-free-school-meals/
     │   ├── aethis.yaml                # section_id: child_eligibility
     │   ├── sources/                   # Citations uploaded for this section
     │   │   ├── education_act_1996_s512.md
-    │   │   └── fsm_regulations_2014_reg3.md
+    │   │   └── fsm_child_entitlement_demo.md
     │   ├── guidance/hints.yaml        # Section-specific guidance
     │   └── tests/scenarios.yaml       # 6 test cases
     ├── B_household_criteria/
@@ -185,7 +184,7 @@ route (B). Either route satisfies the disjunction, gated by section A.
 
 - **Multi-ruleset composition**: Three independent rulesets composed at the Rulebook level
 - **OR logic across sections**: Sections B and C are alternative routes
-- **Automatic entitlement override**: Section C has no income test
+- **Alternative route without an income test**: Section C satisfies the model's B OR C disjunction; Section A still applies
 - **Domain-level guidance with exact adherence**: Constrains section discovery
 - **Threshold arithmetic**: Section B uses `≤ £7,400` comparison on an Int field
 - **Enum fields**: `child.school_type` and `child.year_group`
@@ -193,7 +192,7 @@ route (B). Either route satisfies the disjunction, gated by section A.
 
 ---
 
-## Source legislation
+## Authority links and demonstration sources
 
 - [Education Act 1996, Section 512](https://www.legislation.gov.uk/ukpga/1996/56/section/512)
 - [The Education (Free School Meals) (England) Regulations 2014](https://www.legislation.gov.uk/uksi/2014/843/contents)
@@ -203,11 +202,11 @@ route (B). Either route satisfies the disjunction, gated by section A.
 
 ## Exercises
 
-Two parts of the real legislation are intentionally omitted to keep the example focused. They make good authoring exercises once you've worked through the main walkthrough.
+These exercises address two simplifications in the dated demonstration corpus. They are authoring exercises, not a current legal checklist or a claim that all other entitlement conditions are implemented.
 
 ### Exercise 1 — Sixth-form pupils (ages 16–18)
 
-**What's missing:** [Regulation 3](https://www.legislation.gov.uk/uksi/2014/843/regulation/3) covers not just under-16s but also "relevant sixth-form pupils" aged 16–18. [Regulation 4(g)](https://www.legislation.gov.uk/uksi/2014/843/regulation/4) adds a qualifying benefit that only applies to this group: the **Guarantee Credit element of Pension Credit** under the State Pension Credit Act 2002.
+**Model extension:** The demonstration corpus describes a sixth-form route and a Pension Credit criterion that the fixed rules do not implement. Review the actual authority text separately before adapting any example for real use.
 
 The example's Section A currently gates on ages 4–15 only and Section B has no Pension Credit criterion.
 
@@ -220,7 +219,7 @@ The example's Section A currently gates on ages 4–15 only and Section B has no
 
 ### Exercise 2 — Child Tax Credit income threshold
 
-**What's missing:** The example models Child Tax Credit as a single boolean field (`household.receives_child_tax_credit_only`), which captures the "not entitled to Working Tax Credit" condition but silently drops the second condition in [Regulation 4(e)](https://www.legislation.gov.uk/uksi/2014/843/regulation/4): the household's **annual gross income must not exceed £16,190** (as calculated by HMRC).
+**Model extension:** The demonstration corpus describes an additional Child Tax Credit income condition. The fixed model uses one boolean (`household.receives_child_tax_credit_only`) and does not implement that additional condition.
 
 A family receiving CTC with no WTC entitlement but an income of £20,000 would incorrectly pass Section B as currently modelled.
 

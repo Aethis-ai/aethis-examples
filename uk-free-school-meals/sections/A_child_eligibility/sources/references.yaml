@@ -27,13 +27,18 @@ documents:
     authority: The National Archives (legislation.gov.uk)
     licence: OGL-UK-3.0
     media_type: html
-    source_version: 'Latest available (Revised)'
-    expected_digest: sha256:49c1b62a2a484e786c341d2e918e4d70ecf04c351c425a00e2a623b8dd56b3e6
+    source_version: 'Revised authority document fetched 2026-09-13; cited passage only'
+    source_date: '2026-09-13'
+    expected_digest: sha256:358075cc42c2a6aaf12518f4480ec6daa57ecb488d34dc9b43e3b9d13d83272f
     note: >-
       Published statute. Reproduced under the Open Government Licence v3.0.
-      The digest binds the citation to the revision fetched at verification
-      time; an amendment moves the digest and fails the citation closed until a
-      human re-reads the passage.
+      The cited subsection (4A)(a) passage was compared with the retained
+      July bytes and occurs unchanged in these September bytes. Subsection
+      (2)(a) and new (4D) have changed; no assertion is made that the fixed
+      demonstration model implements current entitlement law. This proposed
+      digest may be adopted only with a reviewed new immutable publication,
+      followed by a served-reference comparison; historical citations remain
+      unchanged. Any further source drift fails closed.
 
   fsm-child-eligibility-corpus:
     url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/uk-free-school-meals/sections/A_child_eligibility/sources/education_act_1996_s512.md
@@ -42,9 +47,9 @@ documents:
     authority: Aethis
     licence: MIT
     media_type: text
-    source_version: aethis-examples@main
-    source_date: '2026-04-06'
-    expected_digest: sha256:4ae4326c100d8918bef9258e7c34b00cc2bfb27e43483f4e2e5105e2d03d6e84
+    source_version: 'Aethis demonstration corpus labelled 2026-09-13'
+    source_date: '2026-09-13'
+    expected_digest: sha256:9917d94b8454c98767479cae3c4a24c7743d66296fdc1f52fce02060ac350ee4
     note: >-
       An Aethis-written extract prepared as input to the rules author. It
       summarises and paraphrases; it is not a certified reproduction of the
@@ -52,15 +57,15 @@ documents:
       states in its own words.
 
   fsm-entitlement-corpus:
-    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/uk-free-school-meals/sections/A_child_eligibility/sources/fsm_regulations_2014_reg3.md
-    local_path: uk-free-school-meals/sections/A_child_eligibility/sources/fsm_regulations_2014_reg3.md
+    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/uk-free-school-meals/sections/A_child_eligibility/sources/fsm_child_entitlement_demo.md
+    local_path: uk-free-school-meals/sections/A_child_eligibility/sources/fsm_child_entitlement_demo.md
     title: Free School Meals - entitlement extract (Aethis demonstration corpus)
     authority: Aethis
     licence: MIT
     media_type: text
-    source_version: aethis-examples@main
-    source_date: '2026-04-06'
-    expected_digest: sha256:6a7693de63b21091b30e61fd2dc4e36b75008ab4076d66cec6a66be10afa874a
+    source_version: 'Aethis demonstration corpus labelled 2026-09-13'
+    source_date: '2026-09-13'
+    expected_digest: sha256:7bf93d09f636272c43976fecc9241e6240a7d930e0b78e6e91102b8f75c2f80a
     note: >-
       An Aethis-written extract prepared as input to the rules author. It
       summarises and paraphrases; it is not a certified reproduction of the
@@ -68,7 +73,9 @@ documents:
 
 # Citation keys are derived from source-document headings by the authoring
 # pipeline (`<file>#<stem>/<heading>`, one key per heading), so each key below
-# names a heading of an uploaded source. A key is a join key, not a location:
+# names a heading of an uploaded source. This manifest targets a newly authored candidate, so the renamed
+# demonstration file has its actual filename-derived key. Historical fixture
+# and immutable publication keys remain unchanged. A key is not a location:
 # the statute key is emitted from the verbatim extract the rules author reads
 # (education_act_1996_s512zb.md) while its resolution target — what a visitor
 # receives — is the published statute at legislation.gov.uk.
@@ -99,7 +106,7 @@ references:
         Independent schools (fee-paying) and home-educated children are not
         within scope of this provision.
 
-  'fsm_regulations_2014_reg3.md#fsm_regulations_2014_reg3/Regulation 3 — Persons who are entitled to free school lunches':
+  'fsm_child_entitlement_demo.md#fsm_child_entitlement_demo/Regulation 3 — Persons who are entitled to free school lunches':
     document: fsm-entitlement-corpus
     locator: 'Regulation 3(1)'
     quote:
@@ -114,4 +121,4 @@ criteria:
   age_at_least_4:
     - 'education_act_1996_s512.md#education_act_1996_s512/Section 512ZA — Prescribed descriptions of pupils'
   age_under_16:
-    - 'fsm_regulations_2014_reg3.md#fsm_regulations_2014_reg3/Regulation 3 — Persons who are entitled to free school lunches'
+    - 'fsm_child_entitlement_demo.md#fsm_child_entitlement_demo/Regulation 3 — Persons who are entitled to free school lunches'

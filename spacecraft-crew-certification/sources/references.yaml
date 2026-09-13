@@ -94,7 +94,7 @@ references:
     quote:
       exact: >-
         the applicant must hold a valid radiation protection certificate.
-      prefix: 'Where the mission type is "orbital"—'
+      prefix: 'Where the mission type is "orbital"— (a)'
 
   'source.md#source/Section 8: Equipment compliance':
     document: spacecraft-crew-certification-act-2049
