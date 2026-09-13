@@ -1,0 +1,82 @@
+# Lint + smoke tests for the agent quickstart.
+#
+# Deliberately offline: no Aethis credential, no model-provider key, no network
+# calls to the evaluator. Everything the tests need is recorded under
+# agent-quickstart/fixtures/. A live run against the evaluator is a release
+# activity, not a per-PR one.
+name: agent-quickstart
+
+on:
+  pull_request:
+    paths:
+      - 'agent-quickstart/**'
+      - 'run_tests.py'
+      - 'test_all.py'
+      - 'scenario_manifest.py'
+      - 'input_identity.py'
+      - 'tests/**'
+      - '**/aethis.yaml'
+      - '**/tests/scenarios.yaml'
+      - '.github/workflows/agent-quickstart.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'agent-quickstart/**'
+      - 'run_tests.py'
+      - 'test_all.py'
+      - 'scenario_manifest.py'
+      - 'input_identity.py'
+      - 'tests/**'
+      - '**/aethis.yaml'
+      - '**/tests/scenarios.yaml'
+      - '.github/workflows/agent-quickstart.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: '0.9.5'
+
+      - name: Lint
+        run: uvx ruff@0.16.0 check agent-quickstart
+
+      - name: Smoke tests
+        env:
+          # Prove the suite needs no credentials: nothing is provided, and the
+          # tests themselves scrub any AETHIS_*/ANTHROPIC_* that leaked in.
+          AETHIS_API_KEY: ''
+          ANTHROPIC_API_KEY: ''
+        run: uv run agent-quickstart/smoke_test.py
+
+      - name: Offline runner controls
+        run: uv run --with pyyaml --with rich --with requests --with rfc8785==0.1.4 python -m unittest discover -s tests -p 'test_runners.py'
+
+  clean-runner-dependencies:
+    name: clean runner dependency install
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: '0.9.5'
+
+      - name: Install runner dependencies into an empty environment
+        run: |
+          uv venv --python 3.12 .runner-venv
+          uv pip install --python .runner-venv/bin/python 'pyyaml>=6.0' 'rich>=13.0' 'requests>=2.28' 'rfc8785==0.1.4'
+
+      - name: Run recursive manifest and runner controls
+        run: .runner-venv/bin/python -m unittest discover -s tests -p 'test_runners.py'

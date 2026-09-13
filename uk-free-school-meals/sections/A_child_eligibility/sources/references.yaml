@@ -1,0 +1,117 @@
+# Citation manifest for the Free School Meals - child eligibility showcase.
+# See provenance/README.md. Every quote is fetched, digested and matched
+# verbatim by `uv run provenance/check_provenance.py`.
+
+schema_version: 1
+
+notes:
+  - >-
+    This showcase is the one case in the set where the underlying subject matter
+    is real. Two kinds of document are therefore cited, and they are labelled
+    differently on purpose. Where a criterion rests on a passage that exists
+    verbatim in the published statute, the statute itself is cited, under the
+    licence the publisher grants. Where a criterion rests on a threshold that
+    the demonstration corpus states in its own words, the corpus document is
+    cited as what it is - an Aethis-written extract prepared for this
+    demonstration - and not dressed up as the instrument.
+  - >-
+    Consequence worth stating plainly: the two age thresholds are grounded in a
+    demonstration document, not in a verbatim statutory passage. Anyone reading
+    this ruleset as a statement of entitlement law should read the cited
+    statute, not this corpus.
+
+documents:
+  education-act-1996-s512zb:
+    url: https://www.legislation.gov.uk/ukpga/1996/56/section/512ZB/data.htm
+    title: Education Act 1996, section 512ZB - Provision of free school lunches and milk
+    authority: The National Archives (legislation.gov.uk)
+    licence: OGL-UK-3.0
+    media_type: html
+    source_version: 'Latest available (Revised)'
+    expected_digest: sha256:49c1b62a2a484e786c341d2e918e4d70ecf04c351c425a00e2a623b8dd56b3e6
+    note: >-
+      Published statute. Reproduced under the Open Government Licence v3.0.
+      The digest binds the citation to the revision fetched at verification
+      time; an amendment moves the digest and fails the citation closed until a
+      human re-reads the passage.
+
+  fsm-child-eligibility-corpus:
+    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/uk-free-school-meals/sections/A_child_eligibility/sources/education_act_1996_s512.md
+    local_path: uk-free-school-meals/sections/A_child_eligibility/sources/education_act_1996_s512.md
+    title: Free School Meals - child eligibility source extract (Aethis demonstration corpus)
+    authority: Aethis
+    licence: MIT
+    media_type: text
+    source_version: aethis-examples@main
+    source_date: '2026-04-06'
+    expected_digest: sha256:4ae4326c100d8918bef9258e7c34b00cc2bfb27e43483f4e2e5105e2d03d6e84
+    note: >-
+      An Aethis-written extract prepared as input to the rules author. It
+      summarises and paraphrases; it is not a certified reproduction of the
+      instrument. Cited only where the rule rests on a threshold this document
+      states in its own words.
+
+  fsm-entitlement-corpus:
+    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/uk-free-school-meals/sections/A_child_eligibility/sources/fsm_regulations_2014_reg3.md
+    local_path: uk-free-school-meals/sections/A_child_eligibility/sources/fsm_regulations_2014_reg3.md
+    title: Free School Meals - entitlement extract (Aethis demonstration corpus)
+    authority: Aethis
+    licence: MIT
+    media_type: text
+    source_version: aethis-examples@main
+    source_date: '2026-04-06'
+    expected_digest: sha256:6a7693de63b21091b30e61fd2dc4e36b75008ab4076d66cec6a66be10afa874a
+    note: >-
+      An Aethis-written extract prepared as input to the rules author. It
+      summarises and paraphrases; it is not a certified reproduction of the
+      instrument.
+
+# Citation keys are derived from source-document headings by the authoring
+# pipeline (`<file>#<stem>/<heading>`, one key per heading), so each key below
+# names a heading of an uploaded source. A key is a join key, not a location:
+# the statute key is emitted from the verbatim extract the rules author reads
+# (education_act_1996_s512zb.md) while its resolution target — what a visitor
+# receives — is the published statute at legislation.gov.uk.
+references:
+  'education_act_1996_s512zb.md#education_act_1996_s512zb/Section 512ZB — Registered pupils in England':
+    document: education-act-1996-s512zb
+    locator: 'section 512ZB(4A)(a)'
+    quote:
+      exact: >-
+        is a registered pupil at a maintained school or pupil referral unit in
+        England
+
+  'education_act_1996_s512.md#education_act_1996_s512/Section 512ZA — Prescribed descriptions of pupils':
+    document: fsm-child-eligibility-corpus
+    locator: 'Section 512ZA - Prescribed descriptions of pupils'
+    quote:
+      exact: >-
+        Compulsory school age begins at the start of the term following a
+        child's fifth birthday, but in practice the provision applies from the
+        start of the Reception year (age 4–5).
+
+        **Relevant school** means—
+        (a) a school maintained by a local authority in England;
+        (b) an Academy;
+        (c) a non-maintained special school;
+        (d) a pupil referral unit.
+
+        Independent schools (fee-paying) and home-educated children are not
+        within scope of this provision.
+
+  'fsm_regulations_2014_reg3.md#fsm_regulations_2014_reg3/Regulation 3 — Persons who are entitled to free school lunches':
+    document: fsm-entitlement-corpus
+    locator: 'Regulation 3(1)'
+    quote:
+      exact: >-
+        A person is entitled to a free school lunch if the person is a registered
+        pupil at a relevant school in England and is aged under 16
+
+criteria:
+  school_type_state_funded:
+    - 'education_act_1996_s512zb.md#education_act_1996_s512zb/Section 512ZB — Registered pupils in England'
+    - 'education_act_1996_s512.md#education_act_1996_s512/Section 512ZA — Prescribed descriptions of pupils'
+  age_at_least_4:
+    - 'education_act_1996_s512.md#education_act_1996_s512/Section 512ZA — Prescribed descriptions of pupils'
+  age_under_16:
+    - 'fsm_regulations_2014_reg3.md#fsm_regulations_2014_reg3/Regulation 3 — Persons who are entitled to free school lunches'

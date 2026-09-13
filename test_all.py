@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # /// script
 # requires-python = ">=3.10"
-# dependencies = ["rich>=13.0"]
+# dependencies = ["pyyaml>=6.0", "rich>=13.0"]
 # ///
 """
 Run every example's test suite in one command.
@@ -21,8 +21,10 @@ has a usage cap that tight loops can hit). Honoured by run_tests.py via env.
 """
 
 import argparse
+import json
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 from rich.console import Console
@@ -30,20 +32,50 @@ from rich.table import Table
 
 console = Console()
 ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT))
+from scenario_manifest import build_manifest, manifest_fingerprint
 
 
 def discover_examples() -> list[Path]:
-    """Every example dir with a tests/scenarios.yaml, sorted.
+    """Every publishable scenario directory, recursively and deterministically.
 
     Skips underscore-prefixed dirs (e.g. _template) — those are scaffolding,
     not publishable examples, and their placeholder scenarios fail by design.
     """
-    found = [
-        p.parent.parent
-        for p in ROOT.glob("*/tests/scenarios.yaml")
-        if not p.parent.parent.name.startswith("_")
-    ]
+    found = []
+    for scenario_file in ROOT.rglob("tests/scenarios.yaml"):
+        relative = scenario_file.relative_to(ROOT)
+        if any(part.startswith("_") or part in {"fixtures", "snapshots"} for part in relative.parts):
+            continue
+        found.append(scenario_file.parent.parent)
     return sorted(found, key=lambda p: p.name)
+
+
+REVIEWED_MANIFEST_SHA256 = "713a2244cec7d3c12a1ff66f62f6d32dfebc6cb32d95b8bf7cd9b86150aa44b1"
+
+def verify_manifest(examples: list[Path], manifest: dict) -> None:
+    """Fail closed if an eligible scenario vanished from the checked manifest."""
+    expected_files = {entry["test_file"] for entry in manifest.get("scenarios", [])}
+    found_files = {
+        str((example / "tests" / "scenarios.yaml").relative_to(ROOT))
+        for example in examples
+    }
+    if found_files != expected_files:
+        raise SystemExit(
+            "ERROR: scenario manifest differs from discovered files; regenerate and review "
+            f"(manifest={sorted(expected_files)}, discovered={sorted(found_files)})"
+        )
+    if manifest.get("expected_count") != len(manifest.get("scenarios", [])):
+        raise SystemExit("ERROR: scenario manifest expected_count is inconsistent")
+    if manifest["expected_count"] < 56:
+        raise SystemExit(
+            f"ERROR: scenario manifest has {manifest['expected_count']} cases; expected at least 56"
+        )
+    if manifest_fingerprint(manifest) != REVIEWED_MANIFEST_SHA256:
+        raise SystemExit("ERROR: scenario identities differ from the reviewed 56-case manifest")
+    nested = [s for s in manifest["scenarios"] if "uk-free-school-meals/sections/" in s["test_file"]]
+    if len(nested) != 23:
+        raise SystemExit("ERROR: reviewed manifest must contain exactly 23 nested FSM cases")
 
 
 def main() -> None:
@@ -83,6 +115,11 @@ def main() -> None:
         console.print("[red]ERROR:[/red] no examples with tests/scenarios.yaml found")
         sys.exit(2)
 
+    manifest = build_manifest()
+    verify_manifest(discover_examples(), manifest)
+    selected_files = {str((example / "tests" / "scenarios.yaml").relative_to(ROOT)) for example in examples}
+    selected_manifest = [s for s in manifest["scenarios"] if s["test_file"] in selected_files]
+
     passthrough = []
     if args.url:
         passthrough += ["--url", args.url]
@@ -92,13 +129,29 @@ def main() -> None:
         passthrough += ["-q"]
 
     results: list[tuple[str, bool]] = []
-    for example in examples:
-        console.rule(f"[bold]{example.name}[/bold]")
-        proc = subprocess.run(
-            ["uv", "run", str(ROOT / "run_tests.py"), str(example), *passthrough],
-            cwd=ROOT,
-        )
-        results.append((example.name, proc.returncode == 0))
+    totals = {"expected": 0, "executed": 0, "passed": 0, "failed": 0, "skipped": 0}
+    with tempfile.TemporaryDirectory(prefix="aethis-example-summaries-") as temp_dir:
+        for example in examples:
+            console.rule(f"[bold]{example.name}[/bold]")
+            summary_path = Path(temp_dir) / f"{example.name}.json"
+            proc = subprocess.run(
+                [
+                    "uv",
+                    "run",
+                    str(ROOT / "run_tests.py"),
+                    str(example),
+                    *passthrough,
+                    "--summary-json",
+                    str(summary_path),
+                ],
+                cwd=ROOT,
+                check=False,
+            )
+            results.append((example.name, proc.returncode == 0))
+            if summary_path.exists():
+                for key, value in json.loads(summary_path.read_text()).items():
+                    if key in totals:
+                        totals[key] += value
 
     # Combined summary
     console.print()
@@ -110,6 +163,13 @@ def main() -> None:
     console.print(table)
 
     failed = [name for name, ok in results if not ok]
+    expected = len(selected_manifest)
+    totals["expected"] = expected
+    totals["failed"] += max(0, expected - totals["executed"])
+    console.print(
+        f"Manifest counts: expected={expected} executed={totals['executed']} "
+        f"passed={totals['passed']} failed={totals['failed']} skipped={totals['skipped']}"
+    )
     if failed:
         console.print(f"[bold red]{len(failed)}/{len(results)} example suites failed:[/bold red] {', '.join(failed)}")
         sys.exit(1)
