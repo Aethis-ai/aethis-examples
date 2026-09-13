@@ -240,3 +240,7 @@ This is the **hard tier** example. Two simpler tiers are planned:
 | **Hard** (this example) | 3 sections, income arithmetic, benefit enums, UIFSM override | Ready for authoring |
 | **Medium** | 1–2 sections, 2 eligibility routes, 1 date comparison | Planned |
 | **Easy** | 1 section, 1 criterion, 1 field | Planned |
+
+## Composition acceptance cases
+
+[composition_cases.json](composition_cases.json) retains the three worked requests from the publishing script, plus missing-input and invalid-age controls. Its member names match that script's public composition. These five controls are separate from the 56 leaf scenarios. They describe the simplified teaching model; they do not establish current legal entitlement or prove that a matching immutable release is live.

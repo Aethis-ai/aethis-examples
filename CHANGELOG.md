@@ -6,6 +6,7 @@
   checks, bounded execution, and a free tool-only mode.
 - Checks the complete recursive scenario manifest, including nested cases,
   immutable ruleset pins, expected outcomes and blocking errors.
+- Adds five authored composition acceptance cases, separate from leaf scenarios.
 - Adds source-reference material and the concessionary travel pass graph demo.
 - Adds CI checks for proof validation, runner controls and dependency installation.
 - Removes generated ruleset snapshots from the current tree.

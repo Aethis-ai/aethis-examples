@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "rulebook_id": "aethis/uk-fsm",
+  "source_provenance": {
+    "basis": "Existing simplified teaching model and published section pins; this is not a current-entitlement claim.",
+    "examples": "scripts/publish-rulebook.sh",
+    "examples_sha256": "2e29c6419ffb95bda01bd58d87361b7e777c67b7f5c3ca2a55b91d0e9a5e60da",
+    "additional_controls": "No inputs leaves required facts unknown; a non-numeric age is a typed-invalid request.",
+    "coverage": "Five composition controls are separate from the 56 leaf scenarios.",
+    "publication": "A matching immutable release must be observed separately; this file is an expected contract, not evidence of a live publication."
+  },
+  "members": {
+    "child_eligibility": "uk-fsm-child-eligibility:20260728-4be3c335",
+    "household_criteria": "uk-fsm-household-criteria:20260528-76291dcc",
+    "universal_infant": "uk-fsm-universal-infant:20260528-9143d0a4"
+  },
+  "scenarios": [
+    {
+      "name": "means-tested-eligible",
+      "field_values": {
+        "child.age": 10,
+        "child.school_type": "state_funded",
+        "child.year_group": "year_6",
+        "household.receives_universal_credit": true,
+        "household.annual_net_earnings": 5000,
+        "household.receives_income_support": false,
+        "household.receives_income_based_jsa": false,
+        "household.receives_income_related_esa": false,
+        "household.receives_child_tax_credit_only": false,
+        "household.receives_nass_support": false,
+        "child.is_looked_after": false,
+        "child.is_care_leaver": false
+      },
+      "expected_outcome": "eligible",
+      "invalid": false,
+      "error_fields": []
+    },
+    {
+      "name": "infant-eligible",
+      "field_values": {
+        "child.age": 5,
+        "child.school_type": "state_funded",
+        "child.year_group": "year_1",
+        "household.receives_universal_credit": false,
+        "household.annual_net_earnings": 60000,
+        "household.receives_income_support": false,
+        "household.receives_income_based_jsa": false,
+        "household.receives_income_related_esa": false,
+        "household.receives_child_tax_credit_only": false,
+        "household.receives_nass_support": false,
+        "child.is_looked_after": false,
+        "child.is_care_leaver": false
+      },
+      "expected_outcome": "eligible",
+      "invalid": false,
+      "error_fields": []
+    },
+    {
+      "name": "neither-route-eligible",
+      "field_values": {
+        "child.age": 10,
+        "child.school_type": "state_funded",
+        "child.year_group": "year_6",
+        "household.receives_universal_credit": false,
+        "household.annual_net_earnings": 60000,
+        "household.receives_income_support": false,
+        "household.receives_income_based_jsa": false,
+        "household.receives_income_related_esa": false,
+        "household.receives_child_tax_credit_only": false,
+        "household.receives_nass_support": false,
+        "child.is_looked_after": false,
+        "child.is_care_leaver": false
+      },
+      "expected_outcome": "not_eligible",
+      "invalid": false,
+      "error_fields": []
+    },
+    {
+      "name": "missing-inputs",
+      "field_values": {},
+      "expected_outcome": "undetermined",
+      "invalid": false,
+      "error_fields": []
+    },
+    {
+      "name": "invalid-age-type",
+      "field_values": {
+        "child.age": "not-an-age",
+        "child.school_type": "state_funded",
+        "child.year_group": "year_6",
+        "household.receives_universal_credit": true,
+        "household.annual_net_earnings": 5000,
+        "household.receives_income_support": false,
+        "household.receives_income_based_jsa": false,
+        "household.receives_income_related_esa": false,
+        "household.receives_child_tax_credit_only": false,
+        "household.receives_nass_support": false,
+        "child.is_looked_after": false,
+        "child.is_care_leaver": false
+      },
+      "expected_outcome": "undetermined",
+      "invalid": true,
+      "error_fields": [
+        "child.age"
+      ]
+    }
+  ]
+}
