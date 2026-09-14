@@ -22,13 +22,13 @@ notes:
 
 documents:
   spacecraft-crew-certification-act-2049:
-    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md
+    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/ed33765e60fcdb8e713e80e631a517c852e6acfe/spacecraft-crew-certification/sources/source.md
     local_path: spacecraft-crew-certification/sources/source.md
     title: Spacecraft Crew Certification Act 2049 (synthetic statute)
     authority: Aethis
     licence: MIT
     media_type: text
-    source_version: aethis-examples@main
+    source_version: aethis-examples@ed33765e60fcdb8e713e80e631a517c852e6acfe
     source_date: '2026-05-17'
     expected_digest: sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113
     note: >-
