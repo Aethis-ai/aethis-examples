@@ -2,9 +2,27 @@
 
 Language models interpret rules well. They do not execute them reliably. The failure mode is silent: high confidence, wrong answer, no trace. In high-stakes decisions — eligibility, compliance, claims, screening — that is not a model-tuning problem. It is a category mismatch. Probabilistic systems cannot guarantee reproducible, auditable outcomes against written rules.
 
-Each example includes source legislation, golden test cases, and a one-command test runner that calls the live API. Anonymous tier is enough for a single demo run; set `AETHIS_API_KEY` for repeated sweeps (see [Run tests](#run-tests) below).
+Each example includes source legislation, golden test cases, and a one-command test runner that calls the live API. The lean anonymous profile is enough for the five-case spacecraft demo; set `AETHIS_API_KEY` for the complete sweep (see [Run tests](#run-tests) below).
 
 **Documentation:** [docs.aethis.ai](https://docs.aethis.ai) · [OpenAPI spec](https://docs.aethis.ai/api-reference/openapi.json) · agents via MCP: `claude mcp add aethis -- npx -y aethis-mcp`
+
+## Start here
+
+**Run an example's test suite against the live API. No sign-up, no key:**
+
+```bash
+uv run run_tests.py spacecraft-crew-certification/
+```
+
+That is the whole first step. Everything below is optional, and each capability
+says up front what it costs you.
+
+| What you want to do | What you need | Where |
+|---|---|---|
+| Evaluate a public showcase ruleset — tests, decision routes, walk-through, REST | **Nothing.** Anonymous, no key | [Run tests](#run-tests), [Inspect decision routes](#inspect-decision-routes), [As a REST API](#as-a-rest-api) |
+| Repeated sweeps across every example | An Aethis API key (free sign-up) — the anonymous tier is capped per IP per day | [Run tests](#run-tests) |
+| Watch an agent call a decision and prove it did | **Your own** model-provider key, billed to your own account | [Agent quickstart](agent-quickstart/) |
+| Author and publish your own rulesets | An Aethis API key with authoring access — **invite-only, private beta** | [Request access](https://aethis.ai/developer-access) |
 
 ## The problem
 
@@ -64,7 +82,7 @@ Run every example's suite in one command:
 uv run test_all.py
 ```
 
-**Auth.** The runner uses the anonymous tier by default; that's enough to run any single example once. The anonymous tier is rate-limited at 500 `/decide` calls per IP per day, which a full sweep across all examples can dent. For repeated runs — or to evaluate the composed [`uk-free-school-meals/`](uk-free-school-meals/) rulebook (rulebook evaluation requires authentication) — set an API key:
+**Auth.** The default request is lean. The documented spacecraft command runs five cases without a key; use `--rich` only when you need explanations and traces, since they cost more quota. The complete 56-case manifest and composed [`uk-free-school-meals/`](uk-free-school-meals/) work require an evaluation key:
 
 ```bash
 export AETHIS_API_KEY=ak_...    # sign up at https://aethis.ai
@@ -118,6 +136,32 @@ Answer questions one at a time. The engine picks the next most informative quest
 uv run walk_through.py construction-all-risks/
 ```
 
+## Agent quickstart
+
+> Requires **your own** Anthropic API key, billed to your own account. This
+> script still sends no Aethis credential.
+
+A LangGraph agent that uses an Aethis decision and prints the evidence — the
+pinned ruleset identity, the replay handles, and the verbatim passages the rules
+cite. If the agent skips the tool or invents a result, the run fails loudly
+instead of reporting a plausible answer.
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+uv run agent-quickstart/quickstart.py
+```
+
+There is also a free path that skips the model provider entirely and calls the
+decision tool directly:
+
+```bash
+uv run agent-quickstart/quickstart.py --tool-only
+```
+
+Prerequisites, cost and data-flow notes:
+[`agent-quickstart/`](agent-quickstart/).
+
+
 ## How to use
 
 ### With AI agents (MCP)
@@ -132,6 +176,11 @@ claude mcp add aethis -- npx -y aethis-mcp
 Anonymous access works for individual public ruleset decisions and for browsing the public rulebook catalogue (`aethis rulebooks list`, no key needed); *deciding* against a composed rulebook (e.g. `aethis/uk-fsm`) requires an API key. See [aethis-mcp](https://github.com/Aethis-ai/aethis-mcp).
 
 ### With the CLI
+
+> **Authoring is invite-only.** `generate`, `test` and `publish` write rulesets
+> into your own tenant and need an API key with authoring access, currently in
+> private beta — [request access](https://aethis.ai/developer-access). Reading
+> and evaluating public rulesets needs no key at all.
 
 ```bash
 uv tool install aethis-cli
@@ -154,7 +203,7 @@ Expected result:
 ```json
 {
   "decision": "not_eligible",
-  "ruleset_id": "spacecraft-crew-certification:20260517-c59647a5"
+  "ruleset_id": "spacecraft-crew-certification:20260913-bee69257"
 }
 ```
 

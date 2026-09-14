@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # /// script
 # requires-python = ">=3.10"
-# dependencies = ["pyyaml>=6.0", "requests>=2.28", "rich>=13.0"]
+# dependencies = ["pyyaml>=6.0", "requests>=2.28", "rich>=13.0", "rfc8785==0.1.4"]
 # ///
 """
 Run Aethis example tests against the live API.
@@ -14,14 +14,19 @@ Dependencies (pyyaml, requests, rich) are resolved automatically by `uv run`.
 """
 
 import argparse
+import json
 import os
 import sys
+import time
 from pathlib import Path
+from typing import Any
 
 import requests
 import yaml
 from rich.console import Console
 from rich.table import Table
+
+from input_identity import decision_input_hash, needs_numeric_schema
 
 console = Console()
 DEFAULT_API_URL = "https://api.aethis.ai"
@@ -50,7 +55,7 @@ def load_config(example_dir: Path) -> dict:
         return yaml.safe_load(f)
 
 
-def load_tests(example_dir: Path) -> list:
+def load_tests(example_dir: Path) -> list[dict[str, Any]]:
     path = example_dir / "tests" / "scenarios.yaml"
     if not path.exists():
         path = example_dir / "tests.yaml"
@@ -59,7 +64,15 @@ def load_tests(example_dir: Path) -> list:
         sys.exit(1)
     with open(path) as f:
         data = yaml.safe_load(f)
-    return data.get("tests", [])
+    if not isinstance(data, dict) or not isinstance(data.get("tests"), list) or not data["tests"]:
+        raise ValueError(f"{path} must contain a non-empty tests list")
+    for test in data["tests"]:
+        if not isinstance(test, dict) or not isinstance(test.get("name"), str) or not isinstance(test.get("inputs"), dict):
+            raise TypeError(f"{path} has malformed test case")
+        outcome = test.get("expect", {}).get("outcome") if isinstance(test.get("expect"), dict) else None
+        if outcome not in _DECISION_STYLE:
+            raise ValueError(f"{path} has invalid expected outcome {outcome!r}")
+    return data["tests"]
 
 
 def _auth_headers(api_key: str | None) -> dict:
@@ -102,31 +115,98 @@ def discover_ruleset(api_url: str, project_name: str, api_key: str | None = None
     sys.exit(1)
 
 
-def run_test(api_url: str, ruleset_id: str, test: dict, *, no_cache: bool = False, api_key: str | None = None) -> dict:
+def _retry_delay(response: requests.Response) -> float:
+    """Return a bounded, server-directed delay for a throttled request."""
+    try:
+        return max(0.0, min(float(response.headers.get("Retry-After", "0")), 5.0))
+    except ValueError:
+        return 0.0
+
+
+def _has_expected_field_error(result: dict[str, Any], expected: str) -> bool:
+    field_errors = result.get("field_errors") or {}
+    if isinstance(field_errors, dict):
+        return any(expected in str(value) for value in field_errors.values())
+    return expected in str(field_errors)
+
+
+def run_test(
+    api_url: str,
+    ruleset_id: str,
+    test: dict[str, Any],
+    *,
+    no_cache: bool = False,
+    api_key: str | None = None,
+    rich: bool = False,
+    max_retries: int = 2,
+) -> dict[str, Any]:
     """Run a single test. Returns the full API response plus pass/fail."""
     payload = {
         "ruleset_id": ruleset_id,
         "field_values": test["inputs"],
-        "include_explanation": True,
-        "include_trace": True,
-        "include_timing": True,
+        # These are weighted API features. Keep the no-key default lean enough
+        # for the documented five-case quickstart; rich evidence is opt-in.
+        "include_explanation": rich,
+        "include_trace": rich,
+        "include_timing": rich,
         "no_cache": no_cache,
     }
-    try:
-        resp = requests.post(
-            f"{api_url}/api/v1/public/decide",
-            json=payload,
-            headers=_auth_headers(api_key),
-            timeout=30,
-        )
-        resp.raise_for_status()
-    except requests.RequestException as e:
-        return {"error": str(e), "passed": False}
+    for attempt in range(max_retries + 1):
+        try:
+            resp = requests.post(
+                f"{api_url}/api/v1/public/decide",
+                json=payload,
+                headers=_auth_headers(api_key),
+                timeout=30,
+            )
+        except requests.RequestException as exc:
+            return {"error": str(exc), "passed": False}
+        if resp.status_code != 429:
+            try:
+                resp.raise_for_status()
+            except requests.RequestException as exc:
+                return {"error": str(exc), "passed": False}
+            break
+        if attempt == max_retries:
+            return {
+                "error": f"rate limited after {max_retries + 1} attempts",
+                "passed": False,
+                "rate_limited": True,
+            }
+        time.sleep(_retry_delay(resp))
 
     result = resp.json()
-    actual = result["decision"]
+    actual = result.get("decision")
     expected = test["expect"]["outcome"]
-    result["passed"] = actual == expected
+    expected_error = test["expect"].get("field_error")
+    blocking_errors = result.get("field_errors") or {}
+    if expected_error:
+        result["passed"] = expected == actual == "undetermined" and _has_expected_field_error(result, expected_error)
+    else:
+        result["passed"] = actual == expected and not blocking_errors
+        if blocking_errors:
+            result["error"] = "response carried blocking field_errors"
+    if result.get("ruleset_id") != ruleset_id:
+        result["passed"] = False
+        result["error"] = "response ruleset identity differs from the requested immutable pin"
+    schema = None
+    try:
+        if needs_numeric_schema(test["inputs"]):
+            schema_response = requests.get(
+                f"{api_url}/api/v1/public/rulesets/{ruleset_id}/schema",
+                headers=_auth_headers(api_key),
+                timeout=30,
+            )
+            schema_response.raise_for_status()
+            schema = schema_response.json()
+        expected_hash = decision_input_hash(test["inputs"], result, schema)
+    except (requests.RequestException, ValueError, TypeError) as exc:
+        result["passed"] = False
+        result["error"] = f"input identity could not be verified: {type(exc).__name__}"
+        return result
+    if result.get("inputs_hash") != expected_hash:
+        result["passed"] = False
+        result["error"] = "response input identity differs from the submitted fields"
     result["expected"] = expected
     return result
 
@@ -232,7 +312,7 @@ def print_provenance(results: list) -> None:
         if not passage_to_rules:
             continue
 
-        console.print(f"  [bold]Provenance[/bold] [dim](source passages → rules)[/dim]")
+        console.print("  [bold]Provenance[/bold] [dim](source passages → rules)[/dim]")
         console.print()
         for section_path, info in passage_to_rules.items():
             rules_str = ", ".join(info["rules"])
@@ -252,7 +332,7 @@ def print_provenance(results: list) -> None:
             continue
         has_refs = any(rule.get("source_refs") for rule in explanation)
         if has_refs:
-            console.print(f"  [bold]Provenance[/bold] [dim](source references per rule)[/dim]")
+            console.print("  [bold]Provenance[/bold] [dim](source references per rule)[/dim]")
             console.print()
             for rule in explanation:
                 refs = rule.get("source_refs")
@@ -292,7 +372,25 @@ def main():
         default=os.environ.get("AETHIS_API_KEY"),
         help="API key for authenticated access (higher rate limits). Or set AETHIS_API_KEY env var.",
     )
+    parser.add_argument(
+        "--rich",
+        action="store_true",
+        help="Request explanation, trace and timing (higher weighted API cost).",
+    )
+    parser.add_argument(
+        "--max-retries",
+        default=2,
+        type=int,
+        help="Bounded retries for HTTP 429 responses (default: 2).",
+    )
+    parser.add_argument(
+        "--summary-json",
+        type=Path,
+        help="Write machine-readable expected/executed/passed/failed/skipped counts.",
+    )
     args = parser.parse_args()
+    if args.max_retries < 0:
+        parser.error("--max-retries must be zero or greater")
 
     example_dir = args.example_dir.resolve()
     if not example_dir.is_dir():
@@ -313,27 +411,26 @@ def main():
     header.add_row("Tests", str(len(tests)))
 
     expected_ruleset_id = config.get("live_ruleset_id")
-    drift_warning: str | None = None
+    if not expected_ruleset_id and not args.ruleset_id:
+        console.print("[red]ERROR:[/red] aethis.yaml must pin live_ruleset_id")
+        sys.exit(1)
 
     if args.ruleset_id:
+        if args.ruleset_id != expected_ruleset_id:
+            parser.error("--ruleset-id must match the reviewed live_ruleset_id pin")
         ruleset_id = args.ruleset_id
     else:
         discovered = discover_ruleset(args.url, project_name, api_key=args.api_key)
-        if expected_ruleset_id and expected_ruleset_id != discovered:
-            # Drift tripwire: aethis.yaml's live_ruleset_id pin does not match
-            # what the live slug resolves to. Warn loudly but run against the
-            # discovered id — the pin may point at a deprecated/deleted ruleset
-            # in which case using it would 404 every decide call.
-            drift_warning = (
-                f"BUNDLE DRIFT: aethis.yaml pins live_ruleset_id={expected_ruleset_id} "
-                f"but slug aethis/{project_name} now resolves to {discovered}. "
-                f"Running against the live slug; refresh aethis.yaml or republish."
+        if expected_ruleset_id != discovered:
+            console.print(
+                "[bold red]ERROR: BUNDLE DRIFT:[/bold red] "
+                f"aethis.yaml pins live_ruleset_id={expected_ruleset_id} but "
+                f"slug aethis/{project_name} resolves to {discovered}. Refusing to test a different artefact."
             )
+            sys.exit(1)
         ruleset_id = discovered
     header.add_row("Ruleset", f"[dim]{ruleset_id}[/dim]")
     console.print(header)
-    if drift_warning:
-        console.print(f"[bold yellow]⚠ {drift_warning}[/bold yellow]")
     console.print()
 
     # Run tests
@@ -342,7 +439,15 @@ def main():
     all_results = []
     for test in tests:
         name = test["name"]
-        result = run_test(args.url, ruleset_id, test, no_cache=args.no_cache, api_key=args.api_key)
+        result = run_test(
+            args.url,
+            ruleset_id,
+            test,
+            no_cache=args.no_cache,
+            api_key=args.api_key,
+            rich=args.rich,
+            max_retries=args.max_retries,
+        )
         all_results.append(result)
 
         if result.get("passed"):
@@ -364,6 +469,24 @@ def main():
 
     # Summary
     total = passed + failed
+    console.print(
+        f"  [dim]Counts:[/dim] expected={len(tests)} executed={total} "
+        f"passed={passed} failed={failed} skipped=0"
+    )
+    if args.summary_json:
+        args.summary_json.write_text(
+            json.dumps(
+                {
+                    "expected": len(tests),
+                    "executed": total,
+                    "passed": passed,
+                    "failed": failed,
+                    "skipped": 0,
+                    "ruleset_id": ruleset_id,
+                }
+            )
+            + "\n"
+        )
     console.print(f"  [dim]{'─' * 60}[/dim]")
     if failed == 0:
         console.print(f"  [bold green]All {total} tests passed.[/bold green]")

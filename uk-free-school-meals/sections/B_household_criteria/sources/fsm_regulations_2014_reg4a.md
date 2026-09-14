@@ -1,5 +1,7 @@
 # The Education (Free School Meals) (England) Regulations 2014 — Regulation 4A
 
+> **Aethis demonstration material — not statutory text.** This synthetic extract was prepared for an intentionally simplified teaching model in April 2026. It contains paraphrase and model assumptions, including passages written in a legislative register. Its filename, headings and provision numbers do not establish an authentic legal quotation or current entitlement rule. The computational model and its fixed test expectations are retained; consult the actual authority separately.
+
 ## Regulation 4A — Looked-after children and care leavers
 
 A person is also within a qualifying criterion if the person—

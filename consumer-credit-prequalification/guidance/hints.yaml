@@ -39,3 +39,24 @@ hints:
     Existing customers (24 months or more in good standing) are exempt
     from the debt-to-income ratio check. All other requirements still
     apply.
+
+  - >
+    Rule identifiers are part of the published contract for this ruleset
+    and must be kept stable across regenerations. Produce exactly these
+    rules, with exactly these identifiers: adverse_history_check
+    (Section 3), employment_check (Section 4), income_route_a (Section 5,
+    Route A — sole income), income_route_b (Section 5, Route B — joint
+    income), dti_check (Section 6, with the Section 10 existing-customer
+    exception), credit_score_secured (Section 7, secured facilities),
+    credit_score_unsecured (Section 7, unsecured facilities), ltv_check
+    (Section 8), stress_test_check (Section 9). Do not add, remove,
+    rename, split, or merge rules.
+
+  - >
+    Every rule must cite the source section it rests on: adverse_history_check
+    cites Section 3; employment_check cites Section 4; income_route_a and
+    income_route_b each cite Section 5; dti_check cites both Section 6 and
+    Section 10; credit_score_secured and credit_score_unsecured each cite
+    Section 7; ltv_check cites Section 8; stress_test_check cites Section 9.
+    Cite the numbered section of the source document itself, not the
+    appendices.

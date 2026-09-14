@@ -15,3 +15,20 @@ hints:
     The field child.school_type should be an enum with values: state_funded, independent,
     home_educated. Only state_funded schools (maintained schools and Academies) are within
     scope. Independent schools and home-educated children are not.
+
+  - >
+    Rule identifiers are part of the published contract for this ruleset
+    and must be kept stable across regenerations. Produce exactly these
+    rules, with exactly these identifiers: school_type_state_funded (the
+    school is state-funded), age_at_least_4 (the child is at least 4),
+    age_under_16 (the child is under 16). Do not add, remove, rename,
+    split, or merge rules.
+
+  - >
+    Every rule must cite the source passages it rests on:
+    school_type_state_funded cites both the Section 512ZB extract
+    (registered pupils in England) and Section 512ZA (prescribed
+    descriptions of pupils); age_at_least_4 cites Section 512ZA
+    (compulsory school age and the Reception-year practice);
+    age_under_16 cites Regulation 3 of the Free School Meals Regulations
+    2014. Never cite the citation manifest file.

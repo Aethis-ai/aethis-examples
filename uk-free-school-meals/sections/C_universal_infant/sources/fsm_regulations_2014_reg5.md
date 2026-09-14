@@ -1,5 +1,7 @@
 # The Education (Free School Meals) (England) Regulations 2014 — Regulation 5
 
+> **Aethis demonstration material — not statutory text.** This synthetic extract was prepared for an intentionally simplified teaching model in April 2026. It contains paraphrase and model assumptions, including passages written in a legislative register. Its filename, headings and provision numbers do not establish an authentic legal quotation or current entitlement rule. The computational model and its fixed test expectations are retained; consult the actual authority separately.
+
 ## Regulation 5 — Universal entitlement for pupils in reception class or years 1 or 2
 
 Every registered pupil at a relevant school who is in—

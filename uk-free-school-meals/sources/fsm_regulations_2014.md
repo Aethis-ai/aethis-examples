@@ -1,5 +1,7 @@
 # The Education (Free School Meals) (England) Regulations 2014 (as amended 2018, 2023)
 
+> **Aethis demonstration material — not statutory text.** This synthetic extract was prepared for an intentionally simplified teaching model in April 2026. It contains paraphrase and model assumptions, including passages written in a legislative register. Its filename, headings and provision numbers do not establish an authentic legal quotation or current entitlement rule. The computational model and its fixed test expectations are retained; consult the actual authority separately.
+
 ## Regulation 3 — Persons who are entitled to free school lunches
 
 (1) A person is entitled to a free school lunch if the person is a registered pupil at a relevant school in England and is aged under 16, or is aged 16 to 18 and is a relevant sixth-form pupil.

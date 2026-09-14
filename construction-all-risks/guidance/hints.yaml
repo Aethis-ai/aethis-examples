@@ -102,3 +102,25 @@ hints:
     under the enhanced terms and the claim is eligible. The same claim
     on a £50 million project would not clear the threshold and the
     access damage would remain excluded under Clause 8.
+
+  - >
+    Rule identifiers are part of the published contract for this ruleset
+    and must be kept stable across regenerations. Produce exactly these
+    rules, with exactly these identifiers: policy_period_valid (Clause 3),
+    insuring_clause (Clause 4), insured_property_category (Clause 5),
+    not_rectification_claim (Clause 6), carve_back_non_access_damage
+    (Clause 7), access_damage_enhanced_cover_reinstated (Clauses 9, 9A
+    and 9B), existing_structures_jct_contract (Clause 10),
+    notification_within_period (Clause 11). Do not add, remove, rename,
+    split, or merge rules.
+
+  - >
+    Every rule must cite the clause it rests on: policy_period_valid cites
+    Clause 3; insuring_clause cites Clause 4; insured_property_category
+    cites Clause 5; not_rectification_claim cites Clause 6;
+    carve_back_non_access_damage cites Clause 7;
+    access_damage_enhanced_cover_reinstated cites Clause 9, Clause 9A and
+    Clause 9B; existing_structures_jct_contract cites Clause 10;
+    notification_within_period cites Clause 11. Cite the numbered clauses
+    of the source document itself, and never cite the citation manifest
+    file.

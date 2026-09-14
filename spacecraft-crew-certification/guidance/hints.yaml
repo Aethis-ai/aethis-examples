@@ -20,3 +20,26 @@ hints:
     areas: species eligibility, flight readiness, medical certification,
     medical certificate validity, radiation certification, and towel
     compliance.
+
+  - >
+    Rule identifiers are part of the published contract for this ruleset
+    and must be kept stable across regenerations. Produce exactly these
+    rules, with exactly these identifiers: species_eligible (Section 3),
+    flight_readiness_met (Section 4), flight_readiness_exempt_age
+    (Section 6, age route), flight_readiness_exempt_1000hrs (Section 6,
+    flight-hours route), medical_gaa_exam (Section 5, Route A),
+    medical_approved_provider (Section 5, Route B), medical_cert_validity
+    (Section 5A), radiation_cert_orbital (Section 7), propulsion_approved
+    (Section 8), towel_compliance (Section 9). Do not add, remove, rename,
+    split, or merge rules.
+
+  - >
+    Every rule must cite the source section it rests on: species_eligible
+    cites Section 3; flight_readiness_met cites Section 4;
+    flight_readiness_exempt_age and flight_readiness_exempt_1000hrs each
+    cite Section 6; medical_gaa_exam and medical_approved_provider each
+    cite Section 5; medical_cert_validity cites Section 5A;
+    radiation_cert_orbital cites Section 7; propulsion_approved cites
+    Section 8; towel_compliance cites Section 9. Cite the numbered
+    sections of the source document itself, not the appendices, and never
+    cite the citation manifest file.

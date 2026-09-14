@@ -1,0 +1,134 @@
+# Citation manifest for the Spacecraft Crew Certification showcase.
+#
+# `documents` are the resolution targets sent with the publish call; `references`
+# bind each citation key to a verbatim passage of one of them; `criteria` maps
+# every criterion the published ruleset evaluates to the citation keys that
+# ground it. Every quote below is checked - fetched, digested and matched
+# verbatim - by `uv run provenance/check_provenance.py`.
+#
+# Citation keys follow the authoring pipeline's key formula:
+#   <uploaded filename>#<document stem>/<heading>
+
+schema_version: 1
+
+notes:
+  - >-
+    The cited statute is synthetic: it was written for this repository to
+    demonstrate the engine, and the repository is its publisher of record. The
+    citation therefore points at the published copy of that document, under the
+    repository's own licence, and is bound to a content digest so a later edit
+    to the text invalidates the citation rather than silently changing what the
+    rules claim to rest on.
+
+documents:
+  spacecraft-crew-certification-act-2049:
+    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/ed33765e60fcdb8e713e80e631a517c852e6acfe/spacecraft-crew-certification/sources/source.md
+    local_path: spacecraft-crew-certification/sources/source.md
+    title: Spacecraft Crew Certification Act 2049 (synthetic statute)
+    authority: Aethis
+    licence: MIT
+    media_type: text
+    source_version: aethis-examples@main
+    source_date: '2026-05-17'
+    expected_digest: sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113
+    note: >-
+      Synthetic statute modelled on the structure of UK primary legislation.
+      Written for demonstration; it describes no real certification regime.
+
+references:
+  'source.md#source/Section 3: Species eligibility':
+    document: spacecraft-crew-certification-act-2049
+    locator: Section 3(1)
+    quote:
+      exact: >-
+        An applicant for crew certification must be of an eligible species.
+      suffix: >-
+        (2) A Vogon national is not an eligible species
+
+  'source.md#source/Section 4: Flight readiness':
+    document: spacecraft-crew-certification-act-2049
+    locator: Section 4(1)(a)-(b)
+    quote:
+      exact: >-
+        the applicant has accumulated not fewer than 500 flight hours; and (b)
+        the applicant holds a valid pilot licence issued or recognised by the
+        Authority.
+
+  # Keyed at heading level: citation keys are derived from source-document
+  # headings by the authoring pipeline (one key per heading), so the two
+  # medical routes share the Section 5 key and the quote spans both limbs.
+  'source.md#source/Section 5: Medical certification':
+    document: spacecraft-crew-certification-act-2049
+    locator: Section 5(1)
+    quote:
+      exact: >-
+        (a) **Route A:** an examination conducted by the Galactic Aviation
+        Authority; or (b) **Route B:** a certification issued by an approved
+        provider.
+
+  'source.md#source/Section 5A: Medical certificate validity period':
+    document: spacecraft-crew-certification-act-2049
+    locator: Section 5A(1)
+    quote:
+      exact: >-
+        A medical certificate obtained under Section 5 is valid for a period of
+        730 days from the date of issue.
+
+  # Heading-level key shared by the age route and the flight-hours route;
+  # the quote spans Section 6(1)-(3) so both exemption limbs are covered.
+  'source.md#source/Section 6: Age exemption from flight readiness':
+    document: spacecraft-crew-certification-act-2049
+    locator: Section 6(1)-(3)
+    quote:
+      exact: >-
+        (1) Subject to subsection (2), an applicant aged 60 or over is exempt
+        from the flight readiness requirement in Section 4. (2) The exemption
+        under subsection (1) does not apply where the mission type is
+        "orbital", unless subsection (3) applies. (3) An applicant who has
+        accumulated not fewer than 1000 flight hours is exempt from Section 4
+        regardless of mission type, notwithstanding subsection (2).
+
+  'source.md#source/Section 7: Mission-specific requirements':
+    document: spacecraft-crew-certification-act-2049
+    locator: Section 7(1)(a)
+    quote:
+      exact: >-
+        the applicant must hold a valid radiation protection certificate.
+      prefix: 'Where the mission type is "orbital"— (a)'
+
+  'source.md#source/Section 8: Equipment compliance':
+    document: spacecraft-crew-certification-act-2049
+    locator: Section 8(1)-(2)
+    quote:
+      exact: >-
+        The vessel's propulsion system must be of an approved type.
+
+  'source.md#source/Section 9: Towel compliance':
+    document: spacecraft-crew-certification-act-2049
+    locator: Section 9(1)
+    quote:
+      exact: >-
+        The applicant must carry a towel at all times during the mission, in
+        accordance with the Interstellar Hitchhiker Safety Regulations 2042.
+
+criteria:
+  species_eligible:
+    - 'source.md#source/Section 3: Species eligibility'
+  flight_readiness_met:
+    - 'source.md#source/Section 4: Flight readiness'
+  flight_readiness_exempt_age:
+    - 'source.md#source/Section 6: Age exemption from flight readiness'
+  flight_readiness_exempt_1000hrs:
+    - 'source.md#source/Section 6: Age exemption from flight readiness'
+  medical_gaa_exam:
+    - 'source.md#source/Section 5: Medical certification'
+  medical_approved_provider:
+    - 'source.md#source/Section 5: Medical certification'
+  medical_cert_validity:
+    - 'source.md#source/Section 5A: Medical certificate validity period'
+  radiation_cert_orbital:
+    - 'source.md#source/Section 7: Mission-specific requirements'
+  propulsion_approved:
+    - 'source.md#source/Section 8: Equipment compliance'
+  towel_compliance:
+    - 'source.md#source/Section 9: Towel compliance'
