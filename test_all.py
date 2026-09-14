@@ -51,17 +51,20 @@ def discover_examples() -> list[Path]:
     return sorted(found, key=lambda p: p.name)
 
 
-REVIEWED_MANIFEST_SHA256 = "713a2244cec7d3c12a1ff66f62f6d32dfebc6cb32d95b8bf7cd9b86150aa44b1"
+REVIEWED_MANIFEST_SHA256 = "428048493e914e2a3aa8bfd8096e87e4e2e5badd9f8584bd05f4465b1ab68d79"
 
 SUMMARY_COUNTS = frozenset({"expected", "executed", "passed", "failed", "skipped"})
+SUMMARY_FIELDS = SUMMARY_COUNTS | {"ruleset_id"}
 
 
-def complete_suite_summary(payload: object, expected: int) -> dict[str, int]:
+def complete_suite_summary(payload: object, expected: int, ruleset_id: str) -> dict[str, int]:
     """Validate one child runner's complete result against its selected cases."""
-    if not isinstance(payload, dict) or set(payload) != SUMMARY_COUNTS:
-        raise ValueError("summary must contain exactly the five scenario counts")
-    if any(type(value) is not int or value < 0 for value in payload.values()):
+    if not isinstance(payload, dict) or set(payload) != SUMMARY_FIELDS:
+        raise ValueError("summary must contain five scenario counts and the immutable ruleset_id")
+    if any(type(payload[key]) is not int or payload[key] < 0 for key in SUMMARY_COUNTS):
         raise ValueError("summary counts must be non-negative integers")
+    if payload["ruleset_id"] != ruleset_id:
+        raise ValueError("summary ruleset_id differs from the selected immutable pin")
     summary = {key: payload[key] for key in SUMMARY_COUNTS}
     if summary["expected"] != expected:
         raise ValueError(f"summary expected {summary['expected']} scenarios, selected set has {expected}")
@@ -168,9 +171,15 @@ def main() -> None:
             )
             suite_ok = proc.returncode == 0
             scenario_file = str((example / "tests" / "scenarios.yaml").relative_to(ROOT))
-            suite_expected = sum(1 for scenario in selected_manifest if scenario["test_file"] == scenario_file)
+            suite_scenarios = [scenario for scenario in selected_manifest if scenario["test_file"] == scenario_file]
+            suite_expected = len(suite_scenarios)
+            suite_pins = {scenario["live_ruleset_id"] for scenario in suite_scenarios}
             try:
-                summary = complete_suite_summary(json.loads(summary_path.read_text()), suite_expected)
+                if len(suite_pins) != 1:
+                    raise ValueError("selected scenarios do not share one immutable ruleset pin")
+                summary = complete_suite_summary(
+                    json.loads(summary_path.read_text()), suite_expected, suite_pins.pop()
+                )
             except (OSError, ValueError, json.JSONDecodeError) as exc:
                 suite_ok = False
                 summary_errors.append(f"{example.name}: {exc}")

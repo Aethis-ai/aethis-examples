@@ -729,7 +729,15 @@ def test_duplicate_json_keys_are_refused() -> None:
 
 
 def test_malformed_reported_groups_and_criteria_are_refused() -> None:
-    for malformed in ("not-a-group", None):
+    malformed_groups = (
+        "not-a-group",
+        None,
+        {},
+        {"criteria": None},
+        {"criteria": 0},
+        {"criteria": {}},
+    )
+    for malformed in malformed_groups:
         envelope = copy.deepcopy(load_fixture("release-contract"))
         envelope["explanation"]["groups"].append(malformed)
         try:

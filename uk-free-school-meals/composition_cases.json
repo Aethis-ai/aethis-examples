@@ -10,7 +10,7 @@
     "publication": "A matching immutable release must be observed separately; this file is an expected contract, not evidence of a live publication."
   },
   "members": {
-    "child_eligibility": "uk-fsm-child-eligibility:20260728-4be3c335",
+    "child_eligibility": "uk-fsm-child-eligibility:20260913-9d55f20b",
     "household_criteria": "uk-fsm-household-criteria:20260528-76291dcc",
     "universal_infant": "uk-fsm-universal-infant:20260528-9143d0a4"
   },

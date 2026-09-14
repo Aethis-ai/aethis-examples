@@ -225,7 +225,7 @@ def reported_criteria(envelope: dict[str, Any]) -> list[tuple[str, dict[str, Any
     explanation = envelope.get("explanation")
     if not isinstance(explanation, dict):
         return found
-    groups = explanation.get("groups") or []
+    groups = explanation.get("groups")
     if not isinstance(groups, list):
         raise ProofError("invalid-explanation", "The explanation groups are not a list.")
     for group_index, group in enumerate(groups):
@@ -234,7 +234,7 @@ def reported_criteria(envelope: dict[str, Any]) -> list[tuple[str, dict[str, Any
                 "invalid-explanation",
                 f"Explanation group {group_index} is not an object.",
             )
-        criteria = group.get("criteria") or []
+        criteria = group.get("criteria")
         if not isinstance(criteria, list):
             raise ProofError(
                 "invalid-explanation",

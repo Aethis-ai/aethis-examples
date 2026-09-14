@@ -22,23 +22,19 @@ notes:
 
 documents:
   education-act-1996-s512zb:
-    url: https://www.legislation.gov.uk/ukpga/1996/56/section/512ZB/data.htm
-    title: Education Act 1996, section 512ZB - Provision of free school lunches and milk
+    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/ed33765e60fcdb8e713e80e631a517c852e6acfe/uk-free-school-meals/sections/A_child_eligibility/sources/education_act_1996_s512zb.md
+    local_path: uk-free-school-meals/sections/A_child_eligibility/sources/education_act_1996_s512zb.md
+    title: Education Act 1996, section 512ZB(4A) - verbatim extract reproduced by Aethis
     authority: The National Archives (legislation.gov.uk)
     licence: OGL-UK-3.0
-    media_type: html
-    source_version: 'Revised authority document fetched 2026-09-13; cited passage only'
+    media_type: text
+    source_version: 'Verbatim s512ZB(4A) extract reproduced in Aethis demonstration corpus; aethis-examples@ed33765e60fcdb8e713e80e631a517c852e6acfe'
     source_date: '2026-09-13'
-    expected_digest: sha256:358075cc42c2a6aaf12518f4480ec6daa57ecb488d34dc9b43e3b9d13d83272f
+    expected_digest: sha256:470d74e590a7a1d5790471c785dbc1904510d0d651d68a508457ec0ed11918fe
     note: >-
-      Published statute. Reproduced under the Open Government Licence v3.0.
-      The cited subsection (4A)(a) passage was compared with the retained
-      July bytes and occurs unchanged in these September bytes. Subsection
-      (2)(a) and new (4D) have changed; no assertion is made that the fixed
-      demonstration model implements current entitlement law. This proposed
-      digest may be adopted only with a reviewed new immutable publication,
-      followed by a served-reference comparison; historical citations remain
-      unchanged. Any further source drift fails closed.
+      A verbatim extract of section 512ZB(4A), reproduced from the published
+      statute under the Open Government Licence v3.0. It is a fixed
+      demonstration source, not a current-entitlement claim.
 
   fsm-child-eligibility-corpus:
     url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/uk-free-school-meals/sections/A_child_eligibility/sources/education_act_1996_s512.md

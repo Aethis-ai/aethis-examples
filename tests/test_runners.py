@@ -246,15 +246,20 @@ class RunnerControlsTest(unittest.TestCase):
             "passed": 5,
             "failed": 0,
             "skipped": 0,
+            "ruleset_id": "immutable-pin",
         }
-        self.assertEqual(test_all.complete_suite_summary(complete, 5), complete)
+        self.assertEqual(
+            test_all.complete_suite_summary(complete, 5, "immutable-pin"),
+            {key: complete[key] for key in test_all.SUMMARY_COUNTS},
+        )
         for incomplete in (
             {**complete, "executed": 1, "passed": 1, "failed": 4},
             {**complete, "skipped": 1, "passed": 4},
             {key: value for key, value in complete.items() if key != "failed"},
+            {**complete, "ruleset_id": "different-pin"},
         ):
             with self.assertRaises(ValueError):
-                test_all.complete_suite_summary(incomplete, 5)
+                test_all.complete_suite_summary(incomplete, 5, "immutable-pin")
 
 
 if __name__ == "__main__":
