@@ -53,6 +53,24 @@ def discover_examples() -> list[Path]:
 
 REVIEWED_MANIFEST_SHA256 = "713a2244cec7d3c12a1ff66f62f6d32dfebc6cb32d95b8bf7cd9b86150aa44b1"
 
+SUMMARY_COUNTS = frozenset({"expected", "executed", "passed", "failed", "skipped"})
+
+
+def complete_suite_summary(payload: object, expected: int) -> dict[str, int]:
+    """Validate one child runner's complete result against its selected cases."""
+    if not isinstance(payload, dict) or set(payload) != SUMMARY_COUNTS:
+        raise ValueError("summary must contain exactly the five scenario counts")
+    if any(type(value) is not int or value < 0 for value in payload.values()):
+        raise ValueError("summary counts must be non-negative integers")
+    summary = {key: payload[key] for key in SUMMARY_COUNTS}
+    if summary["expected"] != expected:
+        raise ValueError(f"summary expected {summary['expected']} scenarios, selected set has {expected}")
+    if summary["executed"] != expected or summary["passed"] != expected:
+        raise ValueError("summary did not execute and pass every selected scenario")
+    if summary["failed"] or summary["skipped"]:
+        raise ValueError("summary reported failed or skipped scenarios")
+    return summary
+
 def verify_manifest(examples: list[Path], manifest: dict) -> None:
     """Fail closed if an eligible scenario vanished from the checked manifest."""
     expected_files = {entry["test_file"] for entry in manifest.get("scenarios", [])}
@@ -129,6 +147,7 @@ def main() -> None:
         passthrough += ["-q"]
 
     results: list[tuple[str, bool]] = []
+    summary_errors: list[str] = []
     totals = {"expected": 0, "executed": 0, "passed": 0, "failed": 0, "skipped": 0}
     with tempfile.TemporaryDirectory(prefix="aethis-example-summaries-") as temp_dir:
         for example in examples:
@@ -147,11 +166,18 @@ def main() -> None:
                 cwd=ROOT,
                 check=False,
             )
-            results.append((example.name, proc.returncode == 0))
-            if summary_path.exists():
-                for key, value in json.loads(summary_path.read_text()).items():
-                    if key in totals:
-                        totals[key] += value
+            suite_ok = proc.returncode == 0
+            scenario_file = str((example / "tests" / "scenarios.yaml").relative_to(ROOT))
+            suite_expected = sum(1 for scenario in selected_manifest if scenario["test_file"] == scenario_file)
+            try:
+                summary = complete_suite_summary(json.loads(summary_path.read_text()), suite_expected)
+            except (OSError, ValueError, json.JSONDecodeError) as exc:
+                suite_ok = False
+                summary_errors.append(f"{example.name}: {exc}")
+            else:
+                for key, value in summary.items():
+                    totals[key] += value
+            results.append((example.name, suite_ok))
 
     # Combined summary
     console.print()
@@ -172,6 +198,8 @@ def main() -> None:
     )
     if failed:
         console.print(f"[bold red]{len(failed)}/{len(results)} example suites failed:[/bold red] {', '.join(failed)}")
+        for error in summary_errors:
+            console.print(f"[red]Invalid child summary:[/red] {error}")
         sys.exit(1)
     console.print(f"[bold green]All {len(results)} example suites passed.[/bold green]")
     sys.exit(0)

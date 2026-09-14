@@ -239,6 +239,23 @@ class RunnerControlsTest(unittest.TestCase):
             )
         )
 
+    def test_aggregate_runner_refuses_incomplete_child_summary(self) -> None:
+        complete = {
+            "expected": 5,
+            "executed": 5,
+            "passed": 5,
+            "failed": 0,
+            "skipped": 0,
+        }
+        self.assertEqual(test_all.complete_suite_summary(complete, 5), complete)
+        for incomplete in (
+            {**complete, "executed": 1, "passed": 1, "failed": 4},
+            {**complete, "skipped": 1, "passed": 4},
+            {key: value for key, value in complete.items() if key != "failed"},
+        ):
+            with self.assertRaises(ValueError):
+                test_all.complete_suite_summary(incomplete, 5)
+
 
 if __name__ == "__main__":
     unittest.main()

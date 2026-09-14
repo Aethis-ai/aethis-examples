@@ -717,6 +717,38 @@ def test_ambiguous_fenced_output_is_refused() -> None:
     raise AssertionError("a payload with two fenced blocks was parsed")
 
 
+def test_duplicate_json_keys_are_refused() -> None:
+    payload = json.dumps(load_fixture("release-contract"))
+    duplicate_decision = payload[:-1] + ', "decision": "eligible"}'
+    try:
+        parse_envelope(duplicate_decision)
+    except ProofError as exc:
+        assert exc.code == "duplicate-json-key", exc.code
+        return
+    raise AssertionError("a duplicate decision key was accepted")
+
+
+def test_malformed_reported_groups_and_criteria_are_refused() -> None:
+    for malformed in ("not-a-group", None):
+        envelope = copy.deepcopy(load_fixture("release-contract"))
+        envelope["explanation"]["groups"].append(malformed)
+        try:
+            verify_decision_envelope(envelope)
+        except ProofError as exc:
+            assert exc.code == "invalid-explanation", exc.code
+        else:
+            raise AssertionError(f"malformed explanation group {malformed!r} was accepted")
+
+    envelope = copy.deepcopy(load_fixture("release-contract"))
+    envelope["explanation"]["groups"][0]["criteria"].append(None)
+    try:
+        verify_decision_envelope(envelope)
+    except ProofError as exc:
+        assert exc.code == "invalid-explanation", exc.code
+        return
+    raise AssertionError("a malformed explanation criterion was accepted")
+
+
 def test_fence_survives_crlf_line_endings() -> None:
     envelope = load_fixture("release-contract")
     crlf = load_wire("release-contract-aethis-mcp-0.16.0").replace("\n", "\r\n")
@@ -1125,6 +1157,8 @@ TESTS: list[Callable[[], None]] = [
     test_pinned_rule_identity_cannot_be_spoofed_by_slug,
     test_ambiguous_numeric_schema_never_certifies_input_hash,
     test_userinfo_urls_cannot_be_printed_or_retained,
+    test_duplicate_json_keys_are_refused,
+    test_malformed_reported_groups_and_criteria_are_refused,
     test_invalid_final_tool_calls_are_rejected_and_retained,
     test_secret_values_in_metadata_keys_and_tuples_are_rejected,
     test_real_input_proof_uses_exact_correlated_schema,

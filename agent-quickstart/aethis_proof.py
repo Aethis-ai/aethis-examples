@@ -75,6 +75,16 @@ class ProofError(Exception):
         super().__init__(f"[{code}] {summary}{detail}")
 
 
+def _unique_json_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    """Build a JSON object while refusing duplicate keys at every depth."""
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"duplicate JSON object key {key!r}")
+        result[key] = value
+    return result
+
+
 # --------------------------------------------------------------------------
 # Reading the envelope back out of the conversation
 # --------------------------------------------------------------------------
@@ -106,13 +116,25 @@ def parse_envelope(text: str) -> dict[str, Any]:
     candidates: list[str] = list(fenced)
     candidates.append(text)
 
+    duplicate_key_error: ValueError | None = None
     for candidate in candidates:
         try:
-            parsed = json.loads(candidate)
-        except (ValueError, TypeError):
+            parsed = json.loads(candidate, object_pairs_hook=_unique_json_object)
+        except ValueError as exc:
+            if str(exc).startswith("duplicate JSON object key"):
+                duplicate_key_error = exc
+            continue
+        except TypeError:
             continue
         if isinstance(parsed, dict):
             return parsed
+
+    if duplicate_key_error is not None:
+        raise ProofError(
+            "duplicate-json-key",
+            "The Aethis tool output contains a duplicate JSON object key.",
+            [str(duplicate_key_error)],
+        )
 
     raise ProofError(
         "unreadable-tool-output",
@@ -203,12 +225,28 @@ def reported_criteria(envelope: dict[str, Any]) -> list[tuple[str, dict[str, Any
     explanation = envelope.get("explanation")
     if not isinstance(explanation, dict):
         return found
-    for group in explanation.get("groups") or []:
+    groups = explanation.get("groups") or []
+    if not isinstance(groups, list):
+        raise ProofError("invalid-explanation", "The explanation groups are not a list.")
+    for group_index, group in enumerate(groups):
         if not isinstance(group, dict):
-            continue
-        for criterion in group.get("criteria") or []:
+            raise ProofError(
+                "invalid-explanation",
+                f"Explanation group {group_index} is not an object.",
+            )
+        criteria = group.get("criteria") or []
+        if not isinstance(criteria, list):
+            raise ProofError(
+                "invalid-explanation",
+                f"Explanation group {group_index} criteria are not a list.",
+            )
+        for criterion_index, criterion in enumerate(criteria):
             if not isinstance(criterion, dict):
-                continue
+                raise ProofError(
+                    "invalid-explanation",
+                    f"Criterion {criterion_index} in explanation group {group_index} "
+                    "is not an object.",
+                )
             found.append((str(criterion.get("criterion_id") or "?"), criterion))
     return found
 
