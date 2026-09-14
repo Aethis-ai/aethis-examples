@@ -28,7 +28,7 @@ documents:
     authority: Aethis
     licence: MIT
     media_type: text
-    source_version: aethis-examples@ed33765e60fcdb8e713e80e631a517c852e6acfe
+    source_version: aethis-examples@main
     source_date: '2026-05-17'
     expected_digest: sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113
     note: >-
