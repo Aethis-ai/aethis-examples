@@ -37,7 +37,7 @@ documents:
       demonstration source, not a current-entitlement claim.
 
   fsm-child-eligibility-corpus:
-    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/uk-free-school-meals/sections/A_child_eligibility/sources/education_act_1996_s512.md
+    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/ed33765e60fcdb8e713e80e631a517c852e6acfe/uk-free-school-meals/sections/A_child_eligibility/sources/education_act_1996_s512.md
     local_path: uk-free-school-meals/sections/A_child_eligibility/sources/education_act_1996_s512.md
     title: Free School Meals - child eligibility source extract (Aethis demonstration corpus)
     authority: Aethis
@@ -53,7 +53,7 @@ documents:
       states in its own words.
 
   fsm-entitlement-corpus:
-    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/uk-free-school-meals/sections/A_child_eligibility/sources/fsm_child_entitlement_demo.md
+    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/ed33765e60fcdb8e713e80e631a517c852e6acfe/uk-free-school-meals/sections/A_child_eligibility/sources/fsm_child_entitlement_demo.md
     local_path: uk-free-school-meals/sections/A_child_eligibility/sources/fsm_child_entitlement_demo.md
     title: Free School Meals - entitlement extract (Aethis demonstration corpus)
     authority: Aethis
