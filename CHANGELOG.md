@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.2 — 2026-09-16
+
+- Replaces the engine-accuracy sentence, which did not survive a re-read of the paper it cited (v3.13.0). The 63.6% floor is GPT-5.3, a production-tier baseline whose alias the paper records as deprecated ("Replication impossible"); it is an N=11 subset with a Wilson 95% CI of [35.4%, 84.8%]; 225 is the benchmark's total size rather than any model's denominator; and §6.3 defines the Module's figures as agreement with the formal rule fixtures, which deterministic execution gives by construction.
+- The replacement states the April 2026 replication range (88–100%) and cites §6.3, so a reader can check every part against the public paper.
+
 ## 0.2.1 — 2026-09-14
 
 - Labels the dated free-school-meals teaching corpus as Aethis demonstration material.
