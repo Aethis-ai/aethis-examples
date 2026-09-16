@@ -26,7 +26,7 @@ says up front what it costs you.
 
 ## The problem
 
-Engine accuracy: 100% across 225 scenarios spanning four rule domains, where frontier LLMs score 63–100% (Simpson 2026 §6). The construction-CAR scenarios below are one domain from that dataset.
+Simpson 2026 evaluates eight models against formal rule fixtures across 225 scenarios in four sections. On the 68-scenario adversarial suite of nested exception chains, frontier models scored 88–100%; a compiled ruleset agrees with those fixtures by construction (Simpson 2026 §6.3). The construction-CAR scenarios below are one of those four sections.
 
 Numbers below from the paper ([Simpson, Kozak, Doake, v3.13, 2026](https://github.com/Aethis-ai/confidently-wrong-benchmark/blob/main/paper/Simpson_Exception_Chain_Collapse_2026.md)).
 
