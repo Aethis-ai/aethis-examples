@@ -203,7 +203,7 @@ Expected result:
 ```json
 {
   "decision": "not_eligible",
-  "ruleset_id": "spacecraft-crew-certification:20260924-2a125fd9"
+  "ruleset_id": "spacecraft-crew-certification:20260924-715ae5c9"
 }
 ```
 

@@ -62,7 +62,7 @@ tests:
     expect:
       outcome: eligible
 
-  - name: "1000+ hours does not exempt under-60s — age 30, no licence (Section 6(4)(c))"
+  - name: "1000+ hours exempts at any age — age 30, no licence (Section 6(3), 6(4)(c))"
     inputs:
       space.crew.species: Human
       space.crew.age: 30
@@ -75,7 +75,7 @@ tests:
       space.vessel.propulsion_type: Bistromathics
       space.crew.has_towel: true
     expect:
-      outcome: not_eligible
+      outcome: eligible
 
   - name: "Senior crew on orbital mission exempt via 1000+ hours (Section 6(3), 6(4)(b))"
     inputs:

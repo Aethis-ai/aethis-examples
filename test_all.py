@@ -51,7 +51,7 @@ def discover_examples() -> list[Path]:
     return sorted(found, key=lambda p: p.name)
 
 
-REVIEWED_MANIFEST_SHA256 = "336eec0e68d4431b7e303b5a542da4ecb4bc00b112942eb4069799327c588308"
+REVIEWED_MANIFEST_SHA256 = "4bf7c8d6cab8066f21b141d86a254aa7e66f71873421cec7a4edddd599e8aa9b"
 
 SUMMARY_COUNTS = frozenset({"expected", "executed", "passed", "failed", "skipped"})
 SUMMARY_FIELDS = SUMMARY_COUNTS | {"ruleset_id"}

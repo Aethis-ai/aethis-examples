@@ -10,7 +10,7 @@ A synthetic statute modelled on UK primary legislation, designed to exercise eve
 | Multi-field AND | S.4 | Flight hours ≥ 500 AND valid pilot licence |
 | Multi-route OR | S.5 | GAA exam OR approved provider cert (either satisfies) |
 | Date-bounded validity | S.5A | Medical cert must be within 730 days |
-| Three-level exception chain | S.6 | Age 60+ exempt, except orbital, except 1000+ hours (60+ only) |
+| Three-level exception chain | S.6 | Age 60+ exempt, except orbital, except 1000+ hours (any age) |
 | Conditional requirement | S.7 | Orbital missions require radiation cert |
 | Enum membership | S.8 | Propulsion must be an approved type |
 | Simple boolean | S.9 | Must carry a towel |
@@ -24,7 +24,7 @@ A synthetic statute modelled on UK primary legislation, designed to exercise eve
 3. **Orbital without radiation cert** — conditional requirement fails → `not_eligible`
 4. **Full compliance** — all requirements met → `eligible`
 5. **Age exemption** — senior crew (65), no flight hours/licence → `eligible`
-6. **1000+ hours under 60** — age 30, 1200 hours, no licence → `not_eligible` (S.6(4)(c): under-60s must always satisfy S.4)
+6. **1000+ hours at any age** — age 30, 1200 hours, no licence → `eligible` (S.6(3); S.6(4)(c): under-60s qualify through S.6(3))
 7. **Senior orbital, 1000+ hours** — age 65, orbital, 1200 hours → `eligible` (S.6(3), S.6(4)(b))
 8. **Senior orbital, under 1000 hours** — age 65, orbital, 400 hours → `not_eligible` (S.6(2))
 
