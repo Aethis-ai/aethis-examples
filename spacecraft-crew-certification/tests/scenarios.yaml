@@ -61,3 +61,50 @@ tests:
       space.crew.has_towel: true
     expect:
       outcome: eligible
+
+  - name: "1000+ hours does not exempt under-60s — age 30, no licence (Section 6(4)(c))"
+    inputs:
+      space.crew.species: Human
+      space.crew.age: 30
+      space.crew.flight_hours: 1200
+      space.crew.has_pilot_license: false
+      space.crew.has_gaa_exam: true
+      space.crew.has_approved_provider_cert: true
+      space.medical.cert_valid: true
+      space.mission.type: suborbital
+      space.vessel.propulsion_type: Bistromathics
+      space.crew.has_towel: true
+    expect:
+      outcome: not_eligible
+
+  - name: "Senior crew on orbital mission exempt via 1000+ hours (Section 6(3), 6(4)(b))"
+    inputs:
+      space.crew.species: Human
+      space.crew.age: 65
+      space.crew.flight_hours: 1200
+      space.crew.has_pilot_license: false
+      space.crew.has_gaa_exam: true
+      space.crew.has_approved_provider_cert: true
+      space.crew.has_radiation_cert: true
+      space.medical.cert_valid: true
+      space.mission.type: orbital
+      space.vessel.propulsion_type: Bistromathics
+      space.crew.has_towel: true
+    expect:
+      outcome: eligible
+
+  - name: "Senior crew on orbital mission under 1000 hours not exempt (Section 6(2), 6(4)(b))"
+    inputs:
+      space.crew.species: Human
+      space.crew.age: 65
+      space.crew.flight_hours: 400
+      space.crew.has_pilot_license: false
+      space.crew.has_gaa_exam: true
+      space.crew.has_approved_provider_cert: true
+      space.crew.has_radiation_cert: true
+      space.medical.cert_valid: true
+      space.mission.type: orbital
+      space.vessel.propulsion_type: Bistromathics
+      space.crew.has_towel: true
+    expect:
+      outcome: not_eligible

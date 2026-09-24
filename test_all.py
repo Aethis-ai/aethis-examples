@@ -51,7 +51,7 @@ def discover_examples() -> list[Path]:
     return sorted(found, key=lambda p: p.name)
 
 
-REVIEWED_MANIFEST_SHA256 = "428048493e914e2a3aa8bfd8096e87e4e2e5badd9f8584bd05f4465b1ab68d79"
+REVIEWED_MANIFEST_SHA256 = "f1bb05feee69c0074d7fa65248ac182deeb60827c49f2621050865c44b23ffc7"
 
 SUMMARY_COUNTS = frozenset({"expected", "executed", "passed", "failed", "skipped"})
 SUMMARY_FIELDS = SUMMARY_COUNTS | {"ruleset_id"}
@@ -88,12 +88,12 @@ def verify_manifest(examples: list[Path], manifest: dict) -> None:
         )
     if manifest.get("expected_count") != len(manifest.get("scenarios", [])):
         raise SystemExit("ERROR: scenario manifest expected_count is inconsistent")
-    if manifest["expected_count"] < 56:
+    if manifest["expected_count"] < 59:
         raise SystemExit(
-            f"ERROR: scenario manifest has {manifest['expected_count']} cases; expected at least 56"
+            f"ERROR: scenario manifest has {manifest['expected_count']} cases; expected at least 59"
         )
     if manifest_fingerprint(manifest) != REVIEWED_MANIFEST_SHA256:
-        raise SystemExit("ERROR: scenario identities differ from the reviewed 56-case manifest")
+        raise SystemExit("ERROR: scenario identities differ from the reviewed 59-case manifest")
     nested = [s for s in manifest["scenarios"] if "uk-free-school-meals/sections/" in s["test_file"]]
     if len(nested) != 23:
         raise SystemExit("ERROR: reviewed manifest must contain exactly 23 nested FSM cases")

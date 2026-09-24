@@ -2,7 +2,7 @@
 
 Language models interpret rules well. They do not execute them reliably. The failure mode is silent: high confidence, wrong answer, no trace. In high-stakes decisions — eligibility, compliance, claims, screening — that is not a model-tuning problem. It is a category mismatch. Probabilistic systems cannot guarantee reproducible, auditable outcomes against written rules.
 
-Each example includes source legislation, golden test cases, and a one-command test runner that calls the live API. The lean anonymous profile is enough for the five-case spacecraft demo; set `AETHIS_API_KEY` for the complete sweep (see [Run tests](#run-tests) below).
+Each example includes source legislation, golden test cases, and a one-command test runner that calls the live API. The lean anonymous profile is enough for the eight-case spacecraft demo; set `AETHIS_API_KEY` for the complete sweep (see [Run tests](#run-tests) below).
 
 **Documentation:** [docs.aethis.ai](https://docs.aethis.ai) · [OpenAPI spec](https://docs.aethis.ai/api-reference/openapi.json) · agents via MCP: `claude mcp add aethis -- npx -y aethis-mcp`
 
@@ -64,7 +64,7 @@ uv run llm_comparison.py construction-all-risks/ --models gpt-5.4 claude-sonnet-
 
 | Example | Domain | Patterns | Tests |
 |---------|--------|----------|-------|
-| [Spacecraft Crew Certification](spacecraft-crew-certification/) | Space regulation | Disqualification, AND/OR, exceptions, conditional, enum | 5 |
+| [Spacecraft Crew Certification](spacecraft-crew-certification/) | Space regulation | Disqualification, AND/OR, exceptions, conditional, enum | 8 |
 | [Construction All Risks](construction-all-risks/) | Insurance | Five-level exception chain, IMPLIES, override, early termination | 14 |
 | [Consumer Credit Pre-Qualification](consumer-credit-prequalification/) | Lending | Income thresholds, DTI ratios, credit bands, customer exceptions | 8 |
 | [UK Free School Meals](uk-free-school-meals/) | Eligibility / public services | Multi-section rulebook composition: `child_eligibility AND (household_criteria OR universal_infant)` | 23 (6 + 11 + 6 per section) |
@@ -82,7 +82,7 @@ Run every example's suite in one command:
 uv run test_all.py
 ```
 
-**Auth.** The default request is lean. The documented spacecraft command runs five cases without a key; use `--rich` only when you need explanations and traces, since they cost more quota. The complete 56-case manifest and composed [`uk-free-school-meals/`](uk-free-school-meals/) work require an evaluation key:
+**Auth.** The default request is lean. The documented spacecraft command runs eight cases without a key; use `--rich` only when you need explanations and traces, since they cost more quota. The complete 59-case manifest and composed [`uk-free-school-meals/`](uk-free-school-meals/) work require an evaluation key:
 
 ```bash
 export AETHIS_API_KEY=ak_...    # sign up at https://aethis.ai
@@ -203,7 +203,7 @@ Expected result:
 ```json
 {
   "decision": "not_eligible",
-  "ruleset_id": "spacecraft-crew-certification:20260913-bee69257"
+  "ruleset_id": "spacecraft-crew-certification:20260924-bc511f76"
 }
 ```
 

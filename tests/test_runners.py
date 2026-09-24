@@ -223,8 +223,8 @@ class RunnerControlsTest(unittest.TestCase):
 
     def test_manifest_has_all_nested_cases_and_inputs(self) -> None:
         manifest = build_manifest()
-        self.assertEqual(manifest["expected_count"], 56)
-        self.assertEqual(len(manifest["scenarios"]), 56)
+        self.assertEqual(manifest["expected_count"], 59)
+        self.assertEqual(len(manifest["scenarios"]), 59)
         self.assertTrue(all(entry["field_values"] for entry in manifest["scenarios"]))
         nested = [
             entry
