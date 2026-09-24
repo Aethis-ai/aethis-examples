@@ -91,14 +91,14 @@ from aethis_proof import (  # noqa: E402
 FIXTURES = HERE / "fixtures"
 WIRE = FIXTURES / "wire"
 SOURCE_DOC = REPO / "spacecraft-crew-certification" / "sources" / "source.md"
-RETAINED_SOURCES = SOURCE_DOC.parent / "retained"
+RETAINED_SOURCES = SOURCE_DOC.parent.parent / "retained"
 
 
 def source_text_for(digest: str) -> str:
     """The exact source bytes a recorded citation was made against, by digest.
 
     Recordings are bound to the source version they cite: the current text, or
-    a retained earlier version kept byte-for-byte under ``sources/retained``.
+    a retained earlier version kept byte-for-byte under ``<example>/retained``.
     A digest that matches neither fails, so drift is never silently accepted.
     """
     candidates = [SOURCE_DOC, *sorted(RETAINED_SOURCES.glob("source.sha256-*.md"))]

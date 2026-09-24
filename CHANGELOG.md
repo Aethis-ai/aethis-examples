@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.7 — 2026-09-24
+
+- Moves the spacecraft example's retained earlier text of the Act from `spacecraft-crew-certification/sources/retained/` to `spacecraft-crew-certification/retained/`. `aethis generate` uploads every file under `sources/`, including subdirectories, so the superseded text was being sent as an input alongside the current Act. The file is unchanged, and the quickstart smoke test reads it from the new location.
+
 ## 0.2.6 — 2026-09-24
 
 - Repins the spacecraft example to v8 (`spacecraft-crew-certification:20260924-715ae5c9`), republished against the restored Section 6(4)(c). Under the restored text, 1,000+ flight hours exempts an applicant from Section 4 at any age, so the "age 30, 1,200 hours, no licence" test case now expects `eligible`. The rule logic is the same as before 0.2.3.

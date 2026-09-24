@@ -2,3 +2,5 @@
 .env.*
 .DS_Store
 .aethis/
+__pycache__/
+*.pyc
