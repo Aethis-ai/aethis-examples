@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.4 — 2026-09-24
+
+- The spacecraft example's Section 6 citation now quotes Section 6(1)–(4). Subsection (4)(b)–(c) is the text that limits the 1000-hour exemption to applicants aged 60 or over; the previous citation quoted only 6(1)–(3). The flight-hours rule is retitled to state the age condition. No decision changes. The example is repinned to v7 (`spacecraft-crew-certification:20260924-2a125fd9`).
+
 ## 0.2.3 — 2026-09-24
 
 - Fixes the spacecraft example's Section 6 flight-hours exemption. The published ruleset applied the 1000-hour exemption at any age, so an applicant aged 30 with 1200 flight hours and no pilot licence was reported `eligible`. Section 6(4)(c) says an applicant aged 59 or under must always satisfy Section 4, so the correct outcome is `not_eligible`. The ruleset is republished as v6 (`spacecraft-crew-certification:20260924-bc511f76`) with the exemption limited to applicants aged 60 or over.
