@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.3 — 2026-09-24
+
+- Fixes the spacecraft example's Section 6 flight-hours exemption. The published ruleset applied the 1000-hour exemption at any age, so an applicant aged 30 with 1200 flight hours and no pilot licence was reported `eligible`. Section 6(4)(c) says an applicant aged 59 or under must always satisfy Section 4, so the correct outcome is `not_eligible`. The ruleset is republished as v6 (`spacecraft-crew-certification:20260924-bc511f76`) with the exemption limited to applicants aged 60 or over.
+- Adds three Section 6 test cases (under-60 with 1000+ hours; 60+ on an orbital mission with and without 1000+ hours). The spacecraft demo now runs eight cases; the complete manifest has 59.
+
 ## 0.2.2 — 2026-09-16
 
 - Replaces the engine-accuracy sentence, which did not survive a re-read of the paper it cited (v3.13.0). The 63.6% floor is GPT-5.3, a production-tier baseline whose alias the paper records as deprecated ("Replication impossible"); it is an N=11 subset with a Wilson 95% CI of [35.4%, 84.8%]; 225 is the benchmark's total size rather than any model's denominator; and §6.3 defines the Module's figures as agreement with the formal rule fixtures, which deterministic execution gives by construction.

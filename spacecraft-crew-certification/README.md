@@ -10,20 +10,23 @@ A synthetic statute modelled on UK primary legislation, designed to exercise eve
 | Multi-field AND | S.4 | Flight hours ≥ 500 AND valid pilot licence |
 | Multi-route OR | S.5 | GAA exam OR approved provider cert (either satisfies) |
 | Date-bounded validity | S.5A | Medical cert must be within 730 days |
-| Three-level exception chain | S.6 | Age 60+ exempt, except orbital, except 1000+ hours |
+| Three-level exception chain | S.6 | Age 60+ exempt, except orbital, except 1000+ hours (60+ only) |
 | Conditional requirement | S.7 | Orbital missions require radiation cert |
 | Enum membership | S.8 | Propulsion must be an approved type |
 | Simple boolean | S.9 | Must carry a towel |
 
 ## Test cases
 
-5 test cases covering:
+8 test cases covering:
 
 1. **Vogon crew member** — disqualifying species → `not_eligible`
 2. **No towel** — equipment violation → `not_eligible`
 3. **Orbital without radiation cert** — conditional requirement fails → `not_eligible`
 4. **Full compliance** — all requirements met → `eligible`
 5. **Age exemption** — senior crew (65), no flight hours/licence → `eligible`
+6. **1000+ hours under 60** — age 30, 1200 hours, no licence → `not_eligible` (S.6(4)(c): under-60s must always satisfy S.4)
+7. **Senior orbital, 1000+ hours** — age 65, orbital, 1200 hours → `eligible` (S.6(3), S.6(4)(b))
+8. **Senior orbital, under 1000 hours** — age 65, orbital, 400 hours → `not_eligible` (S.6(2))
 
 ## Try it
 
@@ -41,7 +44,7 @@ Decision: not eligible. No more questions needed.
 uv run run_tests.py spacecraft-crew-certification/
 ```
 
-This calls the live public API and should pass all 5 scenarios without an API key.
+This calls the live public API and should pass all 8 scenarios without an API key.
 
 ### With REST
 
