@@ -103,8 +103,8 @@ In this Act—
         from Section 4, unless the applicant has 1000+ flight hours
         under subsection (3);
 
-    (c) an applicant aged 59 or under must always satisfy Section 4,
-        regardless of flight hours.
+    (c) an applicant aged 59 or under must satisfy Section 4,
+        unless the applicant qualifies under subsection (3).
 
 ---
 

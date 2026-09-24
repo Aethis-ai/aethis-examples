@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.5 — 2026-09-24
+
+- Restores Section 6(4)(c) of the Spacecraft Crew Certification Act to its original wording: "an applicant aged 59 or under must satisfy Section 4, unless the applicant qualifies under subsection (3)." An April edit had changed it to "must always satisfy Section 4, regardless of flight hours". That contradicted Section 6(3) and differed from the copy of the Act in the published benchmark dataset. The ruleset is republished against the restored text in the next release.
+
 ## 0.2.4 — 2026-09-24
 
 - The spacecraft example's Section 6 citation now quotes Section 6(1)–(4). Subsection (4)(b)–(c) is the text that limits the 1000-hour exemption to applicants aged 60 or over; the previous citation quoted only 6(1)–(3). The flight-hours rule is retitled to state the age condition. No decision changes. The example is repinned to v7 (`spacecraft-crew-certification:20260924-2a125fd9`).
