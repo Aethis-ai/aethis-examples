@@ -91,6 +91,22 @@ from aethis_proof import (  # noqa: E402
 FIXTURES = HERE / "fixtures"
 WIRE = FIXTURES / "wire"
 SOURCE_DOC = REPO / "spacecraft-crew-certification" / "sources" / "source.md"
+RETAINED_SOURCES = SOURCE_DOC.parent / "retained"
+
+
+def source_text_for(digest: str) -> str:
+    """The exact source bytes a recorded citation was made against, by digest.
+
+    Recordings are bound to the source version they cite: the current text, or
+    a retained earlier version kept byte-for-byte under ``sources/retained``.
+    A digest that matches neither fails, so drift is never silently accepted.
+    """
+    candidates = [SOURCE_DOC, *sorted(RETAINED_SOURCES.glob("source.sha256-*.md"))]
+    for path in candidates:
+        raw = path.read_bytes()
+        if "sha256:" + hashlib.sha256(raw).hexdigest() == digest:
+            return raw.decode()
+    raise AssertionError(f"no current or retained source matches {digest}")
 RULESET = "aethis/spacecraft-crew-certification"
 
 
@@ -459,16 +475,10 @@ def test_rendered_proof_shows_the_evidence() -> None:
 
 def test_fixture_citations_are_self_consistent() -> None:
     """Every recorded citation must be checkable, not decorative."""
-    raw = SOURCE_DOC.read_bytes()
-    expected = "sha256:" + hashlib.sha256(raw).hexdigest()
-    text = raw.decode()
     refs = source_references(load_fixture("release-contract"))
     assert len(refs) >= 5, f"expected a citation per criterion, got {len(refs)}"
     for criterion_id, ref in refs:
-        assert ref["content_digest"] == expected, (
-            f"{criterion_id}: digest {ref['content_digest']} does not match "
-            f"{SOURCE_DOC.name} ({expected})"
-        )
+        text = source_text_for(ref["content_digest"])
         assert ref["quote"]["exact"] in text, f"{criterion_id}: quote is not verbatim in the source"
 
 

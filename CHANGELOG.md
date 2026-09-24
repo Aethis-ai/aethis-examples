@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.6 — 2026-09-24
+
+- Repins the spacecraft example to v8 (`spacecraft-crew-certification:20260924-715ae5c9`), republished against the restored Section 6(4)(c). Under the restored text, 1,000+ flight hours exempts an applicant from Section 4 at any age, so the "age 30, 1,200 hours, no licence" test case now expects `eligible`. The rule logic is the same as before 0.2.3.
+- Keeps the superseded text of the Act under `spacecraft-crew-certification/sources/retained/`, named by its digest. The quickstart's recorded responses cite that earlier text, and the smoke test now checks each recording against the exact source version it cites.
+
 ## 0.2.5 — 2026-09-24
 
 - Restores Section 6(4)(c) of the Spacecraft Crew Certification Act to its original wording: "an applicant aged 59 or under must satisfy Section 4, unless the applicant qualifies under subsection (3)." An April edit had changed it to "must always satisfy Section 4, regardless of flight hours". That contradicted Section 6(3) and differed from the copy of the Act in the published benchmark dataset. The ruleset is republished against the restored text in the next release.
