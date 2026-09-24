@@ -17,6 +17,7 @@ on:
       - 'tests/**'
       - '**/aethis.yaml'
       - '**/tests/scenarios.yaml'
+      - 'spacecraft-crew-certification/retained/**'
       - '.github/workflows/agent-quickstart.yml'
   push:
     branches: [main]
@@ -29,6 +30,7 @@ on:
       - 'tests/**'
       - '**/aethis.yaml'
       - '**/tests/scenarios.yaml'
+      - 'spacecraft-crew-certification/retained/**'
       - '.github/workflows/agent-quickstart.yml'
   workflow_dispatch:
 

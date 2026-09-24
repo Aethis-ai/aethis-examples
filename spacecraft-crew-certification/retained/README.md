@@ -1,12 +1,13 @@
 # Retained source versions
 
-Earlier versions of `../source.md`, kept byte-for-byte so that recorded API
+Earlier versions of `../sources/source.md`, kept byte-for-byte so that recorded API
 responses and explanation fixtures can still be checked against the exact text
 they were recorded against. Each file is named by the start of its SHA-256
 digest.
 
-These are **not** authoring inputs and are never uploaded or cited. The current
-text of the Act is `../source.md`.
+These are **not** authoring inputs and are never uploaded or cited. They live
+outside `../sources/` for that reason: authoring uploads every file under
+`sources/`. The current text of the Act is `../sources/source.md`.
 
 | File | Superseded | Why |
 |---|---|---|
