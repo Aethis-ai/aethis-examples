@@ -1,0 +1,42 @@
+tests:
+  - name: "Age 4 at state-funded school — eligible"
+    inputs:
+      child.age: 4
+      child.school_type: state_funded
+    expect:
+      outcome: eligible
+
+  - name: "Age 15 at state-funded school — eligible"
+    inputs:
+      child.age: 15
+      child.school_type: state_funded
+    expect:
+      outcome: eligible
+
+  - name: "Age 3 — too young, below compulsory school age"
+    inputs:
+      child.age: 3
+      child.school_type: state_funded
+    expect:
+      outcome: not_eligible
+
+  - name: "Age 16 at state-funded school — not eligible (above upper age limit)"
+    inputs:
+      child.age: 16
+      child.school_type: state_funded
+    expect:
+      outcome: not_eligible
+
+  - name: "Age 10 at independent (fee-paying) school — not eligible"
+    inputs:
+      child.age: 10
+      child.school_type: independent
+    expect:
+      outcome: not_eligible
+
+  - name: "Age 8, home educated — not eligible"
+    inputs:
+      child.age: 8
+      child.school_type: home_educated
+    expect:
+      outcome: not_eligible

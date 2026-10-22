@@ -1,0 +1,15 @@
+# Synthetic evidence for the existing age input. This record does not imply
+# any eligibility result or claim that the record has been independently verified.
+version: "0.1.0"
+document_types:
+  crew_record:
+    display_name: "Crew member record"
+    subject: applicant
+    collection:
+      - mode: upload
+        verification: caseworker_review
+    recoverable_from:
+      - field: crew_member.age
+        marker: verbatim
+        source_fields: [crew_age]
+        value_pattern: '^(?:0|[1-9][0-9]{0,2})$'

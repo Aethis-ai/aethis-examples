@@ -1,0 +1,126 @@
+{
+    "ruleset_id": "uk-fsm-child-eligibility:20260728-4be3c335",
+    "slug": "aethis/uk-fsm/child-eligibility",
+    "ruleset_version": "v4",
+    "content_digest": "sha256:453502fd9dec1c84c7de6eb63f7133e5587809f608bff0b1ad4b1d1e35ec580f",
+    "criteria": [
+        {
+            "criterion_id": "school_type_state_funded",
+            "group": "school_type_check",
+            "title": "Child attends a state-funded school",
+            "rule_text": "child.school_type equals \"state_funded\"",
+            "source_refs": [
+                "education_act_1996_s512zb.md#education_act_1996_s512zb/Section 512ZB \u2014 Registered pupils in England",
+                "education_act_1996_s512.md#education_act_1996_s512/Section 512ZA \u2014 Prescribed descriptions of pupils"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "education_act_1996_s512zb.md#education_act_1996_s512zb/Section 512ZB \u2014 Registered pupils in England",
+                    "title": "Education Act 1996, section 512ZB - Provision of free school lunches and milk",
+                    "authority": "The National Archives (legislation.gov.uk)",
+                    "url": "https://www.legislation.gov.uk/ukpga/1996/56/section/512ZB/data.htm",
+                    "locator": "section 512ZB(4A)(a)",
+                    "source_version": "Latest available (Revised)",
+                    "source_date": null,
+                    "content_digest": "sha256:49c1b62a2a484e786c341d2e918e4d70ecf04c351c425a00e2a623b8dd56b3e6",
+                    "licence": "OGL-UK-3.0",
+                    "verified_at": "2026-07-28T15:38:28.296369Z",
+                    "quote": {
+                        "exact": "is a registered pupil at a maintained school or pupil referral unit in England",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "html",
+                    "deep_link": "https://www.legislation.gov.uk/ukpga/1996/56/section/512ZB/data.htm#:~:text=is%20a%20registered%20pupil%20at%20a%20maintained%20school%20or%20pupil%20referral%20unit%20in%20England",
+                    "snapshot": "sha256:49c1b62a2a484e786c341d2e918e4d70ecf04c351c425a00e2a623b8dd56b3e6"
+                },
+                {
+                    "schema_version": 1,
+                    "source_id": "education_act_1996_s512.md#education_act_1996_s512/Section 512ZA \u2014 Prescribed descriptions of pupils",
+                    "title": "Free School Meals - child eligibility source extract (Aethis demonstration corpus)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/uk-free-school-meals/sections/A_child_eligibility/sources/education_act_1996_s512.md",
+                    "locator": "Section 512ZA - Prescribed descriptions of pupils",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-06",
+                    "content_digest": "sha256:4ae4326c100d8918bef9258e7c34b00cc2bfb27e43483f4e2e5105e2d03d6e84",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:38:28.105282Z",
+                    "quote": {
+                        "exact": "Compulsory school age begins at the start of the term following a child's fifth birthday, but in practice the provision applies from the start of the Reception year (age 4\u20135).\n**Relevant school** means\u2014 (a) a school maintained by a local authority in England; (b) an Academy; (c) a non-maintained special school; (d) a pupil referral unit.\nIndependent schools (fee-paying) and home-educated children are not within scope of this provision.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/uk-free-school-meals/sections/A_child_eligibility/sources/education_act_1996_s512.md#:~:text=Compulsory%20school%20age%20begins%20at%20the%20start%20of%20the%20term%20following%20a%20child%27s%20fifth%20birthday%2C%20but%20in%20practice%20the%20provision%20applies%20from%20the%20start%20of%20the%20Reception%20year%20%28age%204%E2%80%935%29.%20%2A%2ARelevant%20school%2A%2A%20means%E2%80%94%20%28a%29%20a%20school%20maintained%20by%20a%20local%20authority%20in%20England%3B%20%28b%29%20an%20Academy%3B%20%28c%29%20a%20non-maintained%20special%20school%3B%20%28d%29%20a%20pupil%20referral%20unit.%20Independent%20schools%20%28fee-paying%29%20and%20home-educated%20children%20are%20not%20within%20scope%20of%20this%20provision.",
+                    "snapshot": "sha256:4ae4326c100d8918bef9258e7c34b00cc2bfb27e43483f4e2e5105e2d03d6e84"
+                }
+            ]
+        },
+        {
+            "criterion_id": "age_at_least_4",
+            "group": "age_lower_check",
+            "title": "Child is at least 4 years old",
+            "rule_text": "child.age is at least 4",
+            "source_refs": [
+                "education_act_1996_s512.md#education_act_1996_s512/Section 512ZA \u2014 Prescribed descriptions of pupils"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "education_act_1996_s512.md#education_act_1996_s512/Section 512ZA \u2014 Prescribed descriptions of pupils",
+                    "title": "Free School Meals - child eligibility source extract (Aethis demonstration corpus)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/uk-free-school-meals/sections/A_child_eligibility/sources/education_act_1996_s512.md",
+                    "locator": "Section 512ZA - Prescribed descriptions of pupils",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-06",
+                    "content_digest": "sha256:4ae4326c100d8918bef9258e7c34b00cc2bfb27e43483f4e2e5105e2d03d6e84",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:38:28.105282Z",
+                    "quote": {
+                        "exact": "Compulsory school age begins at the start of the term following a child's fifth birthday, but in practice the provision applies from the start of the Reception year (age 4\u20135).\n**Relevant school** means\u2014 (a) a school maintained by a local authority in England; (b) an Academy; (c) a non-maintained special school; (d) a pupil referral unit.\nIndependent schools (fee-paying) and home-educated children are not within scope of this provision.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/uk-free-school-meals/sections/A_child_eligibility/sources/education_act_1996_s512.md#:~:text=Compulsory%20school%20age%20begins%20at%20the%20start%20of%20the%20term%20following%20a%20child%27s%20fifth%20birthday%2C%20but%20in%20practice%20the%20provision%20applies%20from%20the%20start%20of%20the%20Reception%20year%20%28age%204%E2%80%935%29.%20%2A%2ARelevant%20school%2A%2A%20means%E2%80%94%20%28a%29%20a%20school%20maintained%20by%20a%20local%20authority%20in%20England%3B%20%28b%29%20an%20Academy%3B%20%28c%29%20a%20non-maintained%20special%20school%3B%20%28d%29%20a%20pupil%20referral%20unit.%20Independent%20schools%20%28fee-paying%29%20and%20home-educated%20children%20are%20not%20within%20scope%20of%20this%20provision.",
+                    "snapshot": "sha256:4ae4326c100d8918bef9258e7c34b00cc2bfb27e43483f4e2e5105e2d03d6e84"
+                }
+            ]
+        },
+        {
+            "criterion_id": "age_under_16",
+            "group": "age_upper_check",
+            "title": "Child is under 16 years old",
+            "rule_text": "child.age is less than 16",
+            "source_refs": [
+                "fsm_regulations_2014_reg3.md#fsm_regulations_2014_reg3/Regulation 3 \u2014 Persons who are entitled to free school lunches"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "fsm_regulations_2014_reg3.md#fsm_regulations_2014_reg3/Regulation 3 \u2014 Persons who are entitled to free school lunches",
+                    "title": "Free School Meals - entitlement extract (Aethis demonstration corpus)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/uk-free-school-meals/sections/A_child_eligibility/sources/fsm_regulations_2014_reg3.md",
+                    "locator": "Regulation 3(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-06",
+                    "content_digest": "sha256:6a7693de63b21091b30e61fd2dc4e36b75008ab4076d66cec6a66be10afa874a",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:38:28.493836Z",
+                    "quote": {
+                        "exact": "A person is entitled to a free school lunch if the person is a registered pupil at a relevant school in England and is aged under 16",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/uk-free-school-meals/sections/A_child_eligibility/sources/fsm_regulations_2014_reg3.md#:~:text=A%20person%20is%20entitled%20to%20a%20free%20school%20lunch%20if%20the%20person%20is%20a%20registered%20pupil%20at%20a%20relevant%20school%20in%20England%20and%20is%20aged%20under%2016",
+                    "snapshot": "sha256:6a7693de63b21091b30e61fd2dc4e36b75008ab4076d66cec6a66be10afa874a"
+                }
+            ]
+        }
+    ]
+}

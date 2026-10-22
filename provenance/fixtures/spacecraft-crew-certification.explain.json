@@ -1,0 +1,328 @@
+{
+    "ruleset_id": "spacecraft-crew-certification:20260728-0a403907",
+    "slug": "aethis/spacecraft-crew-certification",
+    "ruleset_version": "v4",
+    "content_digest": "sha256:0b269a19248145449356dda73cdd3b08ee5dd718f71ccd3cb58ab6616dfe0a5d",
+    "criteria": [
+        {
+            "criterion_id": "species_eligible",
+            "group": "species_eligibility",
+            "title": "Species eligibility",
+            "rule_text": "NOT (space.crew.species equals \"Vogon\")",
+            "source_refs": [
+                "source.md#source/Section 3: Species eligibility"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 3: Species eligibility",
+                    "title": "Spacecraft Crew Certification Act 2049 (synthetic statute)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md",
+                    "locator": "Section 3(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-05-17",
+                    "content_digest": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:50:24.010875Z",
+                    "quote": {
+                        "exact": "An applicant for crew certification must be of an eligible species.",
+                        "prefix": null,
+                        "suffix": "(2) A Vogon national is not an eligible species"
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md#:~:text=An%20applicant%20for%20crew%20certification%20must%20be%20of%20an%20eligible%20species.,-%282%29%20A%20Vogon%20national%20is%20not%20an%20eligible%20species",
+                    "snapshot": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113"
+                }
+            ]
+        },
+        {
+            "criterion_id": "flight_readiness_met",
+            "group": "flight_readiness",
+            "title": "Flight readiness met (Section 4)",
+            "rule_text": "( AND space.crew.flight_hours is at least 500 AND space.crew.has_pilot_license equals true)",
+            "source_refs": [
+                "source.md#source/Section 4: Flight readiness"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 4: Flight readiness",
+                    "title": "Spacecraft Crew Certification Act 2049 (synthetic statute)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md",
+                    "locator": "Section 4(1)(a)-(b)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-05-17",
+                    "content_digest": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:50:24.034278Z",
+                    "quote": {
+                        "exact": "the applicant has accumulated not fewer than 500 flight hours; and (b) the applicant holds a valid pilot licence issued or recognised by the Authority.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md#:~:text=the%20applicant%20has%20accumulated%20not%20fewer%20than%20500%20flight%20hours%3B%20and%20%28b%29%20the%20applicant%20holds%20a%20valid%20pilot%20licence%20issued%20or%20recognised%20by%20the%20Authority.",
+                    "snapshot": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113"
+                }
+            ]
+        },
+        {
+            "criterion_id": "flight_readiness_exempt_age",
+            "group": "flight_readiness",
+            "title": "Flight readiness exempt \u2014 age (Section 6, age route)",
+            "rule_text": "( AND space.crew.age is at least 60 AND NOT (space.mission.type equals \"orbital\"))",
+            "source_refs": [
+                "source.md#source/Section 6: Age exemption from flight readiness"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 6: Age exemption from flight readiness",
+                    "title": "Spacecraft Crew Certification Act 2049 (synthetic statute)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md",
+                    "locator": "Section 6(1)-(3)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-05-17",
+                    "content_digest": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:50:24.110425Z",
+                    "quote": {
+                        "exact": "(1) Subject to subsection (2), an applicant aged 60 or over is exempt from the flight readiness requirement in Section 4. (2) The exemption under subsection (1) does not apply where the mission type is \"orbital\", unless subsection (3) applies. (3) An applicant who has accumulated not fewer than 1000 flight hours is exempt from Section 4 regardless of mission type, notwithstanding subsection (2).",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md#:~:text=%281%29%20Subject%20to%20subsection%20%282%29%2C%20an%20applicant%20aged%2060%20or%20over%20is%20exempt%20from%20the%20flight%20readiness%20requirement%20in%20Section%204.%20%282%29%20The%20exemption%20under%20subsection%20%281%29%20does%20not%20apply%20where%20the%20mission%20type%20is%20%22orbital%22%2C%20unless%20subsection%20%283%29%20applies.%20%283%29%20An%20applicant%20who%20has%20accumulated%20not%20fewer%20than%201000%20flight%20hours%20is%20exempt%20from%20Section%204%20regardless%20of%20mission%20type%2C%20notwithstanding%20subsection%20%282%29.",
+                    "snapshot": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113"
+                }
+            ]
+        },
+        {
+            "criterion_id": "flight_readiness_exempt_1000hrs",
+            "group": "flight_readiness",
+            "title": "Flight readiness exempt \u2014 1000 hrs (Section 6, flight-hours route)",
+            "rule_text": "space.crew.flight_hours is at least 1000",
+            "source_refs": [
+                "source.md#source/Section 6: Age exemption from flight readiness"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 6: Age exemption from flight readiness",
+                    "title": "Spacecraft Crew Certification Act 2049 (synthetic statute)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md",
+                    "locator": "Section 6(1)-(3)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-05-17",
+                    "content_digest": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:50:24.110425Z",
+                    "quote": {
+                        "exact": "(1) Subject to subsection (2), an applicant aged 60 or over is exempt from the flight readiness requirement in Section 4. (2) The exemption under subsection (1) does not apply where the mission type is \"orbital\", unless subsection (3) applies. (3) An applicant who has accumulated not fewer than 1000 flight hours is exempt from Section 4 regardless of mission type, notwithstanding subsection (2).",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md#:~:text=%281%29%20Subject%20to%20subsection%20%282%29%2C%20an%20applicant%20aged%2060%20or%20over%20is%20exempt%20from%20the%20flight%20readiness%20requirement%20in%20Section%204.%20%282%29%20The%20exemption%20under%20subsection%20%281%29%20does%20not%20apply%20where%20the%20mission%20type%20is%20%22orbital%22%2C%20unless%20subsection%20%283%29%20applies.%20%283%29%20An%20applicant%20who%20has%20accumulated%20not%20fewer%20than%201000%20flight%20hours%20is%20exempt%20from%20Section%204%20regardless%20of%20mission%20type%2C%20notwithstanding%20subsection%20%282%29.",
+                    "snapshot": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113"
+                }
+            ]
+        },
+        {
+            "criterion_id": "medical_gaa_exam",
+            "group": "medical_certification",
+            "title": "Medical certification \u2014 Route A (GAA examination)",
+            "rule_text": "space.crew.has_gaa_exam equals true",
+            "source_refs": [
+                "source.md#source/Section 5: Medical certification"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 5: Medical certification",
+                    "title": "Spacecraft Crew Certification Act 2049 (synthetic statute)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md",
+                    "locator": "Section 5(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-05-17",
+                    "content_digest": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:50:24.058401Z",
+                    "quote": {
+                        "exact": "(a) **Route A:** an examination conducted by the Galactic Aviation Authority; or (b) **Route B:** a certification issued by an approved provider.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md#:~:text=%28a%29%20%2A%2ARoute%20A%3A%2A%2A%20an%20examination%20conducted%20by%20the%20Galactic%20Aviation%20Authority%3B%20or%20%28b%29%20%2A%2ARoute%20B%3A%2A%2A%20a%20certification%20issued%20by%20an%20approved%20provider.",
+                    "snapshot": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113"
+                }
+            ]
+        },
+        {
+            "criterion_id": "medical_approved_provider",
+            "group": "medical_certification",
+            "title": "Medical certification \u2014 Route B (approved provider)",
+            "rule_text": "space.crew.has_approved_provider_cert equals true",
+            "source_refs": [
+                "source.md#source/Section 5: Medical certification"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 5: Medical certification",
+                    "title": "Spacecraft Crew Certification Act 2049 (synthetic statute)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md",
+                    "locator": "Section 5(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-05-17",
+                    "content_digest": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:50:24.058401Z",
+                    "quote": {
+                        "exact": "(a) **Route A:** an examination conducted by the Galactic Aviation Authority; or (b) **Route B:** a certification issued by an approved provider.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md#:~:text=%28a%29%20%2A%2ARoute%20A%3A%2A%2A%20an%20examination%20conducted%20by%20the%20Galactic%20Aviation%20Authority%3B%20or%20%28b%29%20%2A%2ARoute%20B%3A%2A%2A%20a%20certification%20issued%20by%20an%20approved%20provider.",
+                    "snapshot": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113"
+                }
+            ]
+        },
+        {
+            "criterion_id": "medical_cert_validity",
+            "group": "medical_cert_validity",
+            "title": "Medical certificate validity (Section 5A)",
+            "rule_text": "space.medical.cert_valid equals true",
+            "source_refs": [
+                "source.md#source/Section 5A: Medical certificate validity period"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 5A: Medical certificate validity period",
+                    "title": "Spacecraft Crew Certification Act 2049 (synthetic statute)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md",
+                    "locator": "Section 5A(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-05-17",
+                    "content_digest": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:50:24.084913Z",
+                    "quote": {
+                        "exact": "A medical certificate obtained under Section 5 is valid for a period of 730 days from the date of issue.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md#:~:text=A%20medical%20certificate%20obtained%20under%20Section%205%20is%20valid%20for%20a%20period%20of%20730%20days%20from%20the%20date%20of%20issue.",
+                    "snapshot": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113"
+                }
+            ]
+        },
+        {
+            "criterion_id": "radiation_cert_orbital",
+            "group": "radiation_certification",
+            "title": "Radiation protection certificate (orbital missions)",
+            "rule_text": "IF space.mission.type equals \"orbital\" THEN space.crew.has_radiation_cert equals true",
+            "source_refs": [
+                "source.md#source/Section 7: Mission-specific requirements"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 7: Mission-specific requirements",
+                    "title": "Spacecraft Crew Certification Act 2049 (synthetic statute)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md",
+                    "locator": "Section 7(1)(a)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-05-17",
+                    "content_digest": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:50:24.143232Z",
+                    "quote": {
+                        "exact": "the applicant must hold a valid radiation protection certificate.",
+                        "prefix": "Where the mission type is \"orbital\"\u2014",
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md#:~:text=Where%20the%20mission%20type%20is%20%22orbital%22%E2%80%94-,the%20applicant%20must%20hold%20a%20valid%20radiation%20protection%20certificate.",
+                    "snapshot": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113"
+                }
+            ]
+        },
+        {
+            "criterion_id": "propulsion_approved",
+            "group": "equipment_compliance",
+            "title": "Vessel propulsion type approved (Section 8)",
+            "rule_text": "space.vessel.propulsion_type is one of \"Infinite Improbability Drive\", \"Bistromathics\", or \"Heart of Gold Special\"",
+            "source_refs": [
+                "source.md#source/Section 8: Equipment compliance"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 8: Equipment compliance",
+                    "title": "Spacecraft Crew Certification Act 2049 (synthetic statute)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md",
+                    "locator": "Section 8(1)-(2)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-05-17",
+                    "content_digest": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:50:24.165834Z",
+                    "quote": {
+                        "exact": "The vessel's propulsion system must be of an approved type.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md#:~:text=The%20vessel%27s%20propulsion%20system%20must%20be%20of%20an%20approved%20type.",
+                    "snapshot": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113"
+                }
+            ]
+        },
+        {
+            "criterion_id": "towel_compliance",
+            "group": "towel_compliance",
+            "title": "Towel compliance (Section 9)",
+            "rule_text": "space.crew.has_towel equals true",
+            "source_refs": [
+                "source.md#source/Section 9: Towel compliance"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 9: Towel compliance",
+                    "title": "Spacecraft Crew Certification Act 2049 (synthetic statute)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md",
+                    "locator": "Section 9(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-05-17",
+                    "content_digest": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:50:24.190983Z",
+                    "quote": {
+                        "exact": "The applicant must carry a towel at all times during the mission, in accordance with the Interstellar Hitchhiker Safety Regulations 2042.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/spacecraft-crew-certification/sources/source.md#:~:text=The%20applicant%20must%20carry%20a%20towel%20at%20all%20times%20during%20the%20mission%2C%20in%20accordance%20with%20the%20Interstellar%20Hitchhiker%20Safety%20Regulations%202042.",
+                    "snapshot": "sha256:303eed8e4cc051601e46f72be2531a428ea29d254df8e9226d150e5a2e820113"
+                }
+            ]
+        }
+    ]
+}

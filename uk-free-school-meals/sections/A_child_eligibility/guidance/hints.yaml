@@ -1,0 +1,34 @@
+hints:
+  - >
+    This section determines only whether the child is eligible to receive free school meals
+    on the basis of their age and school type. It does not assess household income or
+    benefit status — those are determined in Section B (household_qualifying_criteria).
+    The two sections are composed together: both must pass for means-tested eligibility.
+
+  - >
+    The field child.age should represent the child's age in whole years at the start of
+    the relevant academic year (1 September). A child aged 4 at the start of the school
+    year is typically in Reception class and is within scope. A child aged 16 or over
+    is only within scope if they are still in full-time education at a state-funded school.
+
+  - >
+    The field child.school_type should be an enum with values: state_funded, independent,
+    home_educated. Only state_funded schools (maintained schools and Academies) are within
+    scope. Independent schools and home-educated children are not.
+
+  - >
+    Rule identifiers are part of the published contract for this ruleset
+    and must be kept stable across regenerations. Produce exactly these
+    rules, with exactly these identifiers: school_type_state_funded (the
+    school is state-funded), age_at_least_4 (the child is at least 4),
+    age_under_16 (the child is under 16). Do not add, remove, rename,
+    split, or merge rules.
+
+  - >
+    Every rule must cite the source passages it rests on:
+    school_type_state_funded cites both the Section 512ZB extract
+    (registered pupils in England) and Section 512ZA (prescribed
+    descriptions of pupils); age_at_least_4 cites Section 512ZA
+    (compulsory school age and the Reception-year practice);
+    age_under_16 cites Regulation 3 of the Free School Meals Regulations
+    2014. Never cite the citation manifest file.

@@ -1,0 +1,26 @@
+# Concessionary Travel Pass — Rulebook composition
+#
+# A single-ruleset rulebook. The pass_eligibility ruleset covers the whole
+# statute (S.3-S.6); composition is the implicit AND of the one live
+# ruleset, so no `outcome_logic` is set.
+#
+# Purpose-built to demonstrate two aethis-core 0.40 authoring-surface
+# features together: the completed-whole-years `years_between` date
+# operator (Section 4, the age route), and the GET /graph ruleset-map
+# endpoint (see scripts/graph_demo.py and README.md).
+
+rulebook:
+  name: Concessionary Travel Pass
+  domain: transport
+  slug: aethis/concessionary-travel-pass
+
+  rulesets:
+    - name: pass_eligibility
+      display_name: "Concessionary Travel Pass Act 2051"
+      description: >
+        Whole-statute eligibility check for a concessionary travel pass:
+        UK residency, plus either the age route (completed years from date
+        of birth, leap-correct) or the disability route.
+
+  # outcome_logic intentionally omitted — single-ruleset rulebooks default
+  # to "the one live ruleset's decision IS the rulebook's decision".

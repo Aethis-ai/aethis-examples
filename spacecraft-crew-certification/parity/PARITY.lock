@@ -1,0 +1,11 @@
+# The frozen published copy of the Spacecraft Crew Certification Act that the
+# canonical ../sources/source.md is checked against, clause for clause.
+#
+# That copy is the dataset behind a published benchmark, so it never changes:
+# the commit and digest below are pinned, and a moved digest fails the parity
+# check rather than being re-pinned quietly. Checked by
+# provenance/check_act_parity.py.
+repository: Aethis-ai/confidently-wrong-benchmark
+commit: 00c062eb6396c543b522a7b29ce774bc0c70b6f8
+path: dataset/spacecraft-crew-certification/source.md
+digest: sha256:8a03e85e890b47abd8616505315621af3afb1492b5a7a73e9791bb116d154fa5

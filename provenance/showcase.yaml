@@ -1,0 +1,65 @@
+# Launch-showcase registry - the denominator for the source-traceability claim.
+#
+# Every ruleset the public launch surface puts in front of a visitor is listed
+# here. A public surface may claim that a showcased decision is traceable to
+# its source only when EVERY participating criterion of that ruleset returns a
+# publish-validated, version-bound source reference carrying an authority, a
+# locator, a content digest and safe target metadata. An opaque citation key,
+# or a URL that merely resolves, does not qualify.
+#
+# The denominator is a list of RULESETS, never of criteria. The criteria that
+# count are whatever the published ruleset actually evaluates, read from its
+# committed explanation fixture - so a showcase can never improve its own
+# coverage by declaring one of its criteria non-source-backed.
+#
+# Refresh the fixtures (and see current coverage) with:
+#   uv run provenance/check_provenance.py --refresh-fixtures
+#   uv run provenance/check_provenance.py
+
+schema_version: 1
+
+# Where the claim is made, so a copy change on the surface and a coverage
+# change here stay connected.
+claim_surfaces:
+  - "aethis.ai homepage ruleset gallery"
+  - "aethis.ai homepage terminal example"
+
+showcases:
+  - name: consumer-credit-prequalification
+    example_dir: consumer-credit-prequalification
+    ruleset_slug: aethis/consumer-credit-prequalification
+    surface: "aethis.ai homepage gallery (default selection)"
+    references: consumer-credit-prequalification/sources/references.yaml
+    explain_fixture: provenance/fixtures/consumer-credit-prequalification.explain.json
+
+  - name: construction-all-risks
+    example_dir: construction-all-risks
+    ruleset_slug: aethis/construction-all-risks
+    surface: "aethis.ai homepage gallery"
+    references: construction-all-risks/sources/references.yaml
+    explain_fixture: provenance/fixtures/construction-all-risks.explain.json
+
+  - name: spacecraft-crew-certification
+    example_dir: spacecraft-crew-certification
+    ruleset_slug: aethis/spacecraft-crew-certification
+    surface: "aethis.ai homepage gallery"
+    references: spacecraft-crew-certification/sources/references.yaml
+    explain_fixture: provenance/fixtures/spacecraft-crew-certification.explain.json
+
+  - name: uk-fsm-child-eligibility
+    example_dir: uk-free-school-meals/sections/A_child_eligibility
+    ruleset_slug: aethis/uk-fsm/child-eligibility
+    surface: "aethis.ai homepage gallery + terminal example"
+    references: uk-free-school-meals/sections/A_child_eligibility/sources/references.yaml
+    explain_fixture: provenance/fixtures/uk-fsm-child-eligibility.explain.json
+    # This ruleset is a member of the `aethis/uk-fsm` rulebook. The publish
+    # path resolves citation targets only for rulesets published outside a
+    # rulebook, so a rulebook member cannot obtain source references through
+    # `aethis publish` today. Its documented resolution path is the public
+    # visibility flip, which carries `source_targets` and resolves for any
+    # ruleset. Until that is confirmed end-to-end, this showcase is prepared
+    # but must not carry the traceability claim.
+    claim_blocked_by: >-
+      Rulebook members skip publish-time citation resolution (aethis-core
+      publish path). Resolution path is PATCH /rulesets/{id}/visibility with
+      source_targets; pending engine follow-up.
