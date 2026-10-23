@@ -1,0 +1,318 @@
+{
+    "ruleset_id": "consumer-credit-prequalification:20260728-5ece6681",
+    "slug": "aethis/consumer-credit-prequalification",
+    "ruleset_version": "v3",
+    "content_digest": "sha256:60ed09c3612ef5218cabd50a9682bd86a3094f3692c8a6fa83b8942aa388dd72",
+    "criteria": [
+        {
+            "criterion_id": "adverse_history_check",
+            "group": "adverse_history_check",
+            "title": "No adverse credit history",
+            "rule_text": "credit.has_adverse_history equals false",
+            "source_refs": [
+                "source.md#source/Section 3: Adverse credit history"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 3: Adverse credit history",
+                    "title": "Consumer Credit Pre-Qualification Rules 2025 (synthetic regulation)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md",
+                    "locator": "Section 3(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-07",
+                    "content_digest": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:45:41.482160Z",
+                    "quote": {
+                        "exact": "An applicant with an adverse credit history must be refused without consideration of any other requirement under these rules.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md#:~:text=An%20applicant%20with%20an%20adverse%20credit%20history%20must%20be%20refused%20without%20consideration%20of%20any%20other%20requirement%20under%20these%20rules.",
+                    "snapshot": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab"
+                }
+            ]
+        },
+        {
+            "criterion_id": "employment_check",
+            "group": "employment_check",
+            "title": "Eligible employment status",
+            "rule_text": "credit.employment_status is one of \"employed\", \"self_employed\", or \"retired\"",
+            "source_refs": [
+                "source.md#source/Section 4: Employment status"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 4: Employment status",
+                    "title": "Consumer Credit Pre-Qualification Rules 2025 (synthetic regulation)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md",
+                    "locator": "Section 4(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-07",
+                    "content_digest": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:45:41.504255Z",
+                    "quote": {
+                        "exact": "The applicant must be in one of the following employment categories\u2014 (a) employed (full-time or part-time); (b) self-employed (trading not less than 2 years); (c) retired (receiving pension income).",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md#:~:text=The%20applicant%20must%20be%20in%20one%20of%20the%20following%20employment%20categories%E2%80%94%20%28a%29%20employed%20%28full-time%20or%20part-time%29%3B%20%28b%29%20self-employed%20%28trading%20not%20less%20than%202%20years%29%3B%20%28c%29%20retired%20%28receiving%20pension%20income%29.",
+                    "snapshot": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab"
+                }
+            ]
+        },
+        {
+            "criterion_id": "income_route_a",
+            "group": "income_check",
+            "title": "Income threshold \u2014 Route A (sole income)",
+            "rule_text": "credit.gross_annual_income is at least 15000",
+            "source_refs": [
+                "source.md#source/Section 5: Income threshold"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 5: Income threshold",
+                    "title": "Consumer Credit Pre-Qualification Rules 2025 (synthetic regulation)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md",
+                    "locator": "Section 5(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-07",
+                    "content_digest": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:45:41.528362Z",
+                    "quote": {
+                        "exact": "(a) **Route A (sole income):** the applicant's gross annual income is not less than GBP 15,000; or (b) **Route B (joint income):** the combined gross annual income of the applicant and a joint applicant is not less than GBP 20,000.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md#:~:text=%28a%29%20%2A%2ARoute%20A%20%28sole%20income%29%3A%2A%2A%20the%20applicant%27s%20gross%20annual%20income%20is%20not%20less%20than%20GBP%2015%2C000%3B%20or%20%28b%29%20%2A%2ARoute%20B%20%28joint%20income%29%3A%2A%2A%20the%20combined%20gross%20annual%20income%20of%20the%20applicant%20and%20a%20joint%20applicant%20is%20not%20less%20than%20GBP%2020%2C000.",
+                    "snapshot": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab"
+                }
+            ]
+        },
+        {
+            "criterion_id": "income_route_b",
+            "group": "income_check",
+            "title": "Income threshold \u2014 Route B (joint income)",
+            "rule_text": "( AND credit.has_joint_applicant equals true AND Operator.PLUS(credit.gross_annual_income, credit.joint_annual_income) is at least 20000)",
+            "source_refs": [
+                "source.md#source/Section 5: Income threshold"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 5: Income threshold",
+                    "title": "Consumer Credit Pre-Qualification Rules 2025 (synthetic regulation)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md",
+                    "locator": "Section 5(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-07",
+                    "content_digest": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:45:41.528362Z",
+                    "quote": {
+                        "exact": "(a) **Route A (sole income):** the applicant's gross annual income is not less than GBP 15,000; or (b) **Route B (joint income):** the combined gross annual income of the applicant and a joint applicant is not less than GBP 20,000.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md#:~:text=%28a%29%20%2A%2ARoute%20A%20%28sole%20income%29%3A%2A%2A%20the%20applicant%27s%20gross%20annual%20income%20is%20not%20less%20than%20GBP%2015%2C000%3B%20or%20%28b%29%20%2A%2ARoute%20B%20%28joint%20income%29%3A%2A%2A%20the%20combined%20gross%20annual%20income%20of%20the%20applicant%20and%20a%20joint%20applicant%20is%20not%20less%20than%20GBP%2020%2C000.",
+                    "snapshot": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab"
+                }
+            ]
+        },
+        {
+            "criterion_id": "dti_check",
+            "group": "dti_check",
+            "title": "Debt-to-income ratio (with existing customer exemption)",
+            "rule_text": "( OR credit.is_existing_customer equals true OR credit.dti_percent is at most 45)",
+            "source_refs": [
+                "source.md#source/Section 6: Debt-to-income ratio",
+                "source.md#source/Section 10: Existing customer exception"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 6: Debt-to-income ratio",
+                    "title": "Consumer Credit Pre-Qualification Rules 2025 (synthetic regulation)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md",
+                    "locator": "Section 6(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-07",
+                    "content_digest": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:45:41.550606Z",
+                    "quote": {
+                        "exact": "The applicant's debt-to-income ratio must not exceed 45%.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md#:~:text=The%20applicant%27s%20debt-to-income%20ratio%20must%20not%20exceed%2045%25.",
+                    "snapshot": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab"
+                },
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 10: Existing customer exception",
+                    "title": "Consumer Credit Pre-Qualification Rules 2025 (synthetic regulation)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md",
+                    "locator": "Section 10(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-07",
+                    "content_digest": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:45:41.453932Z",
+                    "quote": {
+                        "exact": "An existing customer (as defined in Section 2) is exempt from the requirements of Section 6 (debt-to-income ratio).",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md#:~:text=An%20existing%20customer%20%28as%20defined%20in%20Section%202%29%20is%20exempt%20from%20the%20requirements%20of%20Section%206%20%28debt-to-income%20ratio%29.",
+                    "snapshot": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab"
+                }
+            ]
+        },
+        {
+            "criterion_id": "credit_score_secured",
+            "group": "credit_score_check",
+            "title": "Credit score requirement \u2014 secured facility",
+            "rule_text": "( AND credit.product_type equals \"secured\" AND credit.credit_score_band is one of \"fair\", \"good\", or \"excellent\")",
+            "source_refs": [
+                "source.md#source/Section 7: Credit score requirement"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 7: Credit score requirement",
+                    "title": "Consumer Credit Pre-Qualification Rules 2025 (synthetic regulation)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md",
+                    "locator": "Section 7(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-07",
+                    "content_digest": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:45:41.590803Z",
+                    "quote": {
+                        "exact": "(a) for a **secured** facility: the credit score band must be \"fair\", \"good\", or \"excellent\"; (b) for an **unsecured** facility: the credit score band must be \"good\" or \"excellent\".",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md#:~:text=%28a%29%20for%20a%20%2A%2Asecured%2A%2A%20facility%3A%20the%20credit%20score%20band%20must%20be%20%22fair%22%2C%20%22good%22%2C%20or%20%22excellent%22%3B%20%28b%29%20for%20an%20%2A%2Aunsecured%2A%2A%20facility%3A%20the%20credit%20score%20band%20must%20be%20%22good%22%20or%20%22excellent%22.",
+                    "snapshot": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab"
+                }
+            ]
+        },
+        {
+            "criterion_id": "credit_score_unsecured",
+            "group": "credit_score_check",
+            "title": "Credit score requirement \u2014 unsecured facility",
+            "rule_text": "( AND credit.product_type equals \"unsecured\" AND credit.credit_score_band is one of \"good\" or \"excellent\")",
+            "source_refs": [
+                "source.md#source/Section 7: Credit score requirement"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 7: Credit score requirement",
+                    "title": "Consumer Credit Pre-Qualification Rules 2025 (synthetic regulation)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md",
+                    "locator": "Section 7(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-07",
+                    "content_digest": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:45:41.590803Z",
+                    "quote": {
+                        "exact": "(a) for a **secured** facility: the credit score band must be \"fair\", \"good\", or \"excellent\"; (b) for an **unsecured** facility: the credit score band must be \"good\" or \"excellent\".",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md#:~:text=%28a%29%20for%20a%20%2A%2Asecured%2A%2A%20facility%3A%20the%20credit%20score%20band%20must%20be%20%22fair%22%2C%20%22good%22%2C%20or%20%22excellent%22%3B%20%28b%29%20for%20an%20%2A%2Aunsecured%2A%2A%20facility%3A%20the%20credit%20score%20band%20must%20be%20%22good%22%20or%20%22excellent%22.",
+                    "snapshot": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab"
+                }
+            ]
+        },
+        {
+            "criterion_id": "ltv_check",
+            "group": "ltv_check",
+            "title": "Loan-to-value ratio (secured facilities only)",
+            "rule_text": "IF credit.product_type equals \"secured\" THEN credit.ltv_percent is at most 85",
+            "source_refs": [
+                "source.md#source/Section 8: Loan-to-value ratio (secured facilities only)"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 8: Loan-to-value ratio (secured facilities only)",
+                    "title": "Consumer Credit Pre-Qualification Rules 2025 (synthetic regulation)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md",
+                    "locator": "Section 8(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-07",
+                    "content_digest": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:45:41.620729Z",
+                    "quote": {
+                        "exact": "Where the facility is a secured facility, the loan-to-value ratio must not exceed 85%.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md#:~:text=Where%20the%20facility%20is%20a%20secured%20facility%2C%20the%20loan-to-value%20ratio%20must%20not%20exceed%2085%25.",
+                    "snapshot": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab"
+                }
+            ]
+        },
+        {
+            "criterion_id": "stress_test_check",
+            "group": "stress_test_check",
+            "title": "Affordability stress test",
+            "rule_text": "credit.stress_test_passed equals true",
+            "source_refs": [
+                "source.md#source/Section 9: Affordability stress test"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "source.md#source/Section 9: Affordability stress test",
+                    "title": "Consumer Credit Pre-Qualification Rules 2025 (synthetic regulation)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md",
+                    "locator": "Section 9(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-07",
+                    "content_digest": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab",
+                    "licence": "MIT",
+                    "verified_at": "2026-07-28T15:45:41.643828Z",
+                    "quote": {
+                        "exact": "The applicant must demonstrate that monthly repayments remain affordable under a stressed interest rate scenario.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md#:~:text=The%20applicant%20must%20demonstrate%20that%20monthly%20repayments%20remain%20affordable%20under%20a%20stressed%20interest%20rate%20scenario.",
+                    "snapshot": "sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab"
+                }
+            ]
+        }
+    ]
+}

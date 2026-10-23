@@ -1,0 +1,121 @@
+# Citation manifest for the Consumer Credit Pre-Qualification showcase.
+# See provenance/README.md for the file's role and the verification it is put
+# through. Every quote is fetched, digested and matched verbatim by
+# `uv run provenance/check_provenance.py`.
+
+schema_version: 1
+
+notes:
+  - >-
+    The cited rules are synthetic: they were written for this repository to
+    demonstrate the engine on a lending-style decision, and they describe no
+    real lender's criteria. The repository is the publisher of record, so the
+    citation points at the published copy under the repository's own licence
+    and is bound to a content digest.
+
+documents:
+  consumer-credit-prequalification-rules-2025:
+    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/consumer-credit-prequalification/sources/source.md
+    local_path: consumer-credit-prequalification/sources/source.md
+    title: Consumer Credit Pre-Qualification Rules 2025 (synthetic regulation)
+    authority: Aethis
+    licence: MIT
+    media_type: text
+    source_version: aethis-examples@main
+    source_date: '2026-04-07'
+    expected_digest: sha256:31cbcdf2974d497426f12c4fcec3e81705a048d2df7b475869fb2649cb4b01ab
+    note: >-
+      Synthetic regulation modelled on the shape of published affordability
+      rules. Written for demonstration; not any lender's criteria.
+
+references:
+  'source.md#source/Section 3: Adverse credit history':
+    document: consumer-credit-prequalification-rules-2025
+    locator: Section 3(1)
+    quote:
+      exact: >-
+        An applicant with an adverse credit history must be refused without
+        consideration of any other requirement under these rules.
+
+  'source.md#source/Section 4: Employment status':
+    document: consumer-credit-prequalification-rules-2025
+    locator: Section 4(1)
+    quote:
+      exact: >-
+        The applicant must be in one of the following employment categories— (a)
+        employed (full-time or part-time); (b) self-employed (trading not less
+        than 2 years); (c) retired (receiving pension income).
+
+  # Keyed at heading level: citation keys are derived from source-document
+  # headings by the authoring pipeline (one key per heading), so the two
+  # income routes share the Section 5 key and the quote spans both limbs.
+  'source.md#source/Section 5: Income threshold':
+    document: consumer-credit-prequalification-rules-2025
+    locator: Section 5(1)
+    quote:
+      exact: >-
+        (a) **Route A (sole income):** the applicant's gross annual income is
+        not less than GBP 15,000; or (b) **Route B (joint income):** the
+        combined gross annual income of the applicant and a joint applicant is
+        not less than GBP 20,000.
+
+  'source.md#source/Section 6: Debt-to-income ratio':
+    document: consumer-credit-prequalification-rules-2025
+    locator: Section 6(1)
+    quote:
+      exact: >-
+        The applicant's debt-to-income ratio must not exceed 45%.
+
+  'source.md#source/Section 10: Existing customer exception':
+    document: consumer-credit-prequalification-rules-2025
+    locator: Section 10(1)
+    quote:
+      exact: >-
+        An existing customer (as defined in Section 2) is exempt from the
+        requirements of Section 6 (debt-to-income ratio).
+
+  'source.md#source/Section 7: Credit score requirement':
+    document: consumer-credit-prequalification-rules-2025
+    locator: Section 7(1)
+    quote:
+      exact: >-
+        (a) for a **secured** facility: the credit score band must be "fair",
+        "good", or "excellent"; (b) for an **unsecured** facility: the credit
+        score band must be "good" or "excellent".
+
+  'source.md#source/Section 8: Loan-to-value ratio (secured facilities only)':
+    document: consumer-credit-prequalification-rules-2025
+    locator: Section 8(1)
+    quote:
+      exact: >-
+        Where the facility is a secured facility, the loan-to-value ratio must
+        not exceed 85%.
+
+  'source.md#source/Section 9: Affordability stress test':
+    document: consumer-credit-prequalification-rules-2025
+    locator: Section 9(1)
+    quote:
+      exact: >-
+        The applicant must demonstrate that monthly repayments remain affordable
+        under a stressed interest rate scenario.
+
+criteria:
+  adverse_history_check:
+    - 'source.md#source/Section 3: Adverse credit history'
+  employment_check:
+    - 'source.md#source/Section 4: Employment status'
+  income_route_a:
+    - 'source.md#source/Section 5: Income threshold'
+  income_route_b:
+    - 'source.md#source/Section 5: Income threshold'
+  dti_check:
+    - 'source.md#source/Section 6: Debt-to-income ratio'
+    - 'source.md#source/Section 10: Existing customer exception'
+  credit_score_secured:
+    - 'source.md#source/Section 7: Credit score requirement'
+  credit_score_unsecured:
+    - 'source.md#source/Section 7: Credit score requirement'
+  ltv_check:
+    - 'source.md#source/Section 8: Loan-to-value ratio (secured facilities only)'
+  stress_test_check:
+    - 'source.md#source/Section 9: Affordability stress test'

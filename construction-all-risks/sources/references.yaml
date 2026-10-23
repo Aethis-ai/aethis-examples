@@ -1,0 +1,144 @@
+# Citation manifest for the Construction All Risks showcase.
+# See provenance/README.md. Every quote is fetched, digested and matched
+# verbatim by `uv run provenance/check_provenance.py`.
+
+schema_version: 1
+
+notes:
+  - >-
+    The cited endorsement is synthetic: it was written for this repository to
+    demonstrate a deep exception chain, and it is not any insurer's wording.
+    The repository is the publisher of record, so the citation points at the
+    published copy under the repository's own licence and is bound to a content
+    digest.
+  - >-
+    The final criterion rests on three interacting clauses - the enhanced-cover
+    reinstatement and the two limitations that qualify it. All three are cited,
+    because a reader who sees only the reinstatement has been shown a rule that
+    does not decide the case.
+
+documents:
+  car-defect-exclusion-endorsement-2025:
+    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md
+    local_path: construction-all-risks/sources/source.md
+    title: CAR Policy Defect Exclusion Endorsement Schedule 2025 (synthetic policy wording)
+    authority: Aethis
+    licence: MIT
+    media_type: text
+    source_version: aethis-examples@main
+    source_date: '2026-04-12'
+    expected_digest: sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd
+    note: >-
+      Synthetic endorsement modelled on the structure of market defect-exclusion
+      wordings. Written for demonstration; not an insurer's wording.
+
+references:
+  'source.md#source/Clause 3: Policy period':
+    document: car-defect-exclusion-endorsement-2025
+    locator: Clause 3(1)
+    quote:
+      exact: >-
+        This endorsement applies only to loss or damage occurring within the
+        policy period.
+
+  'source.md#source/Clause 4: Insuring clause':
+    document: car-defect-exclusion-endorsement-2025
+    locator: Clause 4(1)(a)-(b)
+    quote:
+      exact: >-
+        The insured must demonstrate that the following conditions are both
+        satisfied— (a) physical loss of or damage to insured property has
+        occurred; and (b) a defective component has been identified in
+        connection with the loss.
+
+  'source.md#source/Clause 5: Insured property categories':
+    document: car-defect-exclusion-endorsement-2025
+    locator: Clause 5(1)
+    quote:
+      exact: >-
+        This endorsement covers property falling within one of the following
+        categories— (a) permanent works; (b) temporary works; (c) existing
+        structures; and (d) materials on site.
+
+  'source.md#source/Clause 6: Defect rectification exclusion':
+    document: car-defect-exclusion-endorsement-2025
+    locator: Clause 6(1)
+    quote:
+      exact: >-
+        The cost of repairing, replacing, or rectifying any component that is
+        itself defective in design, plan, specification, materials, or
+        workmanship is excluded absolutely.
+
+  'source.md#source/Clause 7: Carve-back for resultant damage':
+    document: car-defect-exclusion-endorsement-2025
+    locator: Clause 7(1)(a)-(b)
+    quote:
+      exact: >-
+        the damage arose as a physical consequence of the defective component
+        failing (Route A); or (b) the damage was not caused solely to gain
+        access to, remove, or replace the defective component (Route B).
+
+  'source.md#source/Clause 9: Enhanced cover for large projects':
+    document: car-defect-exclusion-endorsement-2025
+    locator: Clause 9(1)-(3)
+    quote:
+      exact: >-
+        where the insured project is an enhanced cover project, the exclusion of
+        access damage under Clause 8 does not apply and such damage shall be
+        covered under this endorsement.
+
+  'source.md#source/Clause 9A: Known defect limitation':
+    document: car-defect-exclusion-endorsement-2025
+    locator: Clause 9A(1)-(2)
+    quote:
+      exact: >-
+        the pioneer infrastructure override does not apply where the defect
+        giving rise to the claim was known to the insured, or ought reasonably to
+        have been known, prior to the commencement of works.
+
+  'source.md#source/Clause 9B: Subcontractor defect modifier':
+    document: car-defect-exclusion-endorsement-2025
+    locator: Clause 9B(1)
+    quote:
+      exact: >-
+        Where the defective component was installed or fabricated by a
+        subcontractor (not the principal contractor), the enhanced cover
+        threshold under Clause 9(1) is increased from GBP 100 million to GBP 200
+        million.
+
+  'source.md#source/Clause 10: Existing structures condition':
+    document: car-defect-exclusion-endorsement-2025
+    locator: Clause 10(1)
+    quote:
+      exact: >-
+        Where the property suffering loss or damage is an existing structure, the
+        insured must have in place a JCT-compliant construction contract at the
+        date of loss.
+
+  'source.md#source/Clause 11: Notification compliance':
+    document: car-defect-exclusion-endorsement-2025
+    locator: Clause 11(1)
+    quote:
+      exact: >-
+        The insured must notify underwriters of any loss or damage within 30 days
+        of discovery.
+
+criteria:
+  policy_period_valid:
+    - 'source.md#source/Clause 3: Policy period'
+  insuring_clause:
+    - 'source.md#source/Clause 4: Insuring clause'
+  insured_property_category:
+    - 'source.md#source/Clause 5: Insured property categories'
+  notification_within_period:
+    - 'source.md#source/Clause 11: Notification compliance'
+  existing_structures_jct_contract:
+    - 'source.md#source/Clause 10: Existing structures condition'
+  not_rectification_claim:
+    - 'source.md#source/Clause 6: Defect rectification exclusion'
+  carve_back_non_access_damage:
+    - 'source.md#source/Clause 7: Carve-back for resultant damage'
+  access_damage_enhanced_cover_reinstated:
+    - 'source.md#source/Clause 9: Enhanced cover for large projects'
+    - 'source.md#source/Clause 9A: Known defect limitation'
+    - 'source.md#source/Clause 9B: Subcontractor defect modifier'

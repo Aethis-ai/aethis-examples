@@ -1,0 +1,17 @@
+# Children and Families Act 2014 — Universal Infant Free School Meals
+
+> **Aethis demonstration material — not statutory text.** This synthetic extract was prepared for an intentionally simplified teaching model in April 2026. It contains paraphrase and model assumptions, including passages written in a legislative register. Its filename, headings and provision numbers do not establish an authentic legal quotation or current entitlement rule. The computational model and its fixed test expectations are retained; consult the actual authority separately.
+
+## Section 105 — Free school meals for children in reception class or years 1 or 2
+
+**105 Free school meals for children in reception class or years 1 or 2**
+
+(1) The Secretary of State must make regulations under section 512(1)(a) of EA 1996 requiring relevant schools to provide free school lunches to registered pupils who—
+(a) are in the reception class of the school, or
+(b) are in year 1 or year 2 of the school.
+
+(2) The regulations must secure that the requirement to provide free school lunches to pupils within subsection (1) applies regardless of—
+(a) the income of the pupil's family, or
+(b) whether the pupil or a member of the pupil's family is in receipt of any benefit.
+
+(3) In this section "relevant school" has the same meaning as in the Education Act 1996.

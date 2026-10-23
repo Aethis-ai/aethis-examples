@@ -1,0 +1,25 @@
+hints:
+  - >
+    This section uses OR logic across multiple qualifying routes. A household qualifies
+    if it meets ANY ONE of the following: Universal Credit with net earnings at or below
+    £7,400/year; Income Support; income-based JSA; income-related ESA; Child Tax Credit
+    only (no Working Tax Credit) with income at or below £16,190/year; NASS support;
+    the child is looked-after by the local authority; or the child is a care leaver.
+
+  - >
+    The Universal Credit route requires TWO conditions to be true simultaneously:
+    household.receives_universal_credit must be true AND household.annual_net_earnings
+    must be less than or equal to 7400 (in pounds sterling, gross annual figure after
+    tax and NI). These are AND conditions within the UC route, which is then OR'd with
+    the other routes.
+
+  - >
+    Looked-after children (child.is_looked_after) and care leavers (child.is_care_leaver)
+    qualify automatically with no income or benefit requirement. These are unconditional
+    boolean fields — if either is true, Section B passes regardless of all other fields.
+
+  - >
+    The Child Tax Credit route (household.receives_child_tax_credit_only) requires that
+    the household receives CTC but does NOT receive Working Tax Credit. Use a separate
+    boolean field household.receives_working_tax_credit = false as a negative condition,
+    or model this as a single field that already encodes "CTC without WTC".

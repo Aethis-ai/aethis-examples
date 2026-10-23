@@ -1,0 +1,136 @@
+# Provenance gate for the launch showcases.
+#
+# Runs on every change and on a schedule. The scheduled run matters as much as
+# the pull-request run: a citation can stop being true without anyone touching
+# this repository, because the document it points at can be republished. When
+# that happens the digest moves, this job goes red, and a human re-reads the
+# passage before the claim is made again. That is the gate working, not a
+# flake.
+name: provenance
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    # Weekly, so a cited document changing under us surfaces on its own.
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # The published mirror carries this workflow too. Let it verify its own
+    # citations on a push, but leave the weekly source-drift watch to the
+    # repository that can actually act on a red result - a public red X that
+    # nobody there can fix teaches readers to ignore the signal.
+    # The published mirror carries this workflow too, and its history is a
+    # force-pushed snapshot nobody there can fix. Run on pull requests
+    # anywhere, but confine the push and schedule triggers - the ones the
+    # mirror would fire - to the repository that can act on a red result. A
+    # public red X nobody can clear teaches readers to ignore the signal.
+    if: >-
+      github.event_name == 'pull_request'
+      || github.event_name == 'workflow_dispatch'
+      || endsWith(github.repository, '-internal')
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+
+      # publish.sh and its scan live in scripts/, which the public mirror never
+      # receives, so this step only exists where it can run.
+      - name: Publish restricted-phrase scan self-test (no network)
+        if: endsWith(github.repository, '-internal')
+        run: bash scripts/test-publish-scan.sh
+
+      - name: Semantics, safety and gate self-tests (no network)
+        run: uv run provenance/selftest.py
+
+      - name: Live probe self-test (no network, no credentials)
+        run: uv run provenance/probe_staging.py --self-test
+
+      # Authoring uploads every file under an example's sources/ directory,
+      # recursively, so nothing but source documents may live there.
+      - name: sources/ directories have no subdirectories or known non-source files
+        run: uv run provenance/check_sources_layout.py
+
+      # The canonical spacecraft Act must say what the frozen benchmark copy
+      # says, clause for clause, apart from reviewed exceptions. Fetches the
+      # benchmark copy at a pinned commit; a fetch failure fails the step.
+      - name: Canonical spacecraft Act matches the frozen benchmark copy
+        run: uv run provenance/check_act_parity.py
+
+      # Reads the live denominator from the anonymous /explain endpoint - no
+      # credential - so a fixture edited in a pull request cannot change the
+      # total this is measured against.
+      # Writes its artefact to a scratch path. If it wrote to the committed
+      # one, the freshness check below would be comparing a run against itself
+      # and would pass no matter what had been committed.
+      - name: Verify every showcased criterion cites a real, licensed passage
+        env:
+          # Optional. The denominator read is anonymous by design; the key only
+          # avoids the per-IP rate limit that a four-showcase sweep can trip.
+          AETHIS_API_KEY: ${{ secrets.AETHIS_API_KEY_INTERNAL_AUTHORING }}
+        run: uv run provenance/check_provenance.py --json "${RUNNER_TEMP}/coverage.json"
+
+      # The committed artefact is what the public copy and the release gate
+      # read, so it has to be the artefact a run of this tree produces.
+      #
+      # This compares SEMANTICALLY, not byte-for-byte, and that distinction is
+      # load-bearing. Two honest runs differ in `generated_at` (wall clock) and
+      # `binding.commit` (the checkout commit, which in a pull-request build is
+      # an ephemeral merge commit that can never equal the branch head the
+      # artefact was committed on). A byte comparison of the whole file is
+      # therefore unsatisfiable by construction - it fails on every PR forever,
+      # which is how a gate stops being trusted and starts being deleted.
+      # Everything else is still compared exactly, so a forged coverage number
+      # fails. `--verify-artefact` writes nothing.
+      - name: Committed evidence artefact matches a fresh run
+        env:
+          AETHIS_API_KEY: ${{ secrets.AETHIS_API_KEY_INTERNAL_AUTHORING }}
+        run: uv run provenance/check_provenance.py --verify-artefact
+
+      # The publish gate must reach a verdict on every showcase: either it
+      # passes, or it refuses with reasons. Exit 2 means it could not decide -
+      # a usage error, a missing manifest, a crash - and a gate that cannot
+      # decide is not protecting anything. Deliberately not pinned to today's
+      # answer, which is "refuse", so this keeps working once the citation keys
+      # are authored into the rulesets.
+      #
+      # `|| rc=$?` rather than a bare call: GitHub runs `run:` blocks under
+      # `bash -e`, so an expected exit 1 would otherwise kill the step before
+      # the verdict is even read. Putting the command on the left of `||` puts
+      # it in a condition context, where `-e` does not fire - which is true
+      # whatever flags the shell was invoked with.
+      - name: Publish gate reaches a verdict on every showcase
+        run: |
+          set -uo pipefail
+          status=0
+          # Ask the tool, rather than parsing YAML in the shell: `uv run python`
+          # has no pyyaml, so the old inline parse failed and expanded to an
+          # empty list - a loop over nothing that reported success.
+          showcases=$(uv run provenance/check_provenance.py --list-showcases)
+          if [ -z "$showcases" ]; then
+            echo "::error::no showcases resolved; refusing to report success having checked nothing"
+            exit 1
+          fi
+          for showcase in $showcases; do
+            rc=0
+            uv run provenance/publish_showcase.py --showcase "$showcase" > /dev/null 2>&1 || rc=$?
+            if [ "$rc" -ge 2 ]; then
+              echo "::error::publish gate could not reach a verdict for $showcase (exit $rc)"
+              status=1
+            else
+              echo "$showcase: verdict reached (exit $rc)"
+            fi
+          done
+          exit "$status"
+
+      - name: Upload coverage evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: provenance-coverage
+          path: provenance/evidence/

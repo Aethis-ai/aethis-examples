@@ -1,0 +1,3 @@
+project: spacecraft-crew-certification
+api_key_env: AETHIS_API_KEY
+live_ruleset_id: spacecraft-crew-certification:20261023-02cffa2f
