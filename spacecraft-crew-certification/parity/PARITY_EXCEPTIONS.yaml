@@ -1,0 +1,21 @@
+# Reviewed differences between the normative text of the canonical Act
+# (../sources/source.md) and the frozen benchmark copy pinned in PARITY.lock.
+#
+# Every other normative clause must match word for word. Each entry names one
+# subsection, which copy carries it, its exact text (whitespace-normalised), and
+# why the difference is intended. An entry whose text no longer matches, or
+# which matches nothing, fails the check, so an exception cannot silently widen
+# to cover a different change. Add an entry only after reading both copies.
+exceptions:
+  - section: "5A"
+    subsection: "3"
+    present_in: benchmark
+    text: >-
+      (3) For the purposes of subsection (2), dates are expressed in days and
+      the certificate is valid where— application_date - medical_cert_issue_date
+      <= 730
+    reason: >-
+      The benchmark copy states the 730-day validity window a second time as a
+      date-arithmetic formula, for the benchmark's date-handling pattern. The
+      canonical Act states the same rule in words in subsections (1) and (2),
+      so the formula adds no new condition and is omitted.

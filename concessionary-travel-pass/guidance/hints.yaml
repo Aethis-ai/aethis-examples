@@ -1,0 +1,27 @@
+hints:
+  - >
+    The following fields are used to capture applicant data for
+    concessionary travel pass eligibility assessment. These field keys and
+    types define the data contract between the intake system and the
+    eligibility engine: travel.applicant.is_uk_resident (boolean),
+    travel.applicant.date_of_birth (date),
+    travel.application.date (date),
+    travel.applicant.has_disability_certificate (boolean).
+
+  - >
+    The eligibility assessment is structured around two requirement areas:
+    a residency check, and an eligibility route check (satisfied by either
+    the age route or the disability route).
+
+  - >
+    The age route depends on the applicant's age in completed whole years,
+    calculated from the applicant's date of birth to the date of
+    application — not from a difference of calendar years, and not from a
+    day-count divided by 365. Age in completed years only changes on the
+    applicant's birthday: the day before the 66th birthday the applicant
+    is still 65; from the 66th birthday onward the applicant is 66. This
+    must hold correctly across leap years, including where the date of
+    birth itself is 29 February. Prefer whatever date-arithmetic helper
+    the rule authoring toolkit provides for exactly this "completed years
+    between two dates" calculation, rather than composing it from
+    subtraction and division.

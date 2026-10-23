@@ -1,0 +1,12 @@
+.env
+.env.*
+.DS_Store
+.aethis/
+__pycache__/
+*.py[cod]
+.ruff_cache/
+.mypy_cache/
+
+# A --showcase run writes a partial artefact so it can never overwrite the
+# whole-surface evidence the release gate reads.
+provenance/evidence/coverage.partial.json

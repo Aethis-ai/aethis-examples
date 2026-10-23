@@ -1,0 +1,73 @@
+# Citation manifest for the Concessionary Travel Pass example.
+# Same shape as the launch showcases' manifests (see provenance/README.md), but
+# this example is not registered in provenance/showcase.yaml: it makes no
+# public traceability claim. The manifest exists so that publication can
+# resolve every citation key the ruleset declares.
+
+schema_version: 1
+
+notes:
+  - >-
+    The cited Act is synthetic: it was written for this repository to
+    demonstrate completed-whole-years age arithmetic, and it is not any
+    legislature's text. The repository is the publisher of record, so the
+    citation points at the published copy under the repository's own licence
+    and is bound to a content digest.
+
+documents:
+  concessionary-travel-pass-act-2051:
+    url: https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/concessionary-travel-pass/sources/source.md
+    local_path: concessionary-travel-pass/sources/source.md
+    title: Concessionary Travel Pass Act 2051 (synthetic statute)
+    authority: Aethis
+    licence: MIT
+    media_type: text
+    source_version: aethis-examples@main
+    source_date: '2026-07-17'
+    expected_digest: sha256:0f1617f6ee68c128df849a349dea8194d01156178a21779645cd44a2a5ea2445
+    note: >-
+      Synthetic statute modelled on the structure of UK primary legislation.
+      Written for demonstration; not any legislature's text.
+
+references:
+  'src_RA0pAHZ5OyE#item_000002':
+    document: concessionary-travel-pass-act-2051
+    locator: Section 2 ("pass age")
+    quote:
+      exact: >-
+        that is, whether the applicant's 66th birthday has been reached on or
+        before the application date
+
+  'src_RA0pAHZ5OyE#item_000003':
+    document: concessionary-travel-pass-act-2051
+    locator: Section 3(1)
+    quote:
+      exact: >-
+        An applicant for a concessionary travel pass must be ordinarily
+        resident in the United Kingdom at the date of application.
+
+  'src_RA0pAHZ5OyE#item_000004':
+    document: concessionary-travel-pass-act-2051
+    locator: Section 4(1)
+    quote:
+      exact: >-
+        An applicant qualifies for a pass via the age route where the
+        applicant has reached pass age at the date of application.
+
+  'src_RA0pAHZ5OyE#item_000005':
+    document: concessionary-travel-pass-act-2051
+    locator: Section 5(1)
+    quote:
+      exact: >-
+        An applicant who holds a valid qualifying disability certificate
+        qualifies for a pass via the disability route, irrespective of the
+        applicant's age.
+
+criteria:
+  residency_check:
+    - 'src_RA0pAHZ5OyE#item_000003'
+  age_route:
+    - 'src_RA0pAHZ5OyE#item_000004'
+    - 'src_RA0pAHZ5OyE#item_000002'
+  disability_route:
+    - 'src_RA0pAHZ5OyE#item_000005'

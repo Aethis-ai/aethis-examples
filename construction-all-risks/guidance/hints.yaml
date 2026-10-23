@@ -1,0 +1,133 @@
+hints:
+  - >
+    The following fields capture the claim data for coverage determination.
+    These field keys and types define the data contract between the claims
+    intake system and the eligibility engine:
+    car.policy.period_valid (boolean),
+    car.property.category (enum: permanent_works, temporary_works, plant_equipment, existing_structures, materials_on_site),
+    car.loss.is_physical (boolean),
+    car.component.is_defective (boolean),
+    car.defect.origin (enum: design, specification, materials, workmanship, none),
+    car.claim.is_rectification (boolean),
+    car.claim.is_access_damage (boolean),
+    car.damage.consequence_of_failure (boolean),
+    car.project.value_millions_gbp (integer),
+    car.notification.within_period (boolean),
+    car.contract.jct_compliant (boolean),
+    car.defect.was_known_prior (boolean),
+    car.defect.has_engineer_assessment (boolean),
+    car.component.installed_by_subcontractor (boolean)
+
+  - >
+    Rectification cost is absolutely excluded. The cost of repairing or
+    replacing the defective component itself is never covered, regardless
+    of project value, enhanced cover status, or any other provision.
+
+  - >
+    The carve-back for resultant damage can be satisfied by either of
+    two routes: the damage arose as a consequence of the defective
+    component failing, or the damage was not caused solely to gain
+    access to the defective component. Either route is sufficient.
+
+  - >
+    Access damage is re-excluded after the Clause 7 carve-back, but
+    Clause 9 reinstates it on enhanced cover projects. The general
+    rule for the enhanced tier is that the project's total insured
+    value must reach £100 million, but only where the principal
+    contractor installed the defective component directly (Clause
+    9B(3)). Where the component was installed or fabricated by a
+    subcontractor, the threshold is £200 million (Clause 9B(1)).
+    Clause 9B states no default for a claim that does not say who
+    installed the component. Clause 4 puts the burden of demonstrating
+    loss and a defective component on the insured; applying that burden
+    to the installer as well is an interpretive step, consistent with
+    the strict reading this ruleset adopts. So the £100 million threshold
+    applies only when the claim establishes principal-contractor
+    installation; when the installer is not established, the £200
+    million threshold applies. Enhanced cover does
+    not extend to design-origin access damage at the standard tier;
+    under Clause 9(2) that is carved out unless the project qualifies
+    as a pioneer infrastructure project at £500 million or above, in
+    which case Clause 9(3) restores cover. The pioneer threshold of
+    £500 million is fixed and is not affected by Clause 9B.
+
+  - >
+    Where the property is an existing structure, a JCT-compliant
+    construction contract must be in place. This requirement does not
+    apply to other property categories.
+
+  - >
+    Plant and equipment is not covered under this endorsement. The
+    approved insured categories are: permanent works, temporary works,
+    existing structures, and materials on site.
+
+  - >
+    The pioneer infrastructure override does not apply where the defect
+    was known to the insured before commencement of works, unless the
+    insured obtained an independent engineer assessment confirming the
+    defect was not material to structural integrity. In other words:
+    either the defect was not known beforehand, or there is an engineer
+    assessment on file. If neither condition is met, the pioneer override
+    is blocked and the design defect limitation applies even on projects
+    above £500M. Clause 9A states no default for a claim that does not
+    say whether the defect was known. Clause 4 puts the burden of
+    demonstrating loss and a defective component on the insured;
+    applying that burden to prior knowledge as well is an interpretive
+    step, consistent with the strict reading this ruleset adopts. So
+    unless the claim establishes
+    that the defect was not known before commencement, treat it as
+    known, so the pioneer override then needs the engineer assessment.
+
+  - >
+    Clause 9B sets the enhanced cover threshold by who installed the
+    defective component. Clause 9B(1): installed or fabricated by a
+    subcontractor, £200 million. Clause 9B(3): installed by the
+    principal contractor directly, £100 million, unmodified. Neither
+    subclause says what applies when the claim does not state the
+    installer. Clause 4 puts the burden of demonstrating loss and a
+    defective component on the insured, and this ruleset applies that
+    burden to the installer as an interpretive step consistent with its
+    strict reading. So the unmodified £100 million threshold is available
+    only when the claim establishes principal-contractor installation.
+    A claim that does not establish who installed the component is
+    held to the £200 million threshold. Asking the installer question
+    can only lower the threshold, never raise it, so the decision does
+    not depend on whether the question has been asked yet.
+
+  - >
+    Worked example for the Clause 9 enhanced reinstatement: a claim
+    describes a defective steel bracket of workmanship origin on a
+    £150 million tunnel project, with access damage to non-defective
+    wall lining. The claim establishes that the principal contractor
+    installed the bracket directly. Reading Clause 9(1) with Clause
+    9B(3): the £100 million enhanced cover threshold governs; £150
+    million clears that threshold; the workmanship origin is not a
+    design defect, so the Clause 9(2) carve-out does not apply;
+    therefore the access damage is reinstated under the enhanced terms
+    and the claim is eligible. If the same claim does not say who
+    installed the bracket, the installer is not established, the £200
+    million threshold applies, £150 million does not clear it, and the
+    access damage remains excluded under Clause 8. The same claim on a
+    £50 million project would not clear either threshold.
+
+  - >
+    Rule identifiers are part of the published contract for this ruleset
+    and must be kept stable across regenerations. Produce exactly these
+    rules, with exactly these identifiers: policy_period_valid (Clause 3),
+    insuring_clause (Clause 4), insured_property_category (Clause 5),
+    not_rectification_claim (Clause 6), carve_back_non_access_damage
+    (Clause 7), access_damage_enhanced_cover_reinstated (Clauses 9, 9A
+    and 9B), existing_structures_jct_contract (Clause 10),
+    notification_within_period (Clause 11). Do not add, remove, rename,
+    split, or merge rules.
+
+  - >
+    Every rule must cite the clause it rests on: policy_period_valid cites
+    Clause 3; insuring_clause cites Clause 4; insured_property_category
+    cites Clause 5; not_rectification_claim cites Clause 6;
+    carve_back_non_access_damage cites Clause 7;
+    access_damage_enhanced_cover_reinstated cites Clause 9, Clause 9A and
+    Clause 9B; existing_structures_jct_contract cites Clause 10;
+    notification_within_period cites Clause 11. Cite the numbered clauses
+    of the source document itself, and never cite the citation manifest
+    file.

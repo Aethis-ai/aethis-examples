@@ -1,0 +1,7 @@
+project: uk-fsm-child-eligibility
+project_id: proj_HOui5yR9q49mkA2W
+section_id: child_eligibility
+domain: uk_fsm
+api_key_env: AETHIS_API_KEY
+
+live_ruleset_id: uk-fsm-child-eligibility:20261023-a9c70585

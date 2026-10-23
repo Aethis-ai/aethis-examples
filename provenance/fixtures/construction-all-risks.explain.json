@@ -1,0 +1,308 @@
+{
+    "ruleset_id": "construction-all-risks:20261023-d64e7abd",
+    "slug": "aethis/construction-all-risks",
+    "ruleset_version": "v11",
+    "content_digest": "sha256:b339325944e2e4d1ba36913ad329e1e7c34707abbd14ba590ad6fd7011c83f40",
+    "criteria": [
+        {
+            "criterion_id": "policy_period_valid",
+            "group": "policy_period_valid",
+            "title": "Loss within policy period",
+            "rule_text": "car.policy.period_valid equals true",
+            "source_refs": [
+                "src_k8AB11PMHGY#item_000003"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "src_k8AB11PMHGY#item_000003",
+                    "title": "CAR Policy Defect Exclusion Endorsement Schedule 2025 (synthetic policy wording)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md",
+                    "locator": "Clause 3(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-12",
+                    "content_digest": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd",
+                    "licence": "MIT",
+                    "verified_at": "2026-10-23T14:34:33.995000Z",
+                    "quote": {
+                        "exact": "This endorsement applies only to loss or damage occurring within the policy period.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md#:~:text=This%20endorsement%20applies%20only%20to%20loss%20or%20damage%20occurring%20within%20the%20policy%20period.",
+                    "snapshot": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd"
+                }
+            ]
+        },
+        {
+            "criterion_id": "insuring_clause",
+            "group": "insuring_clause",
+            "title": "Physical loss and defective component established",
+            "rule_text": "( AND car.loss.is_physical equals true AND car.component.is_defective equals true)",
+            "source_refs": [
+                "src_k8AB11PMHGY#item_000004"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "src_k8AB11PMHGY#item_000004",
+                    "title": "CAR Policy Defect Exclusion Endorsement Schedule 2025 (synthetic policy wording)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md",
+                    "locator": "Clause 4(1)(a)-(b)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-12",
+                    "content_digest": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd",
+                    "licence": "MIT",
+                    "verified_at": "2026-10-23T14:34:34.023000Z",
+                    "quote": {
+                        "exact": "The insured must demonstrate that the following conditions are both satisfied\u2014 (a) physical loss of or damage to insured property has occurred; and (b) a defective component has been identified in connection with the loss.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md#:~:text=The%20insured%20must%20demonstrate%20that%20the%20following%20conditions%20are%20both%20satisfied%E2%80%94%20%28a%29%20physical%20loss%20of%20or%20damage%20to%20insured%20property%20has%20occurred%3B%20and%20%28b%29%20a%20defective%20component%20has%20been%20identified%20in%20connection%20with%20the%20loss.",
+                    "snapshot": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd"
+                }
+            ]
+        },
+        {
+            "criterion_id": "insured_property_category",
+            "group": "insured_property_category",
+            "title": "Property falls within an insured category",
+            "rule_text": "car.property.category is one of \"permanent_works\", \"temporary_works\", \"existing_structures\", or \"materials_on_site\"",
+            "source_refs": [
+                "src_k8AB11PMHGY#item_000005"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "src_k8AB11PMHGY#item_000005",
+                    "title": "CAR Policy Defect Exclusion Endorsement Schedule 2025 (synthetic policy wording)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md",
+                    "locator": "Clause 5(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-12",
+                    "content_digest": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd",
+                    "licence": "MIT",
+                    "verified_at": "2026-10-23T14:34:34.055000Z",
+                    "quote": {
+                        "exact": "This endorsement covers property falling within one of the following categories\u2014 (a) permanent works; (b) temporary works; (c) existing structures; and (d) materials on site.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md#:~:text=This%20endorsement%20covers%20property%20falling%20within%20one%20of%20the%20following%20categories%E2%80%94%20%28a%29%20permanent%20works%3B%20%28b%29%20temporary%20works%3B%20%28c%29%20existing%20structures%3B%20and%20%28d%29%20materials%20on%20site.",
+                    "snapshot": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd"
+                }
+            ]
+        },
+        {
+            "criterion_id": "notification_within_period",
+            "group": "notification_within_period",
+            "title": "Loss notified within 30 days",
+            "rule_text": "car.notification.within_period equals true",
+            "source_refs": [
+                "src_k8AB11PMHGY#item_000013"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "src_k8AB11PMHGY#item_000013",
+                    "title": "CAR Policy Defect Exclusion Endorsement Schedule 2025 (synthetic policy wording)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md",
+                    "locator": "Clause 11(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-12",
+                    "content_digest": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd",
+                    "licence": "MIT",
+                    "verified_at": "2026-10-23T14:34:34.268000Z",
+                    "quote": {
+                        "exact": "The insured must notify underwriters of any loss or damage within 30 days of discovery.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md#:~:text=The%20insured%20must%20notify%20underwriters%20of%20any%20loss%20or%20damage%20within%2030%20days%20of%20discovery.",
+                    "snapshot": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd"
+                }
+            ]
+        },
+        {
+            "criterion_id": "existing_structures_jct_contract",
+            "group": "existing_structures_jct_contract",
+            "title": "JCT-compliant contract in place (existing structures)",
+            "rule_text": "IF car.property.category equals \"existing_structures\" THEN car.contract.jct_compliant equals true",
+            "source_refs": [
+                "src_k8AB11PMHGY#item_000012"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "src_k8AB11PMHGY#item_000012",
+                    "title": "CAR Policy Defect Exclusion Endorsement Schedule 2025 (synthetic policy wording)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md",
+                    "locator": "Clause 10(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-12",
+                    "content_digest": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd",
+                    "licence": "MIT",
+                    "verified_at": "2026-10-23T14:34:34.237000Z",
+                    "quote": {
+                        "exact": "Where the property suffering loss or damage is an existing structure, the insured must have in place a JCT-compliant construction contract at the date of loss.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md#:~:text=Where%20the%20property%20suffering%20loss%20or%20damage%20is%20an%20existing%20structure%2C%20the%20insured%20must%20have%20in%20place%20a%20JCT-compliant%20construction%20contract%20at%20the%20date%20of%20loss.",
+                    "snapshot": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd"
+                }
+            ]
+        },
+        {
+            "criterion_id": "not_rectification_claim",
+            "group": "not_rectification_claim",
+            "title": "Claim is not for rectification of defective component",
+            "rule_text": "car.claim.is_rectification equals false",
+            "source_refs": [
+                "src_k8AB11PMHGY#item_000006"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "src_k8AB11PMHGY#item_000006",
+                    "title": "CAR Policy Defect Exclusion Endorsement Schedule 2025 (synthetic policy wording)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md",
+                    "locator": "Clause 6(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-12",
+                    "content_digest": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd",
+                    "licence": "MIT",
+                    "verified_at": "2026-10-23T14:34:34.084000Z",
+                    "quote": {
+                        "exact": "The cost of repairing, replacing, or rectifying any component that is itself defective in design, plan, specification, materials, or workmanship is excluded absolutely.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md#:~:text=The%20cost%20of%20repairing%2C%20replacing%2C%20or%20rectifying%20any%20component%20that%20is%20itself%20defective%20in%20design%2C%20plan%2C%20specification%2C%20materials%2C%20or%20workmanship%20is%20excluded%20absolutely.",
+                    "snapshot": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd"
+                }
+            ]
+        },
+        {
+            "criterion_id": "carve_back_non_access_damage",
+            "group": "damage_eligibility",
+            "title": "Carve-back for resultant / non-access damage",
+            "rule_text": "( AND car.claim.is_access_damage equals false AND ( OR car.damage.consequence_of_failure equals true OR car.claim.is_access_damage equals false))",
+            "source_refs": [
+                "src_k8AB11PMHGY#item_000007"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "src_k8AB11PMHGY#item_000007",
+                    "title": "CAR Policy Defect Exclusion Endorsement Schedule 2025 (synthetic policy wording)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md",
+                    "locator": "Clause 7(1)(a)-(b)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-12",
+                    "content_digest": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd",
+                    "licence": "MIT",
+                    "verified_at": "2026-10-23T14:34:34.110000Z",
+                    "quote": {
+                        "exact": "the damage arose as a physical consequence of the defective component failing (Route A); or (b) the damage was not caused solely to gain access to, remove, or replace the defective component (Route B).",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md#:~:text=the%20damage%20arose%20as%20a%20physical%20consequence%20of%20the%20defective%20component%20failing%20%28Route%20A%29%3B%20or%20%28b%29%20the%20damage%20was%20not%20caused%20solely%20to%20gain%20access%20to%2C%20remove%2C%20or%20replace%20the%20defective%20component%20%28Route%20B%29.",
+                    "snapshot": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd"
+                }
+            ]
+        },
+        {
+            "criterion_id": "access_damage_enhanced_cover_reinstated",
+            "group": "damage_eligibility",
+            "title": "Access damage reinstated under enhanced cover (Clauses 9, 9A, 9B)",
+            "rule_text": "( AND car.claim.is_access_damage equals true AND ( OR ( AND car.defect.origin does not equal \"design\" AND IF Operator.DEFAULT_TO(car.component.installed_by_subcontractor, true) equals false THEN car.project.value_millions_gbp is at least 100 AND IF Operator.DEFAULT_TO(car.component.installed_by_subcontractor, true) equals true THEN car.project.value_millions_gbp is at least 200) OR ( AND car.project.value_millions_gbp is at least 500 AND ( OR Operator.DEFAULT_TO(car.defect.was_known_prior, true) equals false OR Operator.DEFAULT_TO(car.defect.has_engineer_assessment, false) equals true))))",
+            "source_refs": [
+                "src_k8AB11PMHGY#item_000009",
+                "src_k8AB11PMHGY#item_000010",
+                "src_k8AB11PMHGY#item_000011"
+            ],
+            "source_references": [
+                {
+                    "schema_version": 1,
+                    "source_id": "src_k8AB11PMHGY#item_000009",
+                    "title": "CAR Policy Defect Exclusion Endorsement Schedule 2025 (synthetic policy wording)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md",
+                    "locator": "Clause 9(1)-(3)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-12",
+                    "content_digest": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd",
+                    "licence": "MIT",
+                    "verified_at": "2026-10-23T14:34:34.138000Z",
+                    "quote": {
+                        "exact": "where the insured project is an enhanced cover project, the exclusion of access damage under Clause 8 does not apply and such damage shall be covered under this endorsement.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md#:~:text=where%20the%20insured%20project%20is%20an%20enhanced%20cover%20project%2C%20the%20exclusion%20of%20access%20damage%20under%20Clause%208%20does%20not%20apply%20and%20such%20damage%20shall%20be%20covered%20under%20this%20endorsement.",
+                    "snapshot": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd"
+                },
+                {
+                    "schema_version": 1,
+                    "source_id": "src_k8AB11PMHGY#item_000010",
+                    "title": "CAR Policy Defect Exclusion Endorsement Schedule 2025 (synthetic policy wording)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md",
+                    "locator": "Clause 9A(1)-(2)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-12",
+                    "content_digest": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd",
+                    "licence": "MIT",
+                    "verified_at": "2026-10-23T14:34:34.173000Z",
+                    "quote": {
+                        "exact": "the pioneer infrastructure override does not apply where the defect giving rise to the claim was known to the insured, or ought reasonably to have been known, prior to the commencement of works.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md#:~:text=the%20pioneer%20infrastructure%20override%20does%20not%20apply%20where%20the%20defect%20giving%20rise%20to%20the%20claim%20was%20known%20to%20the%20insured%2C%20or%20ought%20reasonably%20to%20have%20been%20known%2C%20prior%20to%20the%20commencement%20of%20works.",
+                    "snapshot": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd"
+                },
+                {
+                    "schema_version": 1,
+                    "source_id": "src_k8AB11PMHGY#item_000011",
+                    "title": "CAR Policy Defect Exclusion Endorsement Schedule 2025 (synthetic policy wording)",
+                    "authority": "Aethis",
+                    "url": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md",
+                    "locator": "Clause 9B(1)",
+                    "source_version": "aethis-examples@main",
+                    "source_date": "2026-04-12",
+                    "content_digest": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd",
+                    "licence": "MIT",
+                    "verified_at": "2026-10-23T14:34:34.203000Z",
+                    "quote": {
+                        "exact": "Where the defective component was installed or fabricated by a subcontractor (not the principal contractor), the enhanced cover threshold under Clause 9(1) is increased from GBP 100 million to GBP 200 million.",
+                        "prefix": null,
+                        "suffix": null
+                    },
+                    "media_type": "text",
+                    "deep_link": "https://raw.githubusercontent.com/Aethis-ai/aethis-examples/main/construction-all-risks/sources/source.md#:~:text=Where%20the%20defective%20component%20was%20installed%20or%20fabricated%20by%20a%20subcontractor%20%28not%20the%20principal%20contractor%29%2C%20the%20enhanced%20cover%20threshold%20under%20Clause%209%281%29%20is%20increased%20from%20GBP%20100%20million%20to%20GBP%20200%20million.",
+                    "snapshot": "sha256:f88c19de99afa954c77fa1e352d7b11ea5dec1cdfb1e974ff29ce438d52279cd"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,82 @@
+# Spacecraft Crew Certification — Rulebook composition
+#
+# A single-ruleset rulebook. The crew_certification ruleset covers the
+# entire statute (S.3-S.9); composition is the implicit AND of the one
+# live ruleset, so no `outcome_logic` is set.
+#
+# Used as the simplest single-ruleset example before introducing the
+# multi-ruleset composition story.
+
+rulebook:
+  name: Spacecraft Crew Certification
+  domain: spacecraft
+  slug: aethis/spacecraft-crew-certification
+
+  rulesets:
+    - name: crew_certification
+      display_name: "Spacecraft Crew Certification Act 2049"
+      description: >
+        Whole-statute eligibility check covering species, flight hours,
+        pilot licence, medical cert validity, age exemptions, orbital
+        radiation requirements, propulsion type, and towel possession.
+
+  # Field vocabulary: each engine input paired with a canonical field name.
+  #
+  # `canonical_field` is the stable name a consuming application uses to
+  # store the same fact, so that a fact captured in conversation can be
+  # paired with the engine input it answers. The engine carries it as
+  # opaque metadata and serves it on the rulebook schema; it does not
+  # change any decision.
+  #
+  # Naming: `<subject>.<fact>`, where the subject is the thing the fact
+  # describes, in this domain's own terms:
+  #   crew_member  the person being certified (every crew and medical fact)
+  #   mission      the mission the crew member is certified for
+  #   vessel       the vessel flown
+  # The fact name keeps the field's own wording, so each pairing reads
+  # one-to-one.
+  #
+  # Kept here, on the rulebook, so the pairing can be corrected without
+  # regenerating the member ruleset. Applied with
+  # `POST /api/v1/public/rulebooks/{rulebook_id}/fields`, which publishes a
+  # new release. `sort` must match the member ruleset's compiled field
+  # (checked offline by tests/test_spacecraft_vocabulary.py).
+  fields:
+    - key: space.crew.species
+      sort: Enum
+      canonical_field: crew_member.species
+    - key: space.crew.age
+      sort: Int
+      canonical_field: crew_member.age
+    - key: space.crew.flight_hours
+      sort: Int
+      canonical_field: crew_member.flight_hours
+    - key: space.crew.has_pilot_license
+      sort: Bool
+      canonical_field: crew_member.has_pilot_license
+    - key: space.crew.has_gaa_exam
+      sort: Bool
+      canonical_field: crew_member.has_gaa_exam
+    - key: space.crew.has_approved_provider_cert
+      sort: Bool
+      canonical_field: crew_member.has_approved_provider_cert
+    - key: space.medical.cert_valid
+      sort: Bool
+      canonical_field: crew_member.medical_cert_valid
+    - key: space.mission.type
+      sort: Enum
+      canonical_field: mission.type
+    - key: space.crew.has_radiation_cert
+      sort: Bool
+      canonical_field: crew_member.has_radiation_cert
+    - key: space.vessel.propulsion_type
+      sort: Enum
+      canonical_field: vessel.propulsion_type
+    - key: space.crew.has_towel
+      sort: Bool
+      canonical_field: crew_member.has_towel
+
+  # outcome_logic intentionally omitted — single-ruleset rulebooks
+  # default to "the one live ruleset's decision IS the rulebook's
+  # decision". Multi-ruleset examples (see uk-free-school-meals) set
+  # outcome_logic explicitly via `aethis rulebooks set-logic ...`.

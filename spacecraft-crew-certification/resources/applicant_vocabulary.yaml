@@ -1,0 +1,24 @@
+# Canonical facts paired in rulebook.yaml. No application-specific projection.
+crew_member.species:
+  type: ENUM
+crew_member.age:
+  type: INT
+  document_ack_label: age
+crew_member.flight_hours:
+  type: INT
+crew_member.has_pilot_license:
+  type: BOOL
+crew_member.has_gaa_exam:
+  type: BOOL
+crew_member.has_approved_provider_cert:
+  type: BOOL
+crew_member.medical_cert_valid:
+  type: BOOL
+mission.type:
+  type: ENUM
+crew_member.has_radiation_cert:
+  type: BOOL
+vessel.propulsion_type:
+  type: ENUM
+crew_member.has_towel:
+  type: BOOL

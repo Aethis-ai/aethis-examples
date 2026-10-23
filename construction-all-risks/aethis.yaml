@@ -1,0 +1,3 @@
+project: construction-all-risks
+api_key_env: AETHIS_API_KEY
+live_ruleset_id: construction-all-risks:20261023-d64e7abd

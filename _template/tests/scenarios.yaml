@@ -1,0 +1,12 @@
+tests:
+  - name: "happy_path — clearly eligible"
+    inputs:
+      field.name: true
+    expect:
+      outcome: eligible
+
+  - name: "rejection — clearly not eligible"
+    inputs:
+      field.name: false
+    expect:
+      outcome: not_eligible

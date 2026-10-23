@@ -1,0 +1,16 @@
+# Locked launch-showcase set.
+#
+# Every slug here must still appear in showcase.yaml. The registry is
+# hand-maintained against the public gallery, so without this a deleted entry
+# would shrink the coverage denominator silently - which is exactly the move
+# the per-criterion denominator is already protected against.
+#
+# Removing a showcase is legitimate, but it is a decision, not a tidy-up:
+# delete the line here in the same change, and check the public copy stops
+# claiming that ruleset is source-traceable.
+#
+# Source: `gallery.rulesets` in aethis.ai `src/content/site.ts`.
+aethis/consumer-credit-prequalification
+aethis/construction-all-risks
+aethis/spacecraft-crew-certification
+aethis/uk-fsm/child-eligibility

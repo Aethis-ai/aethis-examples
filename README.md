@@ -1,0 +1,240 @@
+# aethis-examples
+
+Language models interpret rules well. They do not execute them reliably. The failure mode is silent: high confidence, wrong answer, no trace. In high-stakes decisions — eligibility, compliance, claims, screening — that is not a model-tuning problem. It is a category mismatch. Probabilistic systems cannot guarantee reproducible, auditable outcomes against written rules.
+
+Each example includes source legislation, golden test cases, and a one-command test runner that calls the live API. The lean anonymous profile is enough for the eight-case spacecraft demo; set `AETHIS_API_KEY` for the complete sweep (see [Run tests](#run-tests) below).
+
+**Documentation:** [docs.aethis.ai](https://docs.aethis.ai) · [OpenAPI spec](https://docs.aethis.ai/api-reference/openapi.json) · agents via MCP: `claude mcp add aethis -- npx -y aethis-mcp`
+
+## Start here
+
+**Run an example's test suite against the live API. No sign-up, no key:**
+
+```bash
+uv run run_tests.py spacecraft-crew-certification/
+```
+
+That is the whole first step. Everything below is optional, and each capability
+says up front what it costs you.
+
+| What you want to do | What you need | Where |
+|---|---|---|
+| Evaluate a public showcase ruleset — tests, decision routes, walk-through, REST | **Nothing.** Anonymous, no key | [Run tests](#run-tests), [Inspect decision routes](#inspect-decision-routes), [As a REST API](#as-a-rest-api) |
+| Repeated sweeps across every example | An Aethis API key (free sign-up) — the anonymous tier is capped per IP per day | [Run tests](#run-tests) |
+| Watch an agent call a decision and prove it did | **Your own** model-provider key, billed to your own account | [Agent quickstart](agent-quickstart/) |
+| Author and publish your own rulesets | An Aethis API key with authoring access — **invite-only, private beta** | [Request access](https://aethis.ai/developer-access) |
+
+## The problem
+
+Simpson 2026 evaluates eight models against formal rule fixtures across 225 scenarios in four sections. On the 68-scenario adversarial suite of nested exception chains, frontier models scored 88–100%; a compiled ruleset agrees with those fixtures by construction (Simpson 2026 §6.3). The construction-CAR scenarios below are one of those four sections.
+
+Numbers below from the paper ([Simpson, Kozak, Doake, v3.13, 2026](https://github.com/Aethis-ai/confidently-wrong-benchmark/blob/main/paper/Simpson_Exception_Chain_Collapse_2026.md)).
+
+**v3.8 adversarial construction-CAR extension (paper §6.4.1):** 20 newly-authored adversarial scenarios stratified across 5 complexity dimensions. Engine 20/20 (100%) by construction; current frontier models still fail:
+
+| Model | Accuracy (20 scenarios) | Notes |
+|--|:--:|--|
+| **Aethis Engine** | **20/20 (100%)** | deterministic by construction |
+| GPT-5.4 (low reasoning effort) | 20/20 (100%) | no failures |
+| Claude Sonnet 4.6 | 19/20 (95%) | fails E4 (DE3/LEG3 carveback gap) |
+| GPT-5.4 (default) | 19/20 (95%) | fails E4 |
+| **Claude Opus 4.7** (Anthropic's strongest model at evaluation time, April 2026) | **18/20 (90%)** | fails E4 + B3 (£499 M boundary) |
+
+Three of four frontier configurations fail the same scenario across both Anthropic and OpenAI families. Reproducible from `confidently-wrong-benchmark/legalbench/tools/replication_run.py` against `dataset/construction-all-risks/scenarios_v3_8_adversarial.yaml`.
+
+**External validation on LegalBench (v3.8, §6.10).** On 9 LegalBench tasks (949 held-out cases, peer-reviewed external benchmark) the engine is significantly more accurate than each of three frontier LLMs by combined paired-binomial McNemar's: *p* < 0.001 vs Sonnet 4.6, *p* = 0.003 vs Opus 4.7, *p* < 0.001 vs GPT-5.4. See [`confidently-wrong-benchmark/legalbench/`](https://github.com/Aethis-ai/confidently-wrong-benchmark/tree/main/legalbench) for the full harness.
+
+**The shifting-ground problem (paper §6.5 Finding 6).** Several v3.7 paper cells closed silently between March and April 2026 under the same model alias — GPT-5.4 on construction-CAR moved from 96.6% to 100%; Opus 4.6 on spacecraft from 89.7% to 98.5%. Frontier-LLM accuracy is a moving target. The Aethis Engine is invariant by construction.
+
+[Per-test breakdown →](results/llm-vs-engine.md) | [Speed and cost →](results/performance.md) | [Full benchmark paper →](https://github.com/Aethis-ai/confidently-wrong-benchmark)
+
+```bash
+# Reproduce it yourself (requires OPENAI_API_KEY + ANTHROPIC_API_KEY)
+uv run llm_comparison.py construction-all-risks/ --models gpt-5.4 claude-sonnet-5-5 gpt-5-mini
+```
+
+## Who this is for
+
+- **Agent builders** who need reliable decisions inside tool-calling workflows
+- **LangChain / LangGraph users** replacing brittle prompt chains with provable logic
+- **Policy and compliance engineers** who need auditable, explainable decisions
+- **Anyone building regulated workflows** where "95% accurate" isn't good enough
+
+## Examples
+
+| Example | Domain | Patterns | Tests |
+|---------|--------|----------|-------|
+| [Spacecraft Crew Certification](spacecraft-crew-certification/) | Space regulation | Disqualification, AND/OR, exceptions, conditional, enum | 8 |
+| [Construction All Risks](construction-all-risks/) | Insurance | Five-level exception chain, IMPLIES, override, early termination | 16 |
+| [Consumer Credit Pre-Qualification](consumer-credit-prequalification/) | Lending | Income thresholds, DTI ratios, credit bands, customer exceptions | 8 |
+| [UK Free School Meals](uk-free-school-meals/) | Eligibility / public services | Multi-section rulebook composition: `child_eligibility AND (household_criteria OR universal_infant)` | 23 (6 + 11 + 6 per section) |
+| [Concessionary Travel Pass](concessionary-travel-pass/) | Transport / public services | Completed-whole-years date arithmetic (`years_between`), disqualification, OR route, `/graph` ruleset-map demo | 6 |
+
+## Run tests
+
+```bash
+uv run run_tests.py construction-all-risks/
+```
+
+Run every example's suite in one command:
+
+```bash
+uv run test_all.py
+```
+
+**Auth.** The default request is lean. The documented spacecraft command runs eight cases without a key; use `--rich` only when you need explanations and traces, since they cost more quota. The complete 61-case manifest and composed [`uk-free-school-meals/`](uk-free-school-meals/) work require an evaluation key:
+
+```bash
+export AETHIS_API_KEY=ak_...    # sign up at https://aethis.ai
+uv run run_tests.py construction-all-risks/
+```
+
+Each test shows the decision, per-group evaluation status, provenance (which source passages informed each rule), and timing:
+
+```
+  PASS   Rectification claim — absolute exclusion (Clause 6)
+         not_eligible (11/14 fields provided)
+         policy_period: passed  insuring_clause: passed  not_rectification: failed
+         Timing: 2.4ms (compile 0.4ms, eval 2.0ms)
+
+  PASS   Design defect on enhanced project — not reinstated (Clause 9(2))
+         not_eligible (11/11 fields provided)
+         enhanced_cover: failed
+         Timing: 1.9ms
+```
+
+## Inspect decision routes
+
+See how the engine picks the optimal question order and short-circuits as soon as a decision is reached:
+
+```bash
+uv run show_routes.py construction-all-risks/
+```
+
+```
+  Plant equipment — excluded category (Clause 5)
+    1. origin = materials      (8 remaining)
+    2. value_millions_gbp = 50 (8 remaining)
+    3. category = plant_equipment  -> not eligible
+       Failed: insured_category
+    Decision in 3 steps (of 11 fields)
+
+  Design defect on enhanced project — not reinstated (Clause 9(2))
+    1. origin = design             (8 remaining)
+    2. value_millions_gbp = 150    -> not eligible
+       Failed: enhanced_cover
+    Decision in 2 steps (of 11 fields)
+```
+
+Different answers lead to different paths. The engine asks only the questions that matter.
+
+## Interactive walk-through
+
+Answer questions one at a time. The engine picks the next most informative question:
+
+```bash
+uv run walk_through.py construction-all-risks/
+```
+
+## Agent quickstart
+
+> Requires **your own** Anthropic API key, billed to your own account. This
+> script still sends no Aethis credential.
+
+A LangGraph agent that uses an Aethis decision and prints the evidence — the
+pinned ruleset identity, the replay handles, and the verbatim passages the rules
+cite. If the agent skips the tool or invents a result, the run fails loudly
+instead of reporting a plausible answer.
+
+```bash
+export ANTHROPIC_API_KEY=sk-ant-...
+uv run agent-quickstart/quickstart.py
+```
+
+There is also a free path that skips the model provider entirely and calls the
+decision tool directly:
+
+```bash
+uv run agent-quickstart/quickstart.py --tool-only
+```
+
+Prerequisites, cost and data-flow notes, and a recorded transcript:
+[`agent-quickstart/`](agent-quickstart/).
+
+
+## How to use
+
+### With AI agents (MCP)
+
+```bash
+claude mcp add aethis -- npx -y aethis-mcp
+
+# Then ask your agent:
+# "Is a Vogon eligible for crew certification?"
+```
+
+Anonymous access works for individual public ruleset decisions and for browsing the public rulebook catalogue (`aethis rulebooks list`, no key needed); *deciding* against a composed rulebook (e.g. `aethis/uk-fsm`) requires an API key. See [aethis-mcp](https://github.com/Aethis-ai/aethis-mcp).
+
+### With the CLI
+
+> **Authoring is invite-only.** `generate`, `test` and `publish` write rulesets
+> into your own tenant and need an API key with authoring access, currently in
+> private beta — [request access](https://aethis.ai/developer-access). Reading
+> and evaluating public rulesets needs no key at all.
+
+```bash
+uv tool install aethis-cli
+cd spacecraft-crew-certification
+aethis generate --poll
+aethis test
+aethis publish
+```
+
+### As a REST API
+
+```bash
+curl -X POST https://api.aethis.ai/api/v1/public/decide \
+  -H "Content-Type: application/json" \
+  -d '{"ruleset_id": "aethis/spacecraft-crew-certification", "field_values": {"space.crew.species": "Vogon"}}'
+```
+
+Expected result:
+
+```json
+{
+  "decision": "not_eligible",
+  "ruleset_id": "spacecraft-crew-certification:20261023-a28c476e"
+}
+```
+
+## Contributing an example
+
+Copy the `_template/` directory:
+
+```bash
+cp -r _template/ my-example/
+```
+
+Each example follows this structure:
+
+```
+my-example/
+├── aethis.yaml              # Project config (project name, API key env var)
+├── README.md                # What it covers, patterns exercised
+├── sources/
+│   └── source.md            # The legislation, policy, or specification text
+├── guidance/
+│   └── hints.yaml           # Domain knowledge hints for the rule generator
+└── tests/
+    └── scenarios.yaml       # Test cases: inputs + expected outcomes
+```
+
+## Related
+
+- [aethis-mcp](https://github.com/Aethis-ai/aethis-mcp) — MCP server for AI agents (npm)
+- [aethis-cli](https://github.com/Aethis-ai/aethis-cli) — Python CLI for rule authoring
+- [aethis.ai](https://aethis.ai) — Sign up and get your API key
+
+## License
+
+MIT

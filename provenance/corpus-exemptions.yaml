@@ -1,0 +1,17 @@
+# Recorded exemptions from the corpus sweep.
+#
+# The sweep reads every cited source document in full, not just the passages a
+# manifest quotes. A hit fails the gate. An entry here downgrades one specific
+# hit to a reported finding, and exists so that a known issue someone else has
+# to fix cannot be silently tolerated: it has a location, a reason, an owner
+# and a tracking reference, and it shows up in the evidence artefact every run.
+#
+# An exemption is not a fix. Anything listed here is expected to leave.
+#
+# Entries match by path and line, never by quoting the phrase. Reprinting the
+# offending text in a file that ships publicly would undo the point of keeping
+# the boundary list off the mirror. The run output names the phrase locally.
+
+schema_version: 1
+
+exemptions: []

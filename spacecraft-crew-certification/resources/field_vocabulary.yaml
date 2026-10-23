@@ -1,0 +1,24 @@
+# Lossless links to the existing engine inputs; eligibility rules are unchanged.
+crew_certification:
+  space.crew.species:
+    from: crew_member.species
+  space.crew.age:
+    from: crew_member.age
+  space.crew.flight_hours:
+    from: crew_member.flight_hours
+  space.crew.has_pilot_license:
+    from: crew_member.has_pilot_license
+  space.crew.has_gaa_exam:
+    from: crew_member.has_gaa_exam
+  space.crew.has_approved_provider_cert:
+    from: crew_member.has_approved_provider_cert
+  space.medical.cert_valid:
+    from: crew_member.medical_cert_valid
+  space.mission.type:
+    from: mission.type
+  space.crew.has_radiation_cert:
+    from: crew_member.has_radiation_cert
+  space.vessel.propulsion_type:
+    from: vessel.propulsion_type
+  space.crew.has_towel:
+    from: crew_member.has_towel
